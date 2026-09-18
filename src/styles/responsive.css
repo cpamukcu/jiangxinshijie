@@ -1,0 +1,33 @@
+@media (max-width: 1080px) {
+  .safety-grid { grid-template-columns: repeat(2, 1fr); }
+  .solutions-grid { grid-template-columns: repeat(2, 1fr); }
+  .case-grid { grid-template-columns: repeat(3, 1fr); }
+  .cabin-grid { grid-template-columns: repeat(2, 1fr); }
+  .details-grid--3 { grid-template-columns: 1fr 1fr; }
+  .safety-intro { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 900px) {
+  .section { padding: 76px 0; }
+  .split, .split--well, .details-grid, .contact-grid, .safety-intro { grid-template-columns: 1fr; gap: 40px; }
+  .split--img-right .split__media { order: 0; }
+  .vmv { grid-template-columns: 1fr; }
+  .swatches__grid { grid-template-columns: repeat(3, 1fr); }
+  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__btn { grid-template-columns: 1fr; text-align: left; padding: 0 0 26px; }
+  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) .media { aspect-ratio: 3/4; margin-bottom: 20px; }
+  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__code,
+  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__name,
+  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__mood { padding: 0 26px; }
+}
+
+@media (max-width: 640px) {
+  .wrap { padding: 0 20px; }
+  .hero__actions { flex-direction: column; align-items: flex-start; }
+  .safety-grid, .solutions-grid, .case-grid, .cabin-grid { grid-template-columns: 1fr 1fr; }
+  .swatches__grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-bottom__inner { flex-direction: column; gap: 10px; }
+}
+
+@media (max-width: 420px) {
+  .safety-grid, .case-grid { grid-template-columns: 1fr; }
+}

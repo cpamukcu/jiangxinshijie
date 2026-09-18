@@ -1,0 +1,30 @@
+.lightbox { position: fixed; inset: 0; z-index: 300; display: flex; align-items: center; justify-content: center; padding: 24px; }
+.lightbox[hidden] { display: none; }
+.lightbox__backdrop { position: absolute; inset: 0; background: rgba(15, 14, 12, .86); }
+.lightbox__panel {
+  position: relative; z-index: 1; width: min(920px, 100%); max-height: 90vh; overflow-y: auto;
+  background: var(--ivory); border-radius: 6px; display: grid; grid-template-columns: 1.1fr 1fr;
+  box-shadow: var(--shadow-lg); animation: lightboxIn .3s var(--ease);
+}
+@keyframes lightboxIn { from { opacity: 0; transform: translateY(16px) scale(.98); } to { opacity: 1; transform: none; } }
+.lightbox__media { background: var(--titanium); }
+.lightbox__media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.lightbox__body { padding: 38px 34px; }
+.lightbox__body h3 { font-family: var(--font-display); font-size: 24px; margin-bottom: 22px; }
+.lightbox__body dl > div { padding: 12px 0; border-top: 1px solid var(--hairline); }
+.lightbox__body dl > div:first-child { border-top: none; }
+.lightbox__body dt { font-size: 12px; letter-spacing: .05em; color: var(--navy); font-weight: 600; margin-bottom: 5px; }
+.lightbox__body dt span { opacity: .6; margin-left: 5px; }
+.lightbox__body dd { font-size: 14px; }
+.lightbox__body dd span { display: block; font-size: 12.5px; color: #6b665c; font-style: italic; margin-top: 3px; font-family: var(--font-body); }
+.lightbox__close {
+  position: absolute; top: 14px; right: 14px; width: 38px; height: 38px; border-radius: 50%;
+  background: rgba(0,0,0,.35); color: #fff; font-size: 22px; line-height: 1; display: flex;
+  align-items: center; justify-content: center; z-index: 2;
+}
+.lightbox__close:hover { background: var(--gold); }
+
+@media (max-width: 720px) {
+  .lightbox__panel { grid-template-columns: 1fr; }
+  .lightbox__media { aspect-ratio: 4/3; }
+}

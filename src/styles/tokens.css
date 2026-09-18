@@ -1,0 +1,27 @@
+:root {
+  /* brand palette */
+  --ivory: #F7F5F2;
+  --ivory-2: #F0ECE5;
+  --charcoal: #1C1C1C;
+  --navy: #1B3A6B;
+  --navy-2: #24487F;
+  --gold: #C9A05C;
+  --gold-light: #E3C899;
+  --titanium: #2B2B2E;
+  --titanium-2: #201F22;
+  --hairline: rgba(28, 28, 28, 0.12);
+  --hairline-light: rgba(247, 245, 242, 0.16);
+  --white: #FFFFFF;
+
+  /* type */
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* layout */
+  --maxw: 1240px;
+  --gutter: clamp(20px, 5vw, 64px);
+  --radius: 4px;
+  --shadow: 0 10px 40px rgba(28, 28, 28, 0.10);
+  --shadow-lg: 0 24px 64px rgba(28, 28, 28, 0.18);
+  --ease: cubic-bezier(.22, .61, .36, 1);
+}

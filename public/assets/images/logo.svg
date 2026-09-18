@@ -1,0 +1,13 @@
+<!-- PLACEHOLDER WORDMARK — swap for the real vector logo file before launch. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 72" role="img" aria-labelledby="jxsjLogoTitle">
+  <title id="jxsjLogoTitle">JIANGXINSHIJIE</title>
+  <g fill="#1B3A6B">
+    <!-- simple geometric mark, angular strokes echoing an ascending "X" -->
+    <path d="M4 60 L28 12 L36 12 L20 60 Z"/>
+    <path d="M20 60 L44 12 L52 12 L28 60 Z" opacity="0.55"/>
+    <path d="M52 12 L40 60 L48 60 L60 12 Z" opacity="0.55"/>
+    <path d="M60 12 L52 60 L60 60 L68 12 Z"/>
+  </g>
+  <text x="82" y="38" font-family="'Playfair Display', Georgia, serif" font-size="23" font-weight="700" letter-spacing="0.5" fill="#1B3A6B">JIANGXINSHIJIE</text>
+  <text x="82" y="55" font-family="'Inter', Helvetica, Arial, sans-serif" font-size="11" letter-spacing="2.5" fill="#C9A05C">VILLA ELEVATOR</text>
+</svg>
