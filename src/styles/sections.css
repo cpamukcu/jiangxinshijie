@@ -171,7 +171,3 @@
 .contact-form input:focus, .contact-form textarea:focus { outline: 2px solid var(--gold); }
 .contact-form__note { font-size: 13px; color: var(--navy); min-height: 1em; }
 
-.footer-bottom { border-top: 1px solid var(--hairline); margin-top: 90px; padding: 30px 0; }
-.footer-bottom__inner { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
-.disclaimer, .copyright { font-size: 12px; color: #8a8578; }
-.disclaimer span, .copyright span { font-style: italic; font-family: var(--font-body); }

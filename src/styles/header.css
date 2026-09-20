@@ -26,20 +26,33 @@
 .site-header.is-solid .header-cta:hover { background: var(--navy); color: #fff; }
 
 .nav-toggle { display: none; flex-direction: column; gap: 5px; padding: 8px; }
-.nav-toggle span { width: 22px; height: 1.5px; background: #fff; display: block; transition: background .3s; }
+.nav-toggle span { width: 22px; height: 1.5px; background: #fff; display: block; transition: background .3s, transform .35s var(--ease), opacity .2s; }
 .site-header.is-solid .nav-toggle span { background: var(--charcoal); }
 
 @media (max-width: 900px) {
   .main-nav {
-    position: fixed; inset: 0 0 0 auto; width: min(78vw, 340px); height: 100vh; background: var(--ivory);
+    position: fixed; inset: 0 0 0 auto; width: min(82vw, 340px); height: 100vh; height: 100dvh; background: var(--ivory);
+    visibility: hidden;
     flex-direction: column; padding: 100px 34px 34px; gap: 6px; transform: translateX(100%);
-    transition: transform .4s var(--ease); box-shadow: var(--shadow-lg);
+    transition: transform .4s var(--ease), box-shadow .4s var(--ease), visibility 0s .4s;
   }
-  .main-nav.is-open { transform: translateX(0); }
+  .main-nav.is-open { transform: translateX(0); box-shadow: var(--shadow-lg); visibility: visible; transition-delay: 0s; }
+  .main-nav a { opacity: 0; transform: translateX(18px); transition: opacity .4s var(--ease), transform .4s var(--ease), color .3s; }
+  .main-nav.is-open a { opacity: 1; transform: none; transition-delay: calc(.06s * var(--i, 0) + .12s); }
+  .main-nav a:nth-child(1) { --i: 1; } .main-nav a:nth-child(2) { --i: 2; } .main-nav a:nth-child(3) { --i: 3; }
+  .main-nav a:nth-child(4) { --i: 4; } .main-nav a:nth-child(5) { --i: 5; } .main-nav a:nth-child(6) { --i: 6; }
+  .nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+  body.nav-open::before {
+    content: ""; position: fixed; inset: 0; z-index: 90; background: rgba(15, 14, 12, .55);
+    animation: navFade .3s ease;
+  }
   .main-nav a { color: var(--charcoal); font-size: 20px; padding: 12px 0; border-bottom: 1px solid var(--hairline); }
   .header-cta { display: none; }
   .nav-toggle { display: flex; z-index: 110; }
   .nav-toggle span { background: #fff; }
   .site-header.is-solid .nav-toggle span, body.nav-open .nav-toggle span { background: var(--charcoal); }
 }
-body.nav-open { overflow: hidden; }
+body.nav-open, body.scroll-lock { overflow: hidden; }
+@keyframes navFade { from { opacity: 0; } to { opacity: 1; } }

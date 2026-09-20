@@ -15,15 +15,17 @@ export function initContactForm() {
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const data = new FormData(form);
-    const name = (data.get('name') || '').toString();
-    const phone = (data.get('phone') || '').toString();
-    const message = (data.get('message') || '').toString();
-
+    const lines = [];
+    let message = '';
+    for (const el of form.elements) {
+      if (!el.name || !el.value.trim()) continue;
+      if (el.name === 'message') { message = el.value.trim(); continue; }
+      const label = el.closest('label')?.childNodes[0]?.textContent.trim() || el.name;
+      lines.push(`${label}: ${el.value.trim()}`);
+    }
+    const name = form.elements.name?.value || 'website visitor';
     const subject = encodeURIComponent(`Website enquiry from ${name}`);
-    const body = encodeURIComponent(
-      `Name: ${name}\nPhone: ${phone}\n\nMessage:\n${message}`
-    );
+    const body = encodeURIComponent(`${lines.join('\n')}\n\nMessage:\n${message}`);
     window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
 
     if (note) {

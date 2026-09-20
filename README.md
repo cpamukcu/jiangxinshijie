@@ -43,18 +43,22 @@ wired by `src/js/assetFallback.js`) instead of a broken-image icon.
 | `public/assets/video/header.mp4` | **In place** | 1280×720 H.264, 8s, scroll-scrubbed via `src/js/heroVideo.js`. A second take (`Elevator_descending_in_villa_...mp4`) is sitting in `Desktop/VILLA/` unused — swap it in if you prefer that take. |
 | `public/assets/images/logo.svg` | **Placeholder** | A simple typographic mark I built (navy wordmark + geometric "X"). Swap for the real vector logo file — keep the filename `logo.svg` or update the two `<img>` references in `index.html`. |
 | Real contact details | Placeholder | `src/js/contactForm.js` uses `info@jiangxinshijie.com` as the mailto target — replace with the real inbox, and wire the form to a real backend (e.g. Formspree) per the `TODO` comment in that file. |
-| QR codes in the footer | Placeholder | The "Follow Us" boxes are unlabeled dashed placeholders (Website / Xiaohongshu / Douyin / WeChat Channels) — drop in real QR images when available; do not fabricate scannable codes. |
+| QR codes on the home Contact section | Placeholder | The "Follow Us" boxes are unlabeled dashed placeholders (Website / Xiaohongshu / Douyin / WeChat Channels) — drop in real QR images when available; do not fabricate scannable codes. |
 
-Every image slot referenced in `index.html` now resolves to a real file —
+Every image slot referenced in the HTML pages now resolves to a real file —
 run `comm -23 <(grep -oE 'data-fallback-label="[^"]+"' index.html | sed 's/.*"\(.*\)"/\1/' | sort -u) <(ls public/assets/images | sort -u)`
 to re-check for gaps after any future edit.
 
 ## Structure
 
 ```
-index.html               single scrolling page, all 9 sections
+index.html               home — scroll-driven hero + 9 sections
+about / collections / solutions / technology / projects / contact .html
+                         inner pages (each linked from the shared header + footer)
+src/partials/            header, footer, CTA band — injected at build time by the
+                         html-partials plugin in vite.config.js (<!--@include name-->)
 src/main.js              entry point — imports styles + initializes modules
-src/styles/              tokens, base, header, hero, sections, lightbox, responsive
+src/styles/              tokens, base, header, hero, sections, lightbox, pages, responsive
 src/js/
   nav.js                 sticky header + mobile menu
   heroVideo.js            scroll-scrub hero video (CSS-sticky + rAF, no library)
@@ -63,6 +67,7 @@ src/js/
   assetFallback.js         labeled placeholder for any missing image
   contactForm.js           mailto: fallback for the contact form
   parallax.js              subtle scroll parallax on the closing lifestyle banner
+  filters.js               chip filters on Collections and Projects
 public/assets/images/    curated photography (see TODO table above for gaps)
 public/favicon.svg
 ```
@@ -76,3 +81,15 @@ public/favicon.svg
 - `prefers-reduced-motion: reduce` is respected everywhere: the hero skips
   video scrubbing (falls back to the static poster image), and all
   `.reveal` sections and hover-zoom effects are disabled via CSS.
+
+## Multi-page build
+
+`vite.config.js` treats every `*.html` in the project root as an entry point, so
+adding a page is: create `newpage.html` (copy any inner page as a template), add
+a nav link in `src/partials/header.html` (with `data-nav="newpage"` so the active
+link is highlighted), and add it to `public/sitemap.xml`.
+
+`og:image` URLs are made absolute at build time from `SITE_URL` (defaults to the
+GitHub Pages address). When a custom domain is live, build with
+`SITE_URL=https://yourdomain.com npm run build` and update `public/robots.txt`
+and `public/sitemap.xml`.

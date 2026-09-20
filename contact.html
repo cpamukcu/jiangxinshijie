@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact & Request a Quote — Villa Elevators | JIANGXINSHIJIE</title>
+<meta name="description" content="Request a quotation for a custom villa elevator. Send your shaft dimensions, number of floors and preferred finish and our team will reply within two business days.">
+<meta property="og:title" content="Contact & Request a Quote — Villa Elevators | JIANGXINSHIJIE">
+<meta property="og:description" content="Request a quotation for a custom villa elevator. Send your shaft dimensions, number of floors and preferred finish and our team will reply within two business days.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="/assets/images/hero.jpg">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="/assets/images/hero.jpg">
+</head>
+<body class="page-sub">
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!--@include header-->
+
+<main id="main">
+
+  <section class="page-hero" aria-label="Contact">
+    <div class="media page-hero__media" data-fallback-label="hero.jpg"><img src="/assets/images/hero.jpg" alt="Home elevator cabin inside a private villa" fetchpriority="high"></div>
+    <div class="wrap page-hero__content">
+      <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span>Contact</span></nav>
+      <p class="page-hero__kicker">Get in Touch</p>
+      <h1 class="page-hero__title">Tell us about your villa. We’ll shape the elevator.</h1>
+      <p class="page-hero__lede">Share your shaft dimensions and the look you want. We usually reply within two business days.</p>
+    </div>
+  </section>
+
+  <section class="section" id="enquiry" aria-label="Enquiry form">
+    <div class="wrap contact-page-grid">
+      <form class="contact-form reveal" id="contactForm">
+        <!-- TODO: wire to a form backend (e.g. Formspree) — currently falls back to a mailto: link -->
+        <h2>Request a Quote</h2>
+        <p class="contact-form__lead">The more you tell us, the more precise our first reply will be.</p>
+        <div class="contact-form__row">
+          <label>Name<input type="text" name="name" autocomplete="name" required></label>
+          <label>Company<input type="text" name="company" autocomplete="organization"></label>
+        </div>
+        <div class="contact-form__row">
+          <label>Email<input type="email" name="email" autocomplete="email" required></label>
+          <label>Phone / WhatsApp<input type="tel" name="phone" autocomplete="tel"></label>
+        </div>
+        <div class="contact-form__row">
+          <label>Country<input type="text" name="country" autocomplete="country-name" required></label>
+          <label>Number of floors<input type="text" name="floors" inputmode="numeric" placeholder="e.g. 3"></label>
+        </div>
+        <div class="contact-form__row">
+          <label>Preferred structure
+            <select name="structure">
+              <option value="">Not sure yet</option>
+              <option>Traction Gantry-Type</option>
+              <option>Small Gantry-Type</option>
+              <option>Backpack Frame-Type</option>
+              <option>Strong-Drive Type</option>
+            </select>
+          </label>
+          <label>Cabin collection
+            <select name="cabin">
+              <option value="">Undecided</option>
+<option>G510 · Liuguang</option><option>G530 · Wujie</option><option>JX630 · Muyu</option><option>JX640 · Tangyue</option><option>JX650 · Bailu</option><option>JX660 · Jingjie</option><option>JXp670 · Fenghua</option><option>JXp680 · LUMINA</option><option>JXp690 · Lingyun</option><option>JXp691 · Yinshe</option>
+            </select>
+          </label>
+        </div>
+        <label>Message<textarea name="message" rows="5" placeholder="Shaft width × depth, pit depth, overhead height, project type…" required></textarea></label>
+        <button type="submit" class="btn btn--primary btn--full">Send Enquiry</button>
+        <p class="contact-form__note" id="contactFormNote" aria-live="polite"></p>
+      </form>
+
+      <aside class="reveal">
+        <div class="aside-card">
+          <h3>For a fast, accurate quote</h3>
+          <ul class="checklist">
+            <li>Shaft width × depth<small>Finished internal dimensions, in millimetres</small></li>
+            <li>Pit depth and overhead height<small>Or tell us if a pit is not possible</small></li>
+            <li>Number of floors and travel height</li>
+            <li>Door positions<small>Same side, opposite sides, or adjacent</small></li>
+            <li>Preferred style, or a photo of your interior</li>
+          </ul>
+        </div>
+        <div class="aside-card">
+          <h3>Factory &amp; Office</h3>
+          <dl class="contact-info__list">
+            <div><dt>Company</dt><dd>Huzhou Jiangxinshijie Elevator Co., Ltd.</dd></div>
+            <div><dt>Address</dt><dd>No. 1888, Renrui West Road, Nanxun Economic Development Zone, Huzhou City, Zhejiang Province, China</dd></div>
+            <div><dt>Response time</dt><dd>Within two business days</dd></div>
+          </dl>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+</main>
+
+<!--@include footer-->
+
+<script type="module" src="/src/main.js"></script>
+</body>
+</html>

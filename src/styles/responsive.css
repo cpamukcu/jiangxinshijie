@@ -5,6 +5,12 @@
   .cabin-grid { grid-template-columns: repeat(2, 1fr); }
   .details-grid--3 { grid-template-columns: 1fr 1fr; }
   .safety-intro { grid-template-columns: 1fr; }
+  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) { grid-column: auto; }
+  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__btn { display: block; padding: 0 0 26px; }
+  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) .media { aspect-ratio: 3/4; margin-bottom: 20px; }
+  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__code,
+  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__name,
+  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__mood { padding: 0 26px; }
 }
 
 @media (max-width: 900px) {
@@ -13,11 +19,6 @@
   .split--img-right .split__media { order: 0; }
   .vmv { grid-template-columns: 1fr; }
   .swatches__grid { grid-template-columns: repeat(3, 1fr); }
-  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__btn { grid-template-columns: 1fr; text-align: left; padding: 0 0 26px; }
-  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) .media { aspect-ratio: 3/4; margin-bottom: 20px; }
-  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__code,
-  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__name,
-  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__mood { padding: 0 26px; }
 }
 
 @media (max-width: 640px) {
@@ -25,9 +26,50 @@
   .hero__actions { flex-direction: column; align-items: flex-start; }
   .safety-grid, .solutions-grid, .case-grid, .cabin-grid { grid-template-columns: 1fr 1fr; }
   .swatches__grid { grid-template-columns: repeat(2, 1fr); }
-  .footer-bottom__inner { flex-direction: column; gap: 10px; }
+  .case-grid { gap: 6px; }
+  .case-grid--wide { grid-template-columns: 1fr; gap: 12px; }
+  .case-tile .media { aspect-ratio: 4 / 3; }
+  .case-tile figcaption { padding: 14px 10px 8px; font-size: 12px; }
 }
 
 @media (max-width: 420px) {
-  .safety-grid, .case-grid { grid-template-columns: 1fr; }
+  .safety-grid { grid-template-columns: 1fr; }
+}
+
+/* ---------- touch devices ---------- */
+@media (hover: none) {
+  .btn--primary:hover { background: var(--navy); transform: none; box-shadow: none; }
+  .btn--gold:hover { background: var(--gold); transform: none; box-shadow: none; }
+  .btn--ghost:hover { background: transparent; }
+  .filter-chip:hover { border-color: var(--hairline); }
+  .filter-bar--light .filter-chip:hover { border-color: var(--hairline-light); }
+  .supplier-row__badges li:hover, .glass-list li:hover, .quickpick__item:hover { border-color: var(--hairline); box-shadow: none; }
+  .safety-item:hover { background: var(--titanium); }
+}
+.btn:active, .filter-chip:active { transform: scale(.97); }
+.cabin-card__btn:active .media img, .case-tile:active .media img { transform: scale(1.03); }
+
+@media (pointer: coarse) {
+  .btn { min-height: 48px; }
+  .filter-chip { min-height: 44px; }
+  .nav-toggle { min-width: 44px; min-height: 44px; align-items: center; justify-content: center; }
+  .brand { display: inline-flex; align-items: center; min-height: 44px; }
+  .lightbox__close { width: 44px; height: 44px; }
+  .text-link { padding: 12px 0 6px; margin-top: 14px; }
+  .site-footer__col > a, .site-footer__col .site-footer__link { display: block; padding: 11px 0; }
+  .crumbs a { display: inline-flex; align-items: center; min-height: 32px; }
+  .main-nav a { min-height: 52px; }
+}
+@media (max-width: 640px) {
+  .filter-bar { flex-wrap: nowrap; overflow-x: auto; margin-inline: -20px; padding-inline: 20px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .filter-bar::-webkit-scrollbar { display: none; }
+  .filter-chip { flex: none; }
+  .lightbox { padding: 12px; }
+  .lightbox__panel { max-height: 92vh; max-height: 92dvh; }
+}
+
+/* 16px minimum stops iOS Safari zooming the page when a field is focused */
+@media (pointer: coarse) {
+  .contact-form input, .contact-form select, .contact-form textarea { font-size: 16px; min-height: 48px; }
+  .contact-form textarea { min-height: 120px; }
 }

@@ -30,12 +30,12 @@ export function initLightbox() {
     lastFocused = document.activeElement;
     lightbox.hidden = false;
     requestAnimationFrame(() => lightbox.querySelector('.lightbox__close')?.focus());
-    document.body.classList.add('nav-open'); // reuse scroll-lock rule
+    document.body.classList.add('scroll-lock');
   }
 
   function close() {
     lightbox.hidden = true;
-    document.body.classList.remove('nav-open');
+    document.body.classList.remove('scroll-lock');
     if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
   }
 

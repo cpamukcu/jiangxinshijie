@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://cpamukcu.github.io/jiangxinshijie/sitemap.xml

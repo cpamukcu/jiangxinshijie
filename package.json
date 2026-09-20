@@ -2,7 +2,7 @@
   "name": "jiangxinshijie-villa-elevator",
   "version": "1.0.0",
   "private": true,
-  "description": "Marketing site for Huzhou Jiangxinshijie Elevator Co., Ltd. — 匠鑫饰界 villa elevators",
+  "description": "Marketing site for Huzhou Jiangxinshijie Elevator Co., Ltd. — villa elevators",
   "type": "module",
   "scripts": {
     "dev": "vite",

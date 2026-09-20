@@ -33,6 +33,10 @@ export function initHeroVideo() {
 
   video.addEventListener('error', () => { video.classList.remove('is-active'); }, { once: true });
   video.addEventListener('loadedmetadata', render, { once: true });
+  // Show the video only once a real frame exists, so the poster never flashes to black.
+  video.addEventListener('loadeddata', () => { if (hasSource) video.classList.add('is-active'); seekLoop(); }, { once: true });
+  // iOS Safari won't fetch frames for a paused, never-played video: a muted play/pause primes it.
+  if (hasSource) video.play().then(() => video.pause()).catch(() => {});
 
   const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
   const seg = (p, a, b) => clamp((p - a) / (b - a), 0, 1);
@@ -46,21 +50,38 @@ export function initHeroVideo() {
   }
 
   let currentProgress = 0;
+  let shown = 0;
   let ticking = false;
+  let looping = false;
+
+  // Ease the video toward the scroll position and never queue a seek while one is
+  // in flight — phones drop frames badly if currentTime is set on every scroll event.
+  function seekLoop() {
+    if (looping) return;
+    looping = true;
+    const step = () => {
+      const ready = video.readyState >= 2 && video.duration;
+      if (ready) {
+        shown += (currentProgress - shown) * 0.22;
+        if (Math.abs(currentProgress - shown) < 0.0008) shown = currentProgress;
+        const t = shown * video.duration;
+        if (!video.seeking && Math.abs(video.currentTime - t) > 0.016) video.currentTime = t;
+      }
+      if (!ready || shown !== currentProgress) requestAnimationFrame(step);
+      else looping = false;
+    };
+    requestAnimationFrame(step);
+  }
 
   function render() {
     ticking = false;
     const rect = hero.getBoundingClientRect();
-    const trackHeight = hero.offsetHeight - window.innerHeight;
+    const sticky = hero.querySelector('.hero__sticky');
+    const trackHeight = hero.offsetHeight - (sticky ? sticky.offsetHeight : window.innerHeight);
     if (trackHeight <= 0) return;
     currentProgress = clamp(-rect.top / trackHeight, 0, 1);
 
-    if (hasSource) {
-      if (!video.classList.contains('is-active')) video.classList.add('is-active');
-      if (video.readyState >= 1 && video.duration) {
-        video.currentTime = currentProgress * video.duration;
-      }
-    }
+    if (hasSource) seekLoop();
 
     if (hint) hint.style.opacity = String(1 - seg(currentProgress, 0, 0.07));
     reveal(kicker, 0.04, 0.18);

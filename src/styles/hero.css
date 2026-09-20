@@ -2,12 +2,11 @@
    background video/image visually pins via pure CSS while JS scrubs the video's
    currentTime against scroll progress — no animation library required. */
 .hero {
-  --hero-track: 260vh;
-  height: var(--hero-track);
+  height: 260vh; height: 260svh;
   position: relative;
 }
 .hero__sticky {
-  position: sticky; top: 0; height: 100vh; min-height: 560px; overflow: hidden;
+  position: sticky; top: 0; height: 100vh; height: 100svh; min-height: 560px; overflow: hidden;
   display: flex; flex-direction: column; justify-content: flex-end;
   color: #fff;
 }
@@ -68,10 +67,10 @@
 @keyframes scrollcue { 0% { top: -100%; } 60% { top: 100%; } 100% { top: 100%; } }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero { --hero-track: 100vh; }
+  .hero { height: 100vh; height: 100svh; }
   .hero__scrollcue { display: none; }
 }
 @media (max-width: 640px) {
-  .hero { --hero-track: 180vh; }
+  .hero { height: 180vh; height: 180svh; }
   .hero__content { padding-bottom: 70px; }
 }

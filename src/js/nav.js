@@ -5,6 +5,7 @@
  * the hero content's own scroll-reveal (src/js/heroVideo.js) — then fades
  * out gracefully if the visitor is back at the very top. Skipped entirely
  * under prefers-reduced-motion (header just stays fully visible).
+ * On inner pages the header is always visible and turns solid after 40px.
  * Also drives the mobile menu.
  */
 export function initNav() {
@@ -13,14 +14,15 @@ export function initNav() {
   const nav = document.getElementById('mainNav');
   if (!header) return;
 
+  const isHome = document.body.classList.contains('page-home');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
 
   let ticking = false;
   const update = () => {
     ticking = false;
-    header.classList.toggle('is-solid', window.scrollY > window.innerHeight * 0.6);
-    if (!reduceMotion) {
+    header.classList.toggle('is-solid', window.scrollY > (isHome ? window.innerHeight * 0.6 : 40));
+    if (isHome && !reduceMotion) {
       const t = clamp(window.scrollY / 90, 0, 1);
       header.style.opacity = String(t);
       header.style.pointerEvents = t < 0.05 ? 'none' : '';
@@ -45,5 +47,7 @@ export function initNav() {
     });
     nav.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+    document.addEventListener('click', (e) => { if (e.target === document.body) closeMenu(); });
+    window.matchMedia('(min-width: 901px)').addEventListener('change', closeMenu);
   }
 }
