@@ -36,9 +36,29 @@ function htmlPartials() {
   };
 }
 
+// Inlines the (small) built stylesheet into every page so first paint doesn't wait on a CSS round trip.
+function inlineCss() {
+  return {
+    name: 'inline-css',
+    apply: 'build',
+    enforce: 'post',
+    transformIndexHtml: {
+      order: 'post',
+      handler(html, ctx) {
+        return html.replace(/<link rel="stylesheet"[^>]*href="\.\/(assets\/[^"]+\.css)"[^>]*>/g, (tag, name) => {
+          const asset = ctx.bundle && ctx.bundle[name];
+          if (!asset) return tag;
+          // the stylesheet lived in /assets/, so its ../assets/x urls become ./assets/x from the page root
+          return `<style>${String(asset.source).replaceAll('url(../assets/', 'url(./assets/')}</style>`;
+        });
+      }
+    }
+  };
+}
+
 export default defineConfig({
   base: './',
-  plugins: [htmlPartials()],
+  plugins: [htmlPartials(), inlineCss()],
   build: {
     outDir: 'dist',
     assetsInlineLimit: 0,
