@@ -6,8 +6,8 @@
  * While that sticky viewport is pinned, we compute how far the user has
  * scrolled through the track (0–1) and use it to drive two things:
  *
- *  1. Video scrubbing — video.currentTime tracks progress (only if a real
- *     <source> exists; otherwise the static .hero__fallback image stays put).
+ *  1. Video scrubbing — video.currentTime tracks progress (only if the video
+ *     loads; otherwise the static .hero__fallback image stays put).
  *  2. Text reveal — the kicker/headline/description/actions start hidden so
  *     the opening frame is a clean, text-free shot, then fade + slide in
  *     from the left in a short staggered sequence as the visitor scrolls.
@@ -24,7 +24,12 @@ export function initHeroVideo() {
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  const hasSource = !!video.querySelector('source[src]');
+  // The video is fetched only after the page has loaded (so it never competes with the
+  // poster, fonts and CSS), in a small portrait cut on phones, and skipped on data-saver / 2G.
+  const conn = navigator.connection;
+  const lowData = !!conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || ''));
+  const src = window.matchMedia('(max-width: 720px)').matches ? video.dataset.srcMobile : video.dataset.srcDesktop;
+  const hasSource = !!src && !lowData;
   const hint = hero.querySelector('.hero__scrollcue');
   const kicker = hero.querySelector('.hero__kicker');
   const title = hero.querySelector('.hero__title');
@@ -35,8 +40,16 @@ export function initHeroVideo() {
   video.addEventListener('loadedmetadata', render, { once: true });
   // Show the video only once a real frame exists, so the poster never flashes to black.
   video.addEventListener('loadeddata', () => { if (hasSource) video.classList.add('is-active'); seekLoop(); }, { once: true });
-  // iOS Safari won't fetch frames for a paused, never-played video: a muted play/pause primes it.
-  if (hasSource) video.play().then(() => video.pause()).catch(() => {});
+  function startVideo() {
+    video.src = src;
+    // iOS Safari won't fetch frames for a paused, never-played video: a muted play/pause primes it.
+    video.play().then(() => video.pause()).catch(() => {});
+  }
+  if (hasSource) {
+    const idle = () => ('requestIdleCallback' in window ? requestIdleCallback(startVideo, { timeout: 1500 }) : setTimeout(startVideo, 300));
+    if (document.readyState === 'complete') idle();
+    else window.addEventListener('load', idle, { once: true });
+  }
 
   const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
   const seg = (p, a, b) => clamp((p - a) / (b - a), 0, 1);

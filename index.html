@@ -10,9 +10,8 @@
 <meta property="og:type" content="website">
 <meta property="og:image" content="/assets/images/hero-poster.jpg">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/inter.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/playfair.woff2" crossorigin>
 <link rel="preload" as="image" href="/assets/images/hero-poster.jpg">
 <script type="application/ld+json">
 {
@@ -43,9 +42,8 @@
   <section class="hero" id="top" aria-label="Hero">
     <div class="hero__sticky">
       <div class="hero__media">
-        <video class="hero__video" id="heroVideo" muted playsinline preload="auto"
+        <video class="hero__video" id="heroVideo" data-src-desktop="assets/video/header.mp4" data-src-mobile="assets/video/header-mobile.mp4" muted playsinline preload="none"
           poster="/assets/images/hero-poster.jpg" aria-hidden="true">
-          <source src="/assets/video/header.mp4" type="video/mp4">
         </video>
         <div class="media hero__fallback" data-fallback-label="hero-poster.jpg">
           <img src="/assets/images/hero-poster.jpg" alt="Bronze villa elevator in a bright, modern living space" fetchpriority="high">

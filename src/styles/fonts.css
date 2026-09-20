@@ -1,0 +1,4 @@
+/* Self-hosted (latin subset, variable) — avoids the render-blocking Google Fonts round trips. */
+@font-face { font-family: 'Inter'; font-style: normal; font-weight: 400 700; font-display: swap; src: url('/assets/fonts/inter.woff2') format('woff2'); }
+@font-face { font-family: 'Playfair Display'; font-style: normal; font-weight: 500 700; font-display: swap; src: url('/assets/fonts/playfair.woff2') format('woff2'); }
+@font-face { font-family: 'Playfair Display'; font-style: italic; font-weight: 500; font-display: swap; src: url('/assets/fonts/playfair-italic.woff2') format('woff2'); }
