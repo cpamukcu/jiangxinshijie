@@ -41,7 +41,11 @@ export function initHeroVideo() {
   // Show the video only once a real frame exists, so the poster never flashes to black.
   video.addEventListener('loadeddata', () => { if (hasSource) video.classList.add('is-active'); seekLoop(); }, { once: true });
   function startVideo() {
+    // Markup says preload="none" so nothing is fetched early; Safari won't fetch a
+    // preload="none" video at all (even with src set) unless this is flipped and load() called.
+    video.preload = 'auto';
     video.src = src;
+    video.load();
     // iOS Safari won't fetch frames for a paused, never-played video: a muted play/pause primes it.
     video.play().then(() => video.pause()).catch(() => {});
   }
