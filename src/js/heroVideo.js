@@ -20,6 +20,7 @@
 export function initHeroVideo() {
   const hero = document.querySelector('.hero');
   const video = document.getElementById('heroVideo');
+  const canvas = document.getElementById('heroVideoCanvas');
   if (!hero || !video) return;
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -36,10 +37,29 @@ export function initHeroVideo() {
   const desc = hero.querySelector('.hero__desc');
   const actions = hero.querySelector('.hero__actions');
 
-  video.addEventListener('error', () => { video.classList.remove('is-active'); }, { once: true });
+  const ctx2d = canvas ? canvas.getContext('2d', { alpha: false }) : null;
+
+  // Paints the video's current frame into the canvas, cropped to match object-fit: cover.
+  function drawFrame() {
+    if (!ctx2d || !video.videoWidth) return;
+    const rect = canvas.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const w = Math.max(1, Math.round(rect.width * dpr));
+    const h = Math.max(1, Math.round(rect.height * dpr));
+    if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+    const vw = video.videoWidth, vh = video.videoHeight;
+    const boxAspect = w / h, vidAspect = vw / vh;
+    let sx, sy, sw, sh;
+    if (vidAspect > boxAspect) { sh = vh; sw = vh * boxAspect; sx = (vw - sw) / 2; sy = 0; }
+    else { sw = vw; sh = vw / boxAspect; sx = 0; sy = (vh - sh) / 2; }
+    try { ctx2d.drawImage(video, sx, sy, sw, sh, 0, 0, w, h); } catch (e) { return; }
+    if (!canvas.classList.contains('is-active')) canvas.classList.add('is-active');
+  }
+
+  video.addEventListener('error', () => { if (canvas) canvas.classList.remove('is-active'); }, { once: true });
   video.addEventListener('loadedmetadata', render, { once: true });
-  // Show the video only once a real frame exists, so the poster never flashes to black.
-  video.addEventListener('loadeddata', () => { if (hasSource) video.classList.add('is-active'); seekLoop(); }, { once: true });
+  // Paint the first frame only once real data exists, so the poster never flashes to black.
+  video.addEventListener('loadeddata', () => { if (hasSource) drawFrame(); seekLoop(); }, { once: true });
   function startVideo() {
     // Markup says preload="none" so nothing is fetched early; Safari won't fetch a
     // preload="none" video at all (even with src set) unless this is flipped and load() called.
@@ -83,6 +103,7 @@ export function initHeroVideo() {
         if (Math.abs(currentProgress - shown) < 0.0008) shown = currentProgress;
         const t = shown * video.duration;
         if (!video.seeking && Math.abs(video.currentTime - t) > 0.016) video.currentTime = t;
+        drawFrame();
       }
       if (!ready || shown !== currentProgress) requestAnimationFrame(step);
       else looping = false;

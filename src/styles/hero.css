@@ -11,12 +11,17 @@
   color: #fff;
 }
 .hero__media { position: absolute; inset: 0; }
-.hero__video, .hero__fallback, .hero__fallback img {
+.hero__video, .hero__video-canvas, .hero__fallback, .hero__fallback img {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
 }
-.hero__video { opacity: 0; transition: opacity .5s ease; }
-.hero__video.is-active { opacity: 1; }
-.hero__video.is-active ~ .hero__fallback { opacity: 0; }
+/* The <video> itself is never shown — some browsers silently stop compositing a
+   paused, JS-seeked video layer (state looks fine in devtools, nothing paints).
+   heroVideo.js draws each scrubbed frame into this <canvas> instead, which paints
+   reliably everywhere. */
+.hero__video { opacity: 0 !important; }
+.hero__video-canvas { opacity: 0; transition: opacity .5s ease; }
+.hero__video-canvas.is-active { opacity: 1; }
+.hero__video-canvas.is-active ~ .hero__fallback { opacity: 0; }
 .hero__fallback { transition: opacity .5s ease; }
 .hero__vignette {
   position: absolute; inset: 0;
