@@ -33,7 +33,7 @@
 .btn--gold:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
 .main-nav a { position: relative; }
 .main-nav a[aria-current="page"]::after { content: ""; position: absolute; left: 0; right: 0; bottom: -7px; height: 1.5px; background: var(--gold); }
-.main-nav__contact { display: none; }
+.main-nav a.main-nav__contact { display: none; }
 
 /* ---------- call-to-action band ---------- */
 .cta-band { background: var(--navy); color: #fff; padding: 72px 0; }
@@ -177,8 +177,8 @@
   .safety-grid--3 { grid-template-columns: repeat(2, 1fr); }
   .tech-group__note { display: none; }
 }
-@media (max-width: 900px) {
-  .main-nav__contact { display: flex; }
+@media (max-width: 1150px) {
+  .main-nav a.main-nav__contact { display: flex; }
   .feature-row, .well-compare, .contact-page-grid { grid-template-columns: 1fr; gap: 36px; }
   .feature-row:nth-child(even) .feature-row__media { order: 0; }
   .well-compare__media .media { min-height: 320px; }
