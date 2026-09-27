@@ -1,5 +1,5 @@
 /* ---------- split layout (brand story, well solution) ---------- */
-.split { display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px; align-items: start; margin-bottom: 64px; }
+.split { display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px; align-items: center; margin-bottom: 64px; }
 .split--well { margin-top: 72px; margin-bottom: 56px; align-items: center; }
 .split__media .media { aspect-ratio: 4 / 3; border-radius: var(--radius); box-shadow: var(--shadow); }
 .split--img-right .split__media { order: 2; }
@@ -42,17 +42,20 @@
 
 /* ---------- safety grid ---------- */
 .safety-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--hairline-light); border: 1px solid var(--hairline-light); }
-.safety-item { background: var(--titanium); padding: 38px 28px; transition: background .3s ease; }
+.safety-item { background: var(--titanium); padding: 40px 28px; transition: background .3s ease; text-align: center; }
 .safety-item:hover { background: var(--titanium-2); }
 .safety-item__icon-wrap {
-  width: 56px; height: 56px; border-radius: 50%; margin-bottom: 22px;
+  width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 22px;
   display: flex; align-items: center; justify-content: center;
-  background: radial-gradient(circle at 32% 28%, rgba(227,200,153,.18), rgba(227,200,153,.05) 70%);
-  border: 1px solid rgba(227,200,153,.28);
+  background: radial-gradient(circle at 32% 28%, rgba(227,200,153,.22), rgba(227,200,153,.06) 70%);
+  border: 1px solid rgba(227,200,153,.32);
+  box-shadow: 0 1px 0 rgba(255,255,255,.04) inset, 0 8px 20px rgba(0,0,0,.18);
+  transition: transform .3s var(--ease), border-color .3s var(--ease);
 }
-.safety-item__icon { width: 24px; height: 24px; color: var(--gold-light); }
-.safety-item h3 { font-family: var(--font-body); font-size: 16px; font-weight: 600; margin-bottom: 10px; display: flex; flex-direction: column; gap: 4px; }
-.safety-item p { font-size: 13.5px; color: #cfcbc0; }
+.safety-item:hover .safety-item__icon-wrap { transform: translateY(-2px); border-color: rgba(227,200,153,.5); }
+.safety-item__icon { width: 26px; height: 26px; color: var(--gold-light); }
+.safety-item h3 { font-family: var(--font-body); font-size: 16px; font-weight: 600; margin-bottom: 10px; }
+.safety-item p { font-size: 13.5px; color: #cfcbc0; max-width: 26ch; margin-inline: auto; }
 
 /* ---------- solutions grid ---------- */
 .solutions-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; margin-bottom: 30px; }
@@ -70,32 +73,39 @@
 .swatches__grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 18px; margin-bottom: 8px; }
 .media--swatch { aspect-ratio: 1; border-radius: var(--radius); box-shadow: var(--shadow); }
 .swatches__grid figcaption { margin-top: 10px; font-size: 12.5px; text-align: center; }
-.glass-list { display: flex; flex-wrap: wrap; gap: 12px; }
-.glass-list li {
-  display: inline-flex; align-items: center; gap: 10px;
-  font-size: 13.5px; font-weight: 500; padding: 8px 18px 8px 8px; border: 1px solid var(--hairline);
-  border-radius: 100px; color: var(--charcoal); background: #fff; transition: border-color .25s ease, box-shadow .25s ease;
+/* Glass tints have no physical swatch to photograph, so they're rendered as
+   translucent glass panes (gradient + a diagonal sheen) rather than photos —
+   same card grid as the well-colour swatches above, for visual consistency. */
+.glass-grid { margin-bottom: 0; }
+.glass-tile {
+  position: relative; aspect-ratio: 1; border-radius: var(--radius); box-shadow: var(--shadow);
+  overflow: hidden; border: 1px solid rgba(28,28,28,.08);
+  background-image:
+    linear-gradient(155deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,0) 30%),
+    linear-gradient(-25deg, rgba(0,0,0,.06) 0%, rgba(0,0,0,0) 40%);
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease);
 }
-.glass-list li:hover { border-color: var(--gold); box-shadow: var(--shadow); }
-.glass-list__chip {
-  width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
-  border: 1px solid rgba(28,28,28,.15); box-shadow: inset 0 1px 3px rgba(255,255,255,.6), inset 0 -2px 4px rgba(0,0,0,.08);
+.glass-tile__sheen {
+  position: absolute; top: -60%; left: -20%; width: 55%; height: 220%;
+  background: linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.65) 48%, rgba(255,255,255,0) 100%);
+  transform: rotate(20deg); pointer-events: none;
 }
-.glass-list__chip--clear { background: linear-gradient(135deg, #eef3f1, #dbe6e2); }
-.glass-list__chip--ultraclear { background: linear-gradient(135deg, #fbfdfd, #e9f1f2); }
-.glass-list__chip--eurogrey { background: linear-gradient(135deg, #9aa0a4, #6d7377); }
-.glass-list__chip--starblue { background: linear-gradient(135deg, #7c8ea0, #4f5f70); }
-.glass-list__chip--goldtea { background: linear-gradient(135deg, #cdab6f, #a3824c); }
-.glass-list__chip--eurotea { background: linear-gradient(135deg, #a5855a, #7a5a38); }
+figure:hover .glass-tile { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.glass-tile--clear { background-color: #eef4f2; }
+.glass-tile--ultraclear { background-color: #fbfdfd; }
+.glass-tile--eurogrey { background-color: #82898d; }
+.glass-tile--starblue { background-color: #64768a; }
+.glass-tile--goldtea { background-color: #bd9a5e; }
+.glass-tile--eurotea { background-color: #8f6a44; }
 
 /* ---------- cabin gallery ---------- */
 .cabin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--hairline-light); border: 1px solid var(--hairline-light); }
-.cabin-grid > .cabin-card:last-child:nth-child(3n+1) { grid-column: 1 / -1; }
-.cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__btn { display: grid; grid-template-columns: 240px 1fr; align-items: center; gap: 28px; padding: 20px 26px; text-align: left; }
-.cabin-grid > .cabin-card:last-child:nth-child(3n+1) .media { aspect-ratio: 3/2; margin-bottom: 0; }
-.cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__code,
-.cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__name,
-.cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__mood { padding: 0; }
+/* A grid of 10 leaves one orphan card alone in the last row; spanning it full-width
+   stops the container's own background showing through the two empty cells beside
+   it, but it must still render as a normal-width card (not stretched), or it looks
+   like an oversized, half-empty row. */
+.cabin-grid > .cabin-card:last-child:nth-child(3n+1) { grid-column: 1 / -1; display: flex; justify-content: center; }
+.cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__btn { width: 100%; max-width: calc((100% - 4px) / 3); }
 .cabin-grid__more {
   text-align: center; font-size: 13.5px; color: #cfcbc0; padding: 22px 24px 0; max-width: 640px; margin: 0 auto;
 }

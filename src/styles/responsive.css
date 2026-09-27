@@ -3,14 +3,12 @@
   .solutions-grid { grid-template-columns: repeat(2, 1fr); }
   .case-grid { grid-template-columns: repeat(3, 1fr); }
   .cabin-grid { grid-template-columns: repeat(2, 1fr); }
+  /* 10 items divide evenly into a 2-column grid — no orphan, so undo the
+     3-column full-width/centering treatment from sections.css. */
+  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) { grid-column: auto; display: block; }
+  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__btn { max-width: none; }
   .details-grid--3 { grid-template-columns: 1fr 1fr; }
   .safety-intro { grid-template-columns: 1fr; }
-  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) { grid-column: auto; }
-  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__btn { display: block; padding: 0 0 26px; }
-  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) .media { aspect-ratio: 3/4; margin-bottom: 20px; }
-  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__code,
-  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__name,
-  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__mood { padding: 0 26px; }
 }
 
 @media (max-width: 900px) {

@@ -17,9 +17,10 @@
 .site-header.is-solid::before { opacity: 0; }
 .header-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .brand__logo {
-  height: 30px; width: auto; display: block; filter: brightness(0) invert(1) drop-shadow(0 1px 5px rgba(0,0,0,.5));
-  transition: filter .35s var(--ease);
+  height: 44px; width: auto; display: block; filter: brightness(0) invert(1) drop-shadow(0 1px 5px rgba(0,0,0,.5));
+  transition: filter .35s var(--ease), height .35s var(--ease);
 }
+.site-header.is-solid .brand__logo { height: 38px; }
 .site-header.is-solid .brand__logo { filter: none; }
 
 .main-nav { display: flex; gap: 30px; }
