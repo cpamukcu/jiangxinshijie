@@ -14,14 +14,14 @@ export function initLightbox() {
   let lastFocused = null;
 
   function open(card) {
-    const img = card.querySelector('.media img');
+    const media = card.querySelector('.media picture') || card.querySelector('.media img');
     const specsBlock = card.querySelector('.cabin-specs');
-    if (!img || !specsBlock) return;
+    if (!media || !specsBlock) return;
 
     mediaEl.innerHTML = '';
-    const clonedImg = img.cloneNode(true);
-    clonedImg.removeAttribute('loading');
-    mediaEl.appendChild(clonedImg);
+    const cloned = media.cloneNode(true);
+    (cloned.matches('img') ? cloned : cloned.querySelector('img'))?.removeAttribute('loading');
+    mediaEl.appendChild(cloned);
 
     titleEl.textContent = specsBlock.querySelector('.cabin-specs__title')?.textContent || '';
     specsEl.innerHTML = '';

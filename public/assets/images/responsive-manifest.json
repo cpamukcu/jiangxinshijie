@@ -1,0 +1,611 @@
+{
+  "cabin-bailu": {
+    "origWidth": 825,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "cabin-bailu-800w.jpg",
+        "webp": "cabin-bailu-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "cabin-fenghua": {
+    "origWidth": 825,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "cabin-fenghua-800w.jpg",
+        "webp": "cabin-fenghua-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "cabin-jingjie": {
+    "origWidth": 825,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "cabin-jingjie-800w.jpg",
+        "webp": "cabin-jingjie-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "cabin-lingyun": {
+    "origWidth": 825,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "cabin-lingyun-800w.jpg",
+        "webp": "cabin-lingyun-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "cabin-liuguang": {
+    "origWidth": 825,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "cabin-liuguang-800w.jpg",
+        "webp": "cabin-liuguang-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "cabin-lumina": {
+    "origWidth": 825,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "cabin-lumina-800w.jpg",
+        "webp": "cabin-lumina-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "cabin-muyu": {
+    "origWidth": 825,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "cabin-muyu-800w.jpg",
+        "webp": "cabin-muyu-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "cabin-tangyue": {
+    "origWidth": 825,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "cabin-tangyue-800w.jpg",
+        "webp": "cabin-tangyue-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "cabin-wujie": {
+    "origWidth": 825,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "cabin-wujie-800w.jpg",
+        "webp": "cabin-wujie-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "cabin-yinshe": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "cabin-yinshe-800w.jpg",
+        "webp": "cabin-yinshe-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "case-01": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "case-01-800w.jpg",
+        "webp": "case-01-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "case-02": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "case-02-800w.jpg",
+        "webp": "case-02-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "case-03": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "case-03-800w.jpg",
+        "webp": "case-03-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "case-04": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "case-04-800w.jpg",
+        "webp": "case-04-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "case-05": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "case-05-800w.jpg",
+        "webp": "case-05-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "case-06": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "case-06-800w.jpg",
+        "webp": "case-06-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "case-07": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "case-07-800w.jpg",
+        "webp": "case-07-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "case-08": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "case-08-800w.jpg",
+        "webp": "case-08-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "case-09": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "case-09-800w.jpg",
+        "webp": "case-09-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "case-10": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "case-10-800w.jpg",
+        "webp": "case-10-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "component-ceiling": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "component-ceiling-800w.jpg",
+        "webp": "component-ceiling-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "component-door-panel": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "component-door-panel-800w.jpg",
+        "webp": "component-door-panel-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "component-export-crate": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "component-export-crate-800w.jpg",
+        "webp": "component-export-crate-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "component-flooring": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "component-flooring-800w.jpg",
+        "webp": "component-flooring-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "component-handrail": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "component-handrail-800w.jpg",
+        "webp": "component-handrail-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "component-hero": {
+    "origWidth": 1800,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "component-hero-800w.jpg",
+        "webp": "component-hero-800w.webp"
+      },
+      {
+        "width": 1600,
+        "jpg": "component-hero-1600w.jpg",
+        "webp": "component-hero-1600w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "component-materials-flatlay": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "component-materials-flatlay-800w.jpg",
+        "webp": "component-materials-flatlay-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "component-oem-production": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "component-oem-production-800w.jpg",
+        "webp": "component-oem-production-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "component-wall-panel": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "component-wall-panel-800w.jpg",
+        "webp": "component-wall-panel-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "control-panel": {
+    "origWidth": 1800,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "control-panel-800w.jpg",
+        "webp": "control-panel-800w.webp"
+      },
+      {
+        "width": 1600,
+        "jpg": "control-panel-1600w.jpg",
+        "webp": "control-panel-1600w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "craftsmanship-detail": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "craftsmanship-detail-800w.jpg",
+        "webp": "craftsmanship-detail-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "detail-cabin-stairwell": {
+    "origWidth": 1800,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "detail-cabin-stairwell-800w.jpg",
+        "webp": "detail-cabin-stairwell-800w.webp"
+      },
+      {
+        "width": 1600,
+        "jpg": "detail-cabin-stairwell-1600w.jpg",
+        "webp": "detail-cabin-stairwell-1600w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "detail-call-panel-insitu": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "detail-call-panel-insitu-800w.jpg",
+        "webp": "detail-call-panel-insitu-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "detail-drawings-desk": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "detail-drawings-desk-800w.jpg",
+        "webp": "detail-drawings-desk-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "detail-guide-rails": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "detail-guide-rails-800w.jpg",
+        "webp": "detail-guide-rails-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "detail-hero": {
+    "origWidth": 1328,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "detail-hero-800w.jpg",
+        "webp": "detail-hero-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "detail-pit-overhead": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "detail-pit-overhead-800w.jpg",
+        "webp": "detail-pit-overhead-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "detail-shaft-construction": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "detail-shaft-construction-800w.jpg",
+        "webp": "detail-shaft-construction-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "hero-poster": {
+    "origWidth": 1280,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "hero-poster-800w.jpg",
+        "webp": "hero-poster-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "hero": {
+    "origWidth": 1800,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "hero-800w.jpg",
+        "webp": "hero-800w.webp"
+      },
+      {
+        "width": 1600,
+        "jpg": "hero-1600w.jpg",
+        "webp": "hero-1600w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "manufacturing-detail": {
+    "origWidth": 1800,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "manufacturing-detail-800w.jpg",
+        "webp": "manufacturing-detail-800w.webp"
+      },
+      {
+        "width": 1600,
+        "jpg": "manufacturing-detail-1600w.jpg",
+        "webp": "manufacturing-detail-1600w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "materials-flatlay": {
+    "origWidth": 1800,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "materials-flatlay-800w.jpg",
+        "webp": "materials-flatlay-800w.webp"
+      },
+      {
+        "width": 1600,
+        "jpg": "materials-flatlay-1600w.jpg",
+        "webp": "materials-flatlay-1600w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "safety-lifestyle": {
+    "origWidth": 1100,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "safety-lifestyle-800w.jpg",
+        "webp": "safety-lifestyle-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "structure-backpack": {
+    "origWidth": 825,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "structure-backpack-800w.jpg",
+        "webp": "structure-backpack-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "structure-gantry": {
+    "origWidth": 825,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "structure-gantry-800w.jpg",
+        "webp": "structure-gantry-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "structure-small-gantry": {
+    "origWidth": 825,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "structure-small-gantry-800w.jpg",
+        "webp": "structure-small-gantry-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "structure-strong-drive": {
+    "origWidth": 825,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "structure-strong-drive-800w.jpg",
+        "webp": "structure-strong-drive-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "swatch-champagne-gold": {
+    "origWidth": 520,
+    "variants": [],
+    "singleWebp": "swatch-champagne-gold.webp"
+  },
+  "swatch-cinnabar-red": {
+    "origWidth": 520,
+    "variants": [],
+    "singleWebp": "swatch-cinnabar-red.webp"
+  },
+  "swatch-radiant-silver": {
+    "origWidth": 520,
+    "variants": [],
+    "singleWebp": "swatch-radiant-silver.webp"
+  },
+  "swatch-rose-gold": {
+    "origWidth": 520,
+    "variants": [],
+    "singleWebp": "swatch-rose-gold.webp"
+  },
+  "swatch-silver-white": {
+    "origWidth": 520,
+    "variants": [],
+    "singleWebp": "swatch-silver-white.webp"
+  },
+  "swatch-sky-blue": {
+    "origWidth": 520,
+    "variants": [],
+    "singleWebp": "swatch-sky-blue.webp"
+  },
+  "villa-exterior": {
+    "origWidth": 1800,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "villa-exterior-800w.jpg",
+        "webp": "villa-exterior-800w.webp"
+      },
+      {
+        "width": 1600,
+        "jpg": "villa-exterior-1600w.jpg",
+        "webp": "villa-exterior-1600w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "villa-lifestyle-banner": {
+    "origWidth": 1800,
+    "variants": [
+      {
+        "width": 800,
+        "jpg": "villa-lifestyle-banner-800w.jpg",
+        "webp": "villa-lifestyle-banner-800w.webp"
+      },
+      {
+        "width": 1600,
+        "jpg": "villa-lifestyle-banner-1600w.jpg",
+        "webp": "villa-lifestyle-banner-1600w.webp"
+      }
+    ],
+    "singleWebp": null
+  }
+}
