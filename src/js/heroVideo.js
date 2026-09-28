@@ -72,6 +72,15 @@ export function initHeroVideo() {
   video.addEventListener('loadedmetadata', render, { once: true });
   // Paint the first frame only once real data exists, so the poster never flashes to black.
   video.addEventListener('loadeddata', () => { if (hasSource) drawFrame(); seekLoop(); }, { once: true });
+  // GitHub Pages serves the video as a single progressive stream, so readyState can stay
+  // below HAVE_CURRENT_DATA for a while after a seek jumps past what's buffered so far —
+  // seekLoop() bails out without scheduling a retry in that case (see its own comment).
+  // If the visitor stops scrolling at exactly that moment, nothing else would ever call
+  // seekLoop() again, leaving the frame frozen even once enough of the file arrives. These
+  // retry on every 'progress' tick (fired as bytes keep arriving) and once on 'canplay', so
+  // scrubbing always catches up to the current scroll position without polling every frame.
+  video.addEventListener('progress', () => { if (hasSource) seekLoop(); });
+  video.addEventListener('canplay', () => { if (hasSource) seekLoop(); }, { once: true });
   function startVideo() {
     // Markup says preload="none" so nothing is fetched early; Safari won't fetch a
     // preload="none" video at all (even with src set) unless this is flipped and load() called.
