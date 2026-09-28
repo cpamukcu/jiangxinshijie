@@ -40,7 +40,7 @@ wired by `src/js/assetFallback.js`) instead of a broken-image icon.
 
 | Asset | Status | Notes |
 |---|---|---|
-| `public/assets/video/header.mp4` | **In place** | 1280×720 H.264, 8s, scroll-scrubbed via `src/js/heroVideo.js`. A second take (`Elevator_descending_in_villa_...mp4`) is sitting in `Desktop/VILLA/` unused — swap it in if you prefer that take. |
+| `public/assets/video/frames/` | **In place** | Hero is a preloaded still-frame sequence (32 WebP frames per breakpoint, ~5s source clip), not a scrubbed `<video>` — scrubbing a real video by seek is latency-bound and visibly stutters on mobile Safari. Regenerate from a new source clip with `FFMPEG_BIN=<path> node scripts/gen-hero-frames.mjs` (edit the `SOURCES` list in that file to point at the new clip first). |
 | `public/assets/images/logo.svg` | **Placeholder** | A simple typographic mark I built (navy wordmark + geometric "X"). Swap for the real vector logo file — keep the filename `logo.svg` or update the two `<img>` references in `index.html`. |
 | Real contact details | Placeholder | `src/js/contactForm.js` uses `info@jiangxinshijie.com` as the mailto target — replace with the real inbox, and wire the form to a real backend (e.g. Formspree) per the `TODO` comment in that file. |
 | QR codes on the home Contact section | Placeholder | The "Follow Us" boxes are unlabeled dashed placeholders (Website / Xiaohongshu / Douyin / WeChat Channels) — drop in real QR images when available; do not fabricate scannable codes. |
@@ -61,7 +61,7 @@ src/main.js              entry point — imports styles + initializes modules
 src/styles/              tokens, base, header, hero, sections, lightbox, pages, responsive
 src/js/
   nav.js                 sticky header + mobile menu
-  heroVideo.js            scroll-scrub hero video (CSS-sticky + rAF, no library)
+  heroVideo.js            scroll-scrub hero frame sequence (CSS-sticky + rAF, no library)
   reveal.js               IntersectionObserver fade/rise-on-scroll
   lightbox.js              vanilla modal for the cabin interior gallery
   assetFallback.js         labeled placeholder for any missing image

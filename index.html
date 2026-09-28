@@ -39,10 +39,9 @@
   <section class="hero" id="top" aria-label="Hero">
     <div class="hero__sticky">
       <div class="hero__media">
-        <video class="hero__video" id="heroVideo" data-src-desktop="assets/video/header.mp4" data-src-mobile="assets/video/header-mobile.mp4" muted playsinline preload="none"
-          poster="/assets/images/hero-poster.jpg" aria-hidden="true">
-        </video>
-        <canvas class="hero__video-canvas" id="heroVideoCanvas" aria-hidden="true"></canvas>
+        <canvas class="hero__video-canvas" id="heroVideoCanvas" aria-hidden="true"
+          data-frames-desktop="assets/video/frames/header-desktop" data-frame-count-desktop="32"
+          data-frames-mobile="assets/video/frames/header-mobile" data-frame-count-mobile="32"></canvas>
         <div class="media hero__fallback" data-fallback-label="hero-poster.jpg">
           <picture><source type="image/webp" srcset="/assets/images/hero-poster-800w.webp 800w" sizes="100vw"><img src="/assets/images/hero-poster.jpg" srcset="/assets/images/hero-poster-800w.jpg 800w" sizes="100vw" alt="Bronze villa elevator in a bright, modern living space" fetchpriority="high"></picture>
         </div>

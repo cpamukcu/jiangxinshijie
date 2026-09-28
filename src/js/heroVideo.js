@@ -6,46 +6,53 @@
  * While that sticky viewport is pinned, we compute how far the user has
  * scrolled through the track (0–1) and use it to drive two things:
  *
- *  1. Video scrubbing — video.currentTime tracks progress (only if the video
- *     loads; otherwise the static .hero__fallback image stays put).
+ *  1. Frame scrubbing — a preloaded sequence of still frames (extracted from
+ *     the source clip by scripts/gen-hero-frames.mjs) is drawn to a canvas,
+ *     picking whichever frame is nearest to the current scroll progress.
+ *     This used to scrub a real <video> element via video.currentTime, but
+ *     that's seek-latency-bound: even with dense keyframes and a small file,
+ *     mobile Safari's seek latency was high enough to visibly freeze/stutter
+ *     on a fast scroll (confirmed on a real iPhone). A preloaded image has
+ *     no seek step — once the frames are loaded, picking one for a given
+ *     scroll position is just a synchronous canvas draw, so scrubbing always
+ *     matches scroll position exactly, with no per-device latency to hit.
  *  2. Text reveal — the kicker/headline/description/actions start hidden so
  *     the opening frame is a clean, text-free shot, then fade + slide in
  *     from the left in a short staggered sequence as the visitor scrolls.
  *
- * `prefers-reduced-motion: reduce` disables both — the video stays on its
- * poster frame and all text is shown at full opacity immediately (no JS
- * inline styles applied at all, so the plain CSS/document-flow appearance
+ * `prefers-reduced-motion: reduce` disables both — the frame sequence stays
+ * on its poster frame and all text is shown at full opacity immediately (no
+ * JS inline styles applied at all, so the plain CSS/document-flow appearance
  * is what reduced-motion users get).
  */
 export function initHeroVideo() {
   const hero = document.querySelector('.hero');
-  const video = document.getElementById('heroVideo');
   const canvas = document.getElementById('heroVideoCanvas');
-  if (!hero || !video) return;
+  if (!hero || !canvas) return;
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  // The video is fetched only after the page has loaded (so it never competes with the
+  // Frames are fetched only after the page has loaded (so they never compete with the
   // poster, fonts and CSS), in a small portrait cut on phones, and skipped on data-saver / 2G.
   const conn = navigator.connection;
   const lowData = !!conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || ''));
-  const src = window.matchMedia('(max-width: 720px)').matches ? video.dataset.srcMobile : video.dataset.srcDesktop;
-  const hasSource = !!src && !lowData;
+  const isMobile = window.matchMedia('(max-width: 720px)').matches;
+  const base = isMobile ? canvas.dataset.framesMobile : canvas.dataset.framesDesktop;
+  const frameCount = parseInt(isMobile ? canvas.dataset.frameCountMobile : canvas.dataset.frameCountDesktop, 10) || 0;
+  const hasSource = !!base && frameCount > 1 && !lowData;
   const hint = hero.querySelector('.hero__scrollcue');
   const kicker = hero.querySelector('.hero__kicker');
   const title = hero.querySelector('.hero__title');
   const desc = hero.querySelector('.hero__desc');
   const actions = hero.querySelector('.hero__actions');
 
-  const ctx2d = canvas ? canvas.getContext('2d', { alpha: false }) : null;
+  const ctx2d = canvas.getContext('2d', { alpha: false });
 
-  // Canvas box size in device pixels, refreshed only on resize (see
-  // syncCanvasBox below) instead of read from the layout on every drawn
-  // frame — getBoundingClientRect() forces a layout, and drawFrame() can run
-  // once per rAF tick while scrubbing.
+  // Canvas box size in device pixels, refreshed only on resize instead of read from the
+  // layout on every drawn frame — getBoundingClientRect() forces a layout, and drawFrame()
+  // can run on every scroll event while scrubbing.
   const canvasBox = { w: 0, h: 0 };
   function syncCanvasBox() {
-    if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvasBox.w = Math.max(1, Math.round(rect.width * dpr));
@@ -53,45 +60,45 @@ export function initHeroVideo() {
   }
   syncCanvasBox();
 
-  // Paints the video's current frame into the canvas, cropped to match object-fit: cover.
-  function drawFrame() {
-    if (!ctx2d || !video.videoWidth) return;
+  // Paints one still frame into the canvas, cropped to match object-fit: cover.
+  function drawFrame(img) {
+    if (!ctx2d || !img || !img.naturalWidth) return;
     const w = canvasBox.w, h = canvasBox.h;
     if (!w || !h) return;
     if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
-    const vw = video.videoWidth, vh = video.videoHeight;
-    const boxAspect = w / h, vidAspect = vw / vh;
+    const iw = img.naturalWidth, ih = img.naturalHeight;
+    const boxAspect = w / h, imgAspect = iw / ih;
     let sx, sy, sw, sh;
-    if (vidAspect > boxAspect) { sh = vh; sw = vh * boxAspect; sx = (vw - sw) / 2; sy = 0; }
-    else { sw = vw; sh = vw / boxAspect; sx = 0; sy = (vh - sh) / 2; }
-    try { ctx2d.drawImage(video, sx, sy, sw, sh, 0, 0, w, h); } catch (e) { return; }
+    if (imgAspect > boxAspect) { sh = ih; sw = ih * boxAspect; sx = (iw - sw) / 2; sy = 0; }
+    else { sw = iw; sh = iw / boxAspect; sx = 0; sy = (ih - sh) / 2; }
+    try { ctx2d.drawImage(img, sx, sy, sw, sh, 0, 0, w, h); } catch (e) { return; }
     if (!canvas.classList.contains('is-active')) canvas.classList.add('is-active');
   }
 
-  video.addEventListener('error', () => { if (canvas) canvas.classList.remove('is-active'); }, { once: true });
-  video.addEventListener('loadedmetadata', render, { once: true });
-  // Paint the first frame only once real data exists, so the poster never flashes to black.
-  video.addEventListener('loadeddata', () => { if (hasSource) drawFrame(); seekLoop(); }, { once: true });
-  // GitHub Pages serves the video as a single progressive stream, so readyState can stay
-  // below HAVE_CURRENT_DATA for a while after a seek jumps past what's buffered so far —
-  // seekLoop() bails out without scheduling a retry in that case (see its own comment).
-  // If the visitor stops scrolling at exactly that moment, nothing else would ever call
-  // seekLoop() again, leaving the frame frozen even once enough of the file arrives. These
-  // retry on every 'progress' tick (fired as bytes keep arriving) and once on 'canplay', so
-  // scrubbing always catches up to the current scroll position without polling every frame.
-  video.addEventListener('progress', () => { if (hasSource) seekLoop(); });
-  video.addEventListener('canplay', () => { if (hasSource) seekLoop(); }, { once: true });
-  function startVideo() {
-    // Markup says preload="none" so nothing is fetched early; Safari won't fetch a
-    // preload="none" video at all (even with src set) unless this is flipped and load() called.
-    video.preload = 'auto';
-    video.src = src;
-    video.load();
-    // iOS Safari won't fetch frames for a paused, never-played video: a muted play/pause primes it.
-    video.play().then(() => video.pause()).catch(() => {});
+  const frames = [];
+  let framesReady = false;
+
+  function frameForProgress(p) {
+    const idx = Math.max(0, Math.min(frameCount - 1, Math.round(p * (frameCount - 1))));
+    return frames[idx];
+  }
+
+  function loadFrames() {
+    let loaded = 0;
+    for (let i = 0; i < frameCount; i++) {
+      const img = new Image();
+      img.decoding = 'async';
+      img.addEventListener('load', () => {
+        loaded++;
+        if (i === 0) drawFrame(img); // paint the opening frame as soon as it's in, so the poster never lingers longer than it has to
+        if (loaded === frameCount) { framesReady = true; drawFrame(frameForProgress(currentProgress)); }
+      }, { once: true });
+      img.src = `${base}-${String(i).padStart(2, '0')}.webp`;
+      frames[i] = img;
+    }
   }
   if (hasSource) {
-    const idle = () => ('requestIdleCallback' in window ? requestIdleCallback(startVideo, { timeout: 1500 }) : setTimeout(startVideo, 300));
+    const idle = () => ('requestIdleCallback' in window ? requestIdleCallback(loadFrames, { timeout: 1500 }) : setTimeout(loadFrames, 300));
     if (document.readyState === 'complete') idle();
     else window.addEventListener('load', idle, { once: true });
   }
@@ -108,47 +115,7 @@ export function initHeroVideo() {
   }
 
   let currentProgress = 0;
-  let shown = 0;
   let ticking = false;
-  let looping = false;
-
-  // Ease the video toward the scroll position and never queue a seek while one is
-  // in flight — phones drop frames badly if currentTime is set on every scroll event.
-  // Bails out synchronously (no rAF scheduled at all) while the video isn't ready yet,
-  // rather than spinning an empty rAF loop until it is — the 'loadeddata'/'progress'/
-  // 'canplay' listeners and later render() calls (on scroll) each retry seekLoop() on
-  // their own.
-  //
-  // The loop only stops once the real video.currentTime is actually within tolerance of
-  // the eased target — not just once the eased target itself has converged. Safari/WebKit
-  // can leave a single seek's `seeking` flag true for a second or more (slow on this site's
-  // sandboxed test runtime at least); if the exit check only looked at whether `shown` had
-  // caught up to currentProgress, a seek still in flight when that happened would get its
-  // currentTime write silently skipped (see the `!video.seeking` guard below) and the loop
-  // would exit anyway, permanently stranding the video short of where the scroll position
-  // says it should be. A frame budget caps the wait so a video that's stuck seeking forever
-  // can't spin this forever either — a later scroll/progress event will retry it.
-  function seekLoop() {
-    if (looping) return;
-    if (!(video.readyState >= 2 && video.duration)) return;
-    looping = true;
-    let framesLeft = 240; // ~4s at 60fps — generous, but not infinite, ceiling on the wait
-    const step = () => {
-      shown += (currentProgress - shown) * 0.22;
-      if (Math.abs(currentProgress - shown) < 0.0008) shown = currentProgress;
-      const t = shown * video.duration;
-      const synced = Math.abs(video.currentTime - t) <= 0.016;
-      if (!video.seeking && !synced) video.currentTime = t;
-      drawFrame();
-      framesLeft--;
-      if ((shown !== currentProgress || video.seeking || !synced) && framesLeft > 0) {
-        requestAnimationFrame(step);
-      } else {
-        looping = false;
-      }
-    };
-    requestAnimationFrame(step);
-  }
 
   function render() {
     ticking = false;
@@ -158,7 +125,7 @@ export function initHeroVideo() {
     if (trackHeight <= 0) return;
     currentProgress = clamp(-rect.top / trackHeight, 0, 1);
 
-    if (hasSource) seekLoop();
+    if (framesReady) drawFrame(frameForProgress(currentProgress));
 
     if (hint) hint.style.opacity = String(1 - seg(currentProgress, 0, 0.07));
     reveal(kicker, 0.04, 0.18);
