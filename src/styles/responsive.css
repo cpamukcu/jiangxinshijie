@@ -21,7 +21,9 @@
 
 @media (max-width: 640px) {
   .wrap { padding: 0 20px; }
+  .section { padding: 56px 0; }
   .hero__actions { flex-direction: column; align-items: flex-start; }
+  .btn { padding: 11px 20px; font-size: 13.5px; }
   .safety-grid, .solutions-grid, .case-grid, .cabin-grid { grid-template-columns: 1fr 1fr; }
   .swatches__grid { grid-template-columns: repeat(2, 1fr); }
   .case-grid { gap: 6px; }

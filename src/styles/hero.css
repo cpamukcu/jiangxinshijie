@@ -76,4 +76,8 @@
 @media (max-width: 640px) {
   .hero { height: 180vh; height: 180svh; }
   .hero__content { padding-bottom: 70px; }
+  .hero__kicker { margin-bottom: 12px; }
+  .hero__headline { margin-bottom: 22px; }
+  .hero__desc { margin-top: 8px; }
+  .hero__actions { gap: 10px; }
 }

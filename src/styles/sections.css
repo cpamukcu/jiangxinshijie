@@ -57,6 +57,15 @@
 .safety-item h3 { font-family: var(--font-body); font-size: 16px; font-weight: 600; margin-bottom: 10px; }
 .safety-item p { font-size: 13.5px; color: #cfcbc0; max-width: 26ch; margin-inline: auto; }
 
+@media (max-width: 640px) {
+  .vmv__item { padding: 24px 20px; }
+  .vmv__label { margin-bottom: 10px; }
+  .safety-item { padding: 26px 22px; }
+  .safety-item__icon-wrap { width: 52px; height: 52px; margin-bottom: 14px; }
+  .safety-item__icon { width: 22px; height: 22px; }
+  .safety-item h3 { margin-bottom: 6px; }
+}
+
 /* ---------- solutions grid ---------- */
 .solutions-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; margin-bottom: 30px; }
 .solution-card { }
