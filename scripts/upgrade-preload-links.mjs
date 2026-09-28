@@ -8,6 +8,17 @@
  * that source — everyone else silently falls back to fetching the plain
  * `href` JPEG when the <picture>'s own <img> is reached, same as before.
  *
+ * imagesrcset URLs are written relative (`assets/images/...`, no leading
+ * slash) rather than root-absolute: Vite's HTML asset pipeline rewrites
+ * `href`/`srcset` on the tags it recognizes to be base-relative (this site
+ * builds with base: './' for GitHub Pages, which serves from a /<repo>/
+ * subpath), but it does not recognize `imagesrcset` on <link rel="preload">
+ * as an asset attribute, so a root-absolute path here would reach the build
+ * untouched and 404 on GitHub Pages. Every page lives at the site root and
+ * so does /assets/, so a same-relative path resolves identically from any
+ * page — matching the relative form Vite itself already produces for
+ * `srcset` elsewhere in these files.
+ *
  * Idempotent: a link that already has imagesrcset is left untouched.
  */
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
@@ -30,7 +41,7 @@ for (const file of HTML_FILES) {
       console.warn(`  ! ${file}: no responsive variants for "${base}.jpg" — left preload as-is`);
       return full;
     }
-    const imagesrcset = entry.variants.map((v) => `/assets/images/${v.webp} ${v.width}w`).join(', ');
+    const imagesrcset = entry.variants.map((v) => `assets/images/${v.webp} ${v.width}w`).join(', ');
     total++;
     return `<link rel="preload" as="image" href="/assets/images/${base}.jpg" imagesrcset="${imagesrcset}" imagesizes="100vw" type="image/webp" fetchpriority="high">`;
   });
