@@ -15,14 +15,19 @@ export function initReveal() {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const canObserve = 'IntersectionObserver' in window;
 
-  document.querySelectorAll(STAGGER).forEach((container) => {
-    if (!container.classList.contains('reveal')) return;
+  // Read every container's gridTemplateColumns first (a batch of pure layout
+  // reads), then apply classes/styles in a second pass — interleaving reads
+  // and writes here would force a style recalculation per container instead
+  // of one for the whole batch.
+  const containers = [...document.querySelectorAll(STAGGER)].filter((c) => c.classList.contains('reveal'));
+  const cols = containers.map((container) =>
+    Math.max(1, getComputedStyle(container).gridTemplateColumns.split(' ').filter(Boolean).length || 1)
+  );
+  containers.forEach((container, ci) => {
     container.classList.remove('reveal');
-    const kids = [...container.children];
-    const cols = Math.max(1, getComputedStyle(container).gridTemplateColumns.split(' ').filter(Boolean).length || 1);
-    kids.forEach((kid, i) => {
+    [...container.children].forEach((kid, i) => {
       kid.classList.add('rv');
-      kid.style.setProperty('--rd', `${(i % cols) * 90}ms`);
+      kid.style.setProperty('--rd', `${(i % cols[ci]) * 90}ms`);
     });
   });
 

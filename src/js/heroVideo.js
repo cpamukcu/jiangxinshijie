@@ -39,13 +39,25 @@ export function initHeroVideo() {
 
   const ctx2d = canvas ? canvas.getContext('2d', { alpha: false }) : null;
 
+  // Canvas box size in device pixels, refreshed only on resize (see
+  // syncCanvasBox below) instead of read from the layout on every drawn
+  // frame — getBoundingClientRect() forces a layout, and drawFrame() can run
+  // once per rAF tick while scrubbing.
+  const canvasBox = { w: 0, h: 0 };
+  function syncCanvasBox() {
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvasBox.w = Math.max(1, Math.round(rect.width * dpr));
+    canvasBox.h = Math.max(1, Math.round(rect.height * dpr));
+  }
+  syncCanvasBox();
+
   // Paints the video's current frame into the canvas, cropped to match object-fit: cover.
   function drawFrame() {
     if (!ctx2d || !video.videoWidth) return;
-    const rect = canvas.getBoundingClientRect();
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const w = Math.max(1, Math.round(rect.width * dpr));
-    const h = Math.max(1, Math.round(rect.height * dpr));
+    const w = canvasBox.w, h = canvasBox.h;
+    if (!w || !h) return;
     if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
     const vw = video.videoWidth, vh = video.videoHeight;
     const boxAspect = w / h, vidAspect = vw / vh;
@@ -93,19 +105,20 @@ export function initHeroVideo() {
 
   // Ease the video toward the scroll position and never queue a seek while one is
   // in flight — phones drop frames badly if currentTime is set on every scroll event.
+  // Bails out synchronously (no rAF scheduled at all) while the video isn't ready yet,
+  // rather than spinning an empty rAF loop until it is — the 'loadeddata' listener and
+  // later render() calls (on scroll) each retry seekLoop() on their own.
   function seekLoop() {
     if (looping) return;
+    if (!(video.readyState >= 2 && video.duration)) return;
     looping = true;
     const step = () => {
-      const ready = video.readyState >= 2 && video.duration;
-      if (ready) {
-        shown += (currentProgress - shown) * 0.22;
-        if (Math.abs(currentProgress - shown) < 0.0008) shown = currentProgress;
-        const t = shown * video.duration;
-        if (!video.seeking && Math.abs(video.currentTime - t) > 0.016) video.currentTime = t;
-        drawFrame();
-      }
-      if (!ready || shown !== currentProgress) requestAnimationFrame(step);
+      shown += (currentProgress - shown) * 0.22;
+      if (Math.abs(currentProgress - shown) < 0.0008) shown = currentProgress;
+      const t = shown * video.duration;
+      if (!video.seeking && Math.abs(video.currentTime - t) > 0.016) video.currentTime = t;
+      drawFrame();
+      if (shown !== currentProgress) requestAnimationFrame(step);
       else looping = false;
     };
     requestAnimationFrame(step);
@@ -131,8 +144,9 @@ export function initHeroVideo() {
   const onScroll = () => {
     if (!ticking) { requestAnimationFrame(render); ticking = true; }
   };
+  const onResize = () => { syncCanvasBox(); onScroll(); };
 
   window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll);
+  window.addEventListener('resize', onResize);
   render();
 }
