@@ -115,20 +115,37 @@ export function initHeroVideo() {
   // Ease the video toward the scroll position and never queue a seek while one is
   // in flight — phones drop frames badly if currentTime is set on every scroll event.
   // Bails out synchronously (no rAF scheduled at all) while the video isn't ready yet,
-  // rather than spinning an empty rAF loop until it is — the 'loadeddata' listener and
-  // later render() calls (on scroll) each retry seekLoop() on their own.
+  // rather than spinning an empty rAF loop until it is — the 'loadeddata'/'progress'/
+  // 'canplay' listeners and later render() calls (on scroll) each retry seekLoop() on
+  // their own.
+  //
+  // The loop only stops once the real video.currentTime is actually within tolerance of
+  // the eased target — not just once the eased target itself has converged. Safari/WebKit
+  // can leave a single seek's `seeking` flag true for a second or more (slow on this site's
+  // sandboxed test runtime at least); if the exit check only looked at whether `shown` had
+  // caught up to currentProgress, a seek still in flight when that happened would get its
+  // currentTime write silently skipped (see the `!video.seeking` guard below) and the loop
+  // would exit anyway, permanently stranding the video short of where the scroll position
+  // says it should be. A frame budget caps the wait so a video that's stuck seeking forever
+  // can't spin this forever either — a later scroll/progress event will retry it.
   function seekLoop() {
     if (looping) return;
     if (!(video.readyState >= 2 && video.duration)) return;
     looping = true;
+    let framesLeft = 240; // ~4s at 60fps — generous, but not infinite, ceiling on the wait
     const step = () => {
       shown += (currentProgress - shown) * 0.22;
       if (Math.abs(currentProgress - shown) < 0.0008) shown = currentProgress;
       const t = shown * video.duration;
-      if (!video.seeking && Math.abs(video.currentTime - t) > 0.016) video.currentTime = t;
+      const synced = Math.abs(video.currentTime - t) <= 0.016;
+      if (!video.seeking && !synced) video.currentTime = t;
       drawFrame();
-      if (shown !== currentProgress) requestAnimationFrame(step);
-      else looping = false;
+      framesLeft--;
+      if ((shown !== currentProgress || video.seeking || !synced) && framesLeft > 0) {
+        requestAnimationFrame(step);
+      } else {
+        looping = false;
+      }
     };
     requestAnimationFrame(step);
   }
