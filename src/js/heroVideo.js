@@ -33,9 +33,12 @@ export function initHeroVideo() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   // Frames are fetched only after the page has loaded (so they never compete with the
-  // poster, fonts and CSS), in a small portrait cut on phones, and skipped on data-saver / 2G.
+  // poster, fonts and CSS), in a small portrait cut on phones, skipped entirely on
+  // data-saver / 2G, and cut down to a coarse subset on 3G (see loadFrames).
   const conn = navigator.connection;
-  const lowData = !!conn && (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || ''));
+  const effType = (conn && conn.effectiveType) || '';
+  const lowData = !!conn && (conn.saveData || /(^|-)2g$/.test(effType));
+  const slowNet = effType === '3g';
   const isMobile = window.matchMedia('(max-width: 720px)').matches;
   const base = isMobile ? canvas.dataset.framesMobile : canvas.dataset.framesDesktop;
   const frameCount = parseInt(isMobile ? canvas.dataset.frameCountMobile : canvas.dataset.frameCountDesktop, 10) || 0;
@@ -75,27 +78,54 @@ export function initHeroVideo() {
     if (!canvas.classList.contains('is-active')) canvas.classList.add('is-active');
   }
 
-  const frames = [];
-  let framesReady = false;
+  const frames = new Array(frameCount); // a slot is filled only once that frame is decoded
+  let framesReady = false;              // true once frame 0 is in — scrubbing works from then on
+  let shownFrame = null;
 
+  // Nearest decoded frame to the target, so scrubbing never waits on a frame still in flight.
   function frameForProgress(p) {
     const idx = Math.max(0, Math.min(frameCount - 1, Math.round(p * (frameCount - 1))));
-    return frames[idx];
+    for (let d = 0; d < frameCount; d++) {
+      if (frames[idx - d]) return frames[idx - d];
+      if (frames[idx + d]) return frames[idx + d];
+    }
+    return null;
+  }
+
+  function paint() {
+    const img = frameForProgress(currentProgress);
+    if (img && img !== shownFrame) { shownFrame = img; drawFrame(img); }
+  }
+
+  // Coarse-to-fine order (0, 16, 31, 8, 24, 4, 12, …): each pass doubles the timeline's
+  // resolution, so a slow connection gets a usable — just steppier — scrub after a handful of
+  // frames instead of waiting for all of them. Only a few requests run at once so the coarse
+  // frames genuinely arrive first rather than sharing bandwidth with all the others.
+  function loadOrder() {
+    const order = [0, frameCount - 1];
+    for (let step = 1 << Math.floor(Math.log2(frameCount - 1)); step >= 1; step >>= 1) {
+      for (let i = 0; i < frameCount; i += step) if (!order.includes(i)) order.push(i);
+    }
+    return order;
   }
 
   function loadFrames() {
-    let loaded = 0;
-    for (let i = 0; i < frameCount; i++) {
+    const queue = loadOrder().slice(0, slowNet ? 9 : frameCount);
+    const next = () => {
+      const i = queue.shift();
+      if (i === undefined) return;
       const img = new Image();
       img.decoding = 'async';
-      img.addEventListener('load', () => {
-        loaded++;
-        if (i === 0) drawFrame(img); // paint the opening frame as soon as it's in, so the poster never lingers longer than it has to
-        if (loaded === frameCount) { framesReady = true; drawFrame(frameForProgress(currentProgress)); }
-      }, { once: true });
       img.src = `${base}-${String(i).padStart(2, '0')}.webp`;
-      frames[i] = img;
-    }
+      // decode() before use: drawing a not-yet-decoded image would decode it synchronously
+      // on the main thread in the middle of a scroll.
+      img.decode().then(() => {
+        frames[i] = img;
+        if (!framesReady && i === 0) framesReady = true;
+        if (framesReady) paint();
+      }, () => {}).then(next);
+    };
+    for (let k = 0; k < 4; k++) next();
   }
   if (hasSource) {
     const idle = () => ('requestIdleCallback' in window ? requestIdleCallback(loadFrames, { timeout: 1500 }) : setTimeout(loadFrames, 300));
@@ -125,7 +155,7 @@ export function initHeroVideo() {
     if (trackHeight <= 0) return;
     currentProgress = clamp(-rect.top / trackHeight, 0, 1);
 
-    if (framesReady) drawFrame(frameForProgress(currentProgress));
+    if (framesReady) paint();
 
     if (hint) hint.style.opacity = String(1 - seg(currentProgress, 0, 0.07));
     reveal(kicker, 0.04, 0.18);
@@ -137,7 +167,7 @@ export function initHeroVideo() {
   const onScroll = () => {
     if (!ticking) { requestAnimationFrame(render); ticking = true; }
   };
-  const onResize = () => { syncCanvasBox(); onScroll(); };
+  const onResize = () => { syncCanvasBox(); shownFrame = null; onScroll(); };
 
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onResize);

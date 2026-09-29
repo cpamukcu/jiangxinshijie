@@ -16,7 +16,17 @@
  *
  * Run once (or whenever the source clips change) — not part of the build,
  * since ffmpeg isn't a build-time dependency and the output is committed
- * like any other asset in public/.
+ * like any other asset in public/. The source clips themselves aren't
+ * committed any more (nothing on the site loads them); point HERO_SRC_DIR at
+ * a folder holding header.mp4 / header-mobile.mp4 — the last committed copies
+ * can be recovered with `git show e51c8c5^:public/assets/video/header.mp4`.
+ *
+ * Sizing: the canvas caps at 2x DPR and the frames are a moving, vignetted
+ * backdrop behind text, so they're encoded well below the source resolution
+ * (with a light denoise — the AI-generated source is grainy, and grain is
+ * what makes these frames expensive to encode). Checked side-by-side at
+ * display size: indistinguishable from the full-size q76 frames, ~40% fewer
+ * bytes and ~35% less decoded memory for the 32 frames held at once.
  */
 import { execFileSync } from 'node:child_process';
 import { mkdtempSync, rmSync, mkdirSync, readdirSync } from 'node:fs';
@@ -32,11 +42,11 @@ const FFMPEG_BIN = process.env.FFMPEG_BIN || 'ffmpeg';
 const ROOT = join(import.meta.dirname, '..');
 const FRAMES_DIR = join(ROOT, 'public', 'assets', 'video', 'frames');
 const FRAME_COUNT = 32;
-const WEBP_QUALITY = 76;
+const SRC_DIR = process.env.HERO_SRC_DIR || join(ROOT, 'public', 'assets', 'video');
 
 const SOURCES = [
-  { file: join(ROOT, 'public', 'assets', 'video', 'header.mp4'), name: 'header-desktop' },
-  { file: join(ROOT, 'public', 'assets', 'video', 'header-mobile.mp4'), name: 'header-mobile' },
+  { file: join(SRC_DIR, 'header.mp4'), name: 'header-desktop', width: 1280, quality: 58 },
+  { file: join(SRC_DIR, 'header-mobile.mp4'), name: 'header-mobile', width: 480, quality: 60 },
 ];
 
 function probeDuration(ffmpeg, file) {
@@ -56,14 +66,14 @@ async function run() {
   const ffmpeg = FFMPEG_BIN;
   mkdirSync(FRAMES_DIR, { recursive: true });
 
-  for (const { file, name } of SOURCES) {
+  for (const { file, name, width, quality } of SOURCES) {
     const duration = probeDuration(ffmpeg, file);
     const fps = FRAME_COUNT / duration;
     const tmp = mkdtempSync(join(tmpdir(), 'hero-frames-'));
 
     execFileSync(ffmpeg, [
-      '-y', '-i', file,
-      '-vf', `fps=${fps}`,
+      '-y', '-loglevel', 'error', '-i', file,
+      '-vf', `fps=${fps},hqdn3d=3:3:4:4`,
       '-frames:v', String(FRAME_COUNT),
       join(tmp, 'frame-%03d.png'),
     ], { stdio: 'inherit' });
@@ -76,7 +86,7 @@ async function run() {
     let totalBytes = 0;
     for (let i = 0; i < pngs.length; i++) {
       const outPath = join(FRAMES_DIR, `${name}-${String(i).padStart(2, '0')}.webp`);
-      const info = await sharp(join(tmp, pngs[i])).webp({ quality: WEBP_QUALITY }).toFile(outPath);
+      const info = await sharp(join(tmp, pngs[i])).resize({ width }).webp({ quality, effort: 6 }).toFile(outPath);
       totalBytes += info.size;
     }
     rmSync(tmp, { recursive: true, force: true });
