@@ -69,6 +69,19 @@
 .hero__scrollcue span { font-family: var(--font-body); font-size: 10px; letter-spacing: .2em; }
 @keyframes scrollcue { 0% { top: -100%; } 60% { top: 100%; } 100% { top: 100%; } }
 
+/* The home page opens on a clean, text-free frame; heroVideo.js and nav.js fade the hero
+   text and header in on scroll. Hide them here, from the very first paint — hiding them only
+   once the JS arrives made them flash up and vanish on slow connections. If the JS never
+   runs (main.js adds .js-ready once it has), the delayed animation shows them anyway. */
+@media (prefers-reduced-motion: no-preference) {
+  .hero__kicker, .hero__title, .hero__desc, .hero__actions, .page-home .site-header {
+    opacity: 0; animation: heroNoJsReveal .6s ease 4s forwards;
+  }
+  .js-ready .hero__kicker, .js-ready .hero__title, .js-ready .hero__desc, .js-ready .hero__actions,
+  .js-ready.page-home .site-header { animation: none; }
+}
+@keyframes heroNoJsReveal { to { opacity: 1; } }
+
 @media (prefers-reduced-motion: reduce) {
   .hero { height: 100vh; height: 100svh; }
   .hero__scrollcue { display: none; }

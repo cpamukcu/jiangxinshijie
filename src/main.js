@@ -32,4 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initParallax();
   initFilters();
   initYear();
+  // Last, so it's only set once everything above ran: hands the home hero/header over from
+  // hero.css's no-JS fallback reveal to the scroll-driven JS.
+  document.body.classList.add('js-ready');
 });
