@@ -64,7 +64,7 @@ p:last-child { margin-bottom: 0; }
 
 /* ---------- buttons ---------- */
 .btn {
-  display: inline-flex; align-items: center; gap: 8px; padding: 14px 26px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 26px;
   font-size: 14.5px; font-weight: 600; border-radius: var(--radius); border: 1.5px solid transparent;
   transition: all .25s var(--ease);
 }
