@@ -8,7 +8,7 @@
  */
 const STAGGER = [
   '.safety-grid', '.cabin-grid', '.case-grid', '.solutions-grid', '.pillars', '.quickpick',
-  '.extra-finishes', '.proof-grid', '.details-grid', '.vmv', '.swatches__grid', '.glass-list', '.supplier-row__badges'
+  '.extra-finishes', '.proof-grid', '.details-grid', '.vmv', '.swatches__grid', '.supplier-row__badges'
 ].join(',');
 
 export function initReveal() {

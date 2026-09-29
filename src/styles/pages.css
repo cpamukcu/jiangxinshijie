@@ -14,7 +14,7 @@
 }
 .page-hero__content { position: relative; z-index: 2; width: 100%; padding-top: 150px; padding-bottom: 64px; animation: heroRise .9s .1s var(--ease) both; }
 @keyframes heroRise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
-.crumbs { display: flex; gap: 10px; font-size: 12.5px; letter-spacing: .04em; color: rgba(255,255,255,.7); margin-bottom: 20px; }
+.crumbs { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; font-size: 12.5px; letter-spacing: .04em; color: rgba(255,255,255,.7); margin-bottom: 20px; }
 .crumbs a:hover { color: var(--gold-light); }
 .page-hero__kicker { font-size: 12.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 16px; }
 .page-hero__title { font-family: var(--font-display); font-size: clamp(34px, 5.4vw, 64px); line-height: 1.14; max-width: 15em; margin-bottom: 20px; text-shadow: 0 2px 24px rgba(0,0,0,.35); }

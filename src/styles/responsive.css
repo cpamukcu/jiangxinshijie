@@ -20,7 +20,10 @@
 }
 
 @media (max-width: 640px) {
-  .wrap { padding: 0 20px; }
+  /* Longhands only: .wrap shares elements with .hero__content, .page-hero__content
+     and .site-footer__grid, whose own top/bottom padding a `padding` shorthand here
+     would silently zero out (this file loads last). */
+  .wrap { padding-left: 20px; padding-right: 20px; }
   .section { padding: 56px 0; }
   .hero__actions { display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; }
   .hero__actions .btn { width: 100%; justify-content: center; min-height: 56px; padding-top: 16px; padding-bottom: 16px; }
@@ -33,14 +36,6 @@
   .case-tile figcaption { padding: 14px 10px 8px; font-size: 12px; }
 }
 
-@media (max-width: 420px) {
-  .safety-grid { grid-template-columns: 1fr; }
-  /* .safety-grid--2/--3 carry the base .safety-grid class too, so the 1fr
-     reset above would otherwise also collapse them back to one column —
-     re-assert 2-up for those variants even at this narrow width. */
-  .safety-grid--2, .safety-grid--3 { grid-template-columns: repeat(2, 1fr); }
-}
-
 /* ---------- touch devices ---------- */
 @media (hover: none) {
   .btn--primary:hover { background: var(--navy); transform: none; box-shadow: none; }
@@ -48,7 +43,7 @@
   .btn--ghost:hover { background: transparent; }
   .filter-chip:hover { border-color: var(--hairline); }
   .filter-bar--light .filter-chip:hover { border-color: var(--hairline-light); }
-  .supplier-row__badges li:hover, .glass-list li:hover, .quickpick__item:hover { border-color: var(--hairline); box-shadow: none; }
+  .supplier-row__badges li:hover, .quickpick__item:hover { border-color: var(--hairline); box-shadow: none; }
   .safety-item:hover { background: var(--titanium); }
 }
 .btn:active, .filter-chip:active { transform: scale(.97); }
