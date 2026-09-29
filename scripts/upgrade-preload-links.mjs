@@ -19,7 +19,8 @@
  * page — matching the relative form Vite itself already produces for
  * `srcset` elsewhere in these files.
  *
- * Idempotent: a link that already has imagesrcset is left untouched.
+ * Idempotent: re-running rebuilds already-upgraded links from the current
+ * manifest (so a change in width tiers carries through) and is otherwise a no-op.
  */
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -30,7 +31,7 @@ const manifest = JSON.parse(readFileSync(join(IMAGES_DIR, 'responsive-manifest.j
 
 const HTML_FILES = readdirSync(ROOT).filter((f) => f.endsWith('.html')).map((f) => join(ROOT, f));
 
-const LINK_RE = /<link rel="preload" as="image" href="\/assets\/images\/([\w-]+)\.jpg">/g;
+const LINK_RE = /<link rel="preload" as="image" href="\/assets\/images\/([\w-]+)\.jpg"[^>]*>/g;
 
 let total = 0;
 for (const file of HTML_FILES) {

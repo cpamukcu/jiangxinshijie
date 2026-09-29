@@ -80,44 +80,52 @@ function isAlreadyPicture(content, imgIndex) {
   return p !== -1 && p > closeP;
 }
 
+// The WebP <source> carries the srcset; the <img> is just the original JPEG as
+// a fallback for anything that can't decode WebP.
+function buildPicture(base, attrs, sizes) {
+  const entry = manifest[base];
+  if (entry.singleWebp) {
+    return `<picture><source type="image/webp" srcset="/assets/images/${entry.singleWebp}"><img src="/assets/images/${base}.jpg"${attrs}></picture>`;
+  }
+  const srcset = entry.variants.map((v) => `/assets/images/${v.webp} ${v.width}w`).join(', ');
+  return `<picture><source type="image/webp" srcset="${srcset}" sizes="${sizes}"><img src="/assets/images/${base}.jpg"${attrs}></picture>`;
+}
+
+// Existing <picture> blocks from an earlier run: rebuild their srcset from the
+// current manifest (tiers may have changed), keeping the sizes already chosen.
+const PICTURE_RE = /<picture><source type="image\/webp" srcset="[^"]*"(?: sizes="([^"]*)")?><img src="\/assets\/images\/([\w-]+)\.jpg"(?: srcset="[^"]*")?(?: sizes="[^"]*")?([^>]*)><\/picture>/g;
+
 let totalConverted = 0;
+let totalRefreshed = 0;
 
 for (const file of HTML_FILES) {
-  let content = readFileSync(file, 'utf8');
+  const original = readFileSync(file, 'utf8');
   let converted = 0;
+  let refreshed = 0;
+
+  let content = original.replace(PICTURE_RE, (full, sizes, base, attrs, offset, fullString) => {
+    if (!manifest[base]) return full;
+    refreshed++;
+    const needsSizes = !manifest[base].singleWebp && !sizes;
+    return buildPicture(base, attrs, needsSizes ? sizesFor(fullString, offset, enclosingMediaClass(fullString, offset)) : sizes);
+  });
 
   content = content.replace(IMG_RE, (full, base, attrs, offset, fullString) => {
     if (isAlreadyPicture(fullString, offset)) return full;
-    const entry = manifest[base];
-    if (!entry) {
+    if (!manifest[base]) {
       console.warn(`  ! ${file}: no manifest entry for "${base}.jpg" — left as plain <img>`);
       return full;
     }
-
-    const mediaClass = enclosingMediaClass(fullString, offset);
     converted++;
-
-    if (entry.singleWebp) {
-      return `<picture><source type="image/webp" srcset="/assets/images/${entry.singleWebp}"><img src="/assets/images/${base}.jpg"${attrs}></picture>`;
-    }
-
-    const sizes = sizesFor(fullString, offset, mediaClass);
-    const webpSrcset = entry.variants.map((v) => `/assets/images/${v.webp} ${v.width}w`).join(', ');
-    const jpgSrcset = entry.variants.map((v) => `/assets/images/${v.jpg} ${v.width}w`).join(', ');
-
-    return (
-      `<picture>` +
-      `<source type="image/webp" srcset="${webpSrcset}" sizes="${sizes}">` +
-      `<img src="/assets/images/${base}.jpg" srcset="${jpgSrcset}" sizes="${sizes}"${attrs}>` +
-      `</picture>`
-    );
+    return buildPicture(base, attrs, sizesFor(fullString, offset, enclosingMediaClass(fullString, offset)));
   });
 
-  if (converted > 0) {
+  if (content !== original) {
     writeFileSync(file, content);
-    console.log(`${file.replace(ROOT + '/', '')}: converted ${converted} <img> to <picture>`);
-    totalConverted += converted;
+    console.log(`${file.replace(ROOT + '/', '')}: converted ${converted}, refreshed ${refreshed}`);
   }
+  totalConverted += converted;
+  totalRefreshed += refreshed;
 }
 
-console.log(`\nTotal converted: ${totalConverted}`);
+console.log(`\nTotal converted: ${totalConverted}, refreshed: ${totalRefreshed}`);

@@ -1,94 +1,77 @@
 #!/usr/bin/env node
 /**
- * Generates responsive WebP + resized-JPEG variants for every source JPEG in
- * public/assets/images, at up to two target widths (800 / 1600), capped so
- * nothing is ever upscaled past its own original width. Writes
- * public/assets/images/responsive-manifest.json describing what was produced,
- * so the HTML transform script (html-to-picture.mjs) knows which srcset
- * entries exist per image without re-inspecting files itself.
+ * Generates responsive WebP variants for every source JPEG in
+ * public/assets/images at up to four widths (480 / 800 / 1200 / 1600),
+ * capped so nothing is ever upscaled past its own original width, and writes
+ * public/assets/images/responsive-manifest.json describing what was produced
+ * so html-to-picture.mjs / upgrade-preload-links.mjs can build srcsets
+ * without re-inspecting files.
  *
- * Re-run is idempotent: only files derived from an *original* jpg are ever
- * written (never from a previously-generated -Nw file), and originals are
- * matched by filename, not overwritten.
+ * Tiers: 480 serves card/grid images on 2x phones, 1200 serves full-width
+ * heroes on 3x phones (which would otherwise jump straight to 1600).
+ * Quality 64 was checked side-by-side against 78 on the heaviest images —
+ * indistinguishable at display size, roughly 25% fewer bytes.
+ *
+ * No resized JPEG copies: every browser that supports srcset also decodes
+ * WebP now; anything that doesn't still gets the original JPEG via <img src>.
+ *
+ * Re-run is idempotent: variants are only ever derived from an *original*
+ * jpg (never from a previously generated -Nw file), and stale variant files
+ * from earlier tiers/formats are removed.
  */
-import { readdirSync, statSync, writeFileSync } from 'node:fs';
+import { readdirSync, statSync, writeFileSync, unlinkSync } from 'node:fs';
 import { join, basename, extname } from 'node:path';
 import sharp from 'sharp';
 
 const IMAGES_DIR = join(import.meta.dirname, '..', 'public', 'assets', 'images');
-const TARGET_WIDTHS = [800, 1600];
-const JPEG_QUALITY = 80;
-const WEBP_QUALITY = 78;
+const TARGET_WIDTHS = [480, 800, 1200, 1600];
+const WEBP_QUALITY = 64;
 
-function isGeneratedVariant(name) {
-  return /-(?:800|1600)w\.(?:jpg|webp)$/.test(name);
-}
+const isGeneratedVariant = (name) => /-\d+w\.(?:jpg|webp)$/.test(name);
 
 async function run() {
-  const entries = readdirSync(IMAGES_DIR).filter(
-    (f) => extname(f).toLowerCase() === '.jpg' && !isGeneratedVariant(f)
-  );
+  const all = readdirSync(IMAGES_DIR);
+  const entries = all.filter((f) => extname(f).toLowerCase() === '.jpg' && !isGeneratedVariant(f));
 
   const manifest = {};
-  let bytesBefore = 0;
-  let bytesAfterNewFiles = 0;
+  const keep = new Set();
+  let bytesOut = 0;
 
   for (const file of entries) {
     const srcPath = join(IMAGES_DIR, file);
     const base = basename(file, '.jpg');
-    const origStat = statSync(srcPath);
-    bytesBefore += origStat.size;
-
-    const img = sharp(srcPath);
-    const meta = await img.metadata();
-    const origWidth = meta.width;
-
+    const { width: origWidth } = await sharp(srcPath).metadata();
     const widths = TARGET_WIDTHS.filter((w) => w <= origWidth);
 
     if (widths.length === 0) {
-      // Original is already narrower than the smallest target (e.g. swatches) —
-      // still worth a same-size WebP re-encode, just no srcset needed.
-      const webpPath = join(IMAGES_DIR, `${base}.webp`);
-      const info = await sharp(srcPath).webp({ quality: WEBP_QUALITY }).toFile(webpPath);
-      bytesAfterNewFiles += info.size;
-      manifest[base] = { origWidth, variants: [], singleWebp: `${base}.webp` };
-      console.log(`${file}: single-size webp (${origWidth}px) — ${(info.size / 1024).toFixed(1)} KiB`);
+      // Narrower than the smallest tier (the swatches) — same-size WebP, no srcset.
+      const out = `${base}.webp`;
+      const info = await sharp(srcPath).webp({ quality: WEBP_QUALITY, effort: 6 }).toFile(join(IMAGES_DIR, out));
+      bytesOut += info.size;
+      keep.add(out);
+      manifest[base] = { origWidth, variants: [], singleWebp: out };
       continue;
     }
 
     const variants = [];
     for (const w of widths) {
-      const jpgPath = join(IMAGES_DIR, `${base}-${w}w.jpg`);
-      const webpPath = join(IMAGES_DIR, `${base}-${w}w.webp`);
-
-      const jpgInfo = await sharp(srcPath)
-        .resize({ width: w })
-        .jpeg({ quality: JPEG_QUALITY, mozjpeg: true, progressive: true })
-        .toFile(jpgPath);
-      const webpInfo = await sharp(srcPath)
-        .resize({ width: w })
-        .webp({ quality: WEBP_QUALITY })
-        .toFile(webpPath);
-
-      bytesAfterNewFiles += jpgInfo.size + webpInfo.size;
-      variants.push({ width: w, jpg: `${base}-${w}w.jpg`, webp: `${base}-${w}w.webp` });
-      console.log(
-        `${file}: ${w}w — jpg ${(jpgInfo.size / 1024).toFixed(1)} KiB, webp ${(webpInfo.size / 1024).toFixed(1)} KiB`
-      );
+      const out = `${base}-${w}w.webp`;
+      const info = await sharp(srcPath).resize({ width: w }).webp({ quality: WEBP_QUALITY, effort: 6 }).toFile(join(IMAGES_DIR, out));
+      bytesOut += info.size;
+      keep.add(out);
+      variants.push({ width: w, webp: out });
     }
     manifest[base] = { origWidth, variants, singleWebp: null };
+    console.log(`${file}: ${widths.map((w) => w + 'w').join(', ')}`);
   }
 
-  writeFileSync(
-    join(IMAGES_DIR, 'responsive-manifest.json'),
-    JSON.stringify(manifest, null, 2) + '\n'
-  );
+  let removed = 0;
+  for (const f of all) {
+    if (isGeneratedVariant(f) && !keep.has(f)) { unlinkSync(join(IMAGES_DIR, f)); removed++; }
+  }
 
-  console.log('\n--- summary ---');
-  console.log(`Original JPEGs scanned: ${entries.length}`);
-  console.log(`Original bytes: ${(bytesBefore / 1024 / 1024).toFixed(2)} MiB`);
-  console.log(`New variant bytes written: ${(bytesAfterNewFiles / 1024 / 1024).toFixed(2)} MiB`);
-  console.log('Manifest written to public/assets/images/responsive-manifest.json');
+  writeFileSync(join(IMAGES_DIR, 'responsive-manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
+  console.log(`\n${entries.length} originals -> ${keep.size} WebP files, ${(bytesOut / 1024 / 1024).toFixed(2)} MiB total; removed ${removed} stale variant files`);
 }
 
 run().catch((err) => {
