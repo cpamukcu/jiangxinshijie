@@ -67,7 +67,9 @@
 .filter-bar--light .filter-chip { background: transparent; color: var(--ivory); border-color: var(--hairline-light); }
 .filter-bar--light .filter-chip:hover { border-color: var(--gold-light); }
 .filter-bar--light .filter-chip[aria-pressed="true"] { background: var(--gold-light); border-color: var(--gold-light); color: var(--titanium); }
-[data-tag][hidden] { display: none; }
+/* !important: a filtered-out card must hide even when a layout rule sets its display
+   (e.g. the orphan-card centering on the last .cabin-card), which would otherwise win. */
+[data-tag][hidden] { display: none !important; }
 
 /* ---------- about ---------- */
 .stats-band { background: var(--navy); color: #fff; }
