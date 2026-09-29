@@ -23,7 +23,7 @@
   .wrap { padding: 0 20px; }
   .section { padding: 56px 0; }
   .hero__actions { display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; }
-  .hero__actions .btn { width: 100%; justify-content: center; }
+  .hero__actions .btn { width: 100%; justify-content: center; min-height: 56px; padding-top: 16px; padding-bottom: 16px; }
   .btn { padding: 11px 20px; font-size: 13.5px; }
   .safety-grid, .solutions-grid, .case-grid, .cabin-grid { grid-template-columns: 1fr 1fr; }
   .swatches__grid { grid-template-columns: repeat(2, 1fr); }
