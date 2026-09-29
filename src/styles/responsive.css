@@ -22,7 +22,8 @@
 @media (max-width: 640px) {
   .wrap { padding: 0 20px; }
   .section { padding: 56px 0; }
-  .hero__actions { flex-direction: column; align-items: flex-start; }
+  .hero__actions { display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; }
+  .hero__actions .btn { width: 100%; justify-content: center; }
   .btn { padding: 11px 20px; font-size: 13.5px; }
   .safety-grid, .solutions-grid, .case-grid, .cabin-grid { grid-template-columns: 1fr 1fr; }
   .swatches__grid { grid-template-columns: repeat(2, 1fr); }
@@ -34,6 +35,10 @@
 
 @media (max-width: 420px) {
   .safety-grid { grid-template-columns: 1fr; }
+  /* .safety-grid--2/--3 carry the base .safety-grid class too, so the 1fr
+     reset above would otherwise also collapse them back to one column —
+     re-assert 2-up for those variants even at this narrow width. */
+  .safety-grid--2, .safety-grid--3 { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* ---------- touch devices ---------- */
