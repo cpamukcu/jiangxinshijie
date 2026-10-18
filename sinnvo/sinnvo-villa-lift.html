@@ -1,0 +1,723 @@
+<title>SINNVO Villa Lift</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: full-bleed showroom stage; brand top-left, floor indicator top-right, one control dock at the bottom. */
+:root {
+  --bg: #e7e6e2;
+  --bg-hi: #f3f2ef;
+  --ink: #1c1d1f;
+  --muted: #6c6b67;
+  --line: rgba(28, 29, 31, 0.12);
+  --panel: rgba(248, 247, 244, 0.8);
+  --accent: #96804f;
+  --on-accent: #fbfaf7;
+  --display: "Jost", "Futura", "Avenir Next", "Helvetica Neue", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141517; --bg-hi: #23252a; --ink: #eceae5; --muted: #9b9994;
+    --line: rgba(236, 234, 229, 0.13); --panel: rgba(30, 31, 35, 0.74);
+    --accent: #cdb27c; --on-accent: #1a1a1a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141517; --bg-hi: #23252a; --ink: #eceae5; --muted: #9b9994;
+  --line: rgba(236, 234, 229, 0.13); --panel: rgba(30, 31, 35, 0.74);
+  --accent: #cdb27c; --on-accent: #1a1a1a; color-scheme: dark;
+}
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body {
+  margin: 0; overflow: hidden; color: var(--ink); font-family: var(--display);
+  background: radial-gradient(ellipse 80% 70% at 50% 38%, var(--bg-hi), var(--bg) 72%) var(--bg);
+  -webkit-font-smoothing: antialiased;
+}
+#stage { position: fixed; inset: 0; }
+#stage canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+
+.top {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 2; pointer-events: none;
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 16px;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 20px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.brand { display: grid; gap: 4px; }
+.wordmark { font-weight: 400; font-size: 22px; letter-spacing: 0.42em; line-height: 1; }
+.sub { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+
+.hud { text-align: right; display: grid; gap: 2px; font-family: var(--mono); }
+.hud-floor { font-size: 34px; font-weight: 500; line-height: 1; display: flex; align-items: center; gap: 8px; justify-content: flex-end; font-variant-numeric: tabular-nums; }
+.hud-arrow { font-size: 14px; color: var(--accent); opacity: 0; transition: opacity .3s; }
+.hud-arrow.on { opacity: 1; }
+.hud-meta { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; font-variant-numeric: tabular-nums; }
+
+.dock {
+  position: fixed; left: 50%; transform: translateX(-50%); z-index: 2;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 18px);
+  width: min(960px, calc(100% - 32px));
+  display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px 18px;
+  padding: 10px 14px; border-radius: 14px; border: 1px solid var(--line);
+  background: var(--panel); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+}
+.group { display: flex; align-items: center; gap: 8px; }
+.label { font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; }
+button {
+  font: inherit; font-size: 13px; color: var(--ink); background: transparent; border: 0;
+  padding: 7px 12px; cursor: pointer; line-height: 1.2; border-radius: 0;
+}
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg-hi); }
+.btn { border: 1px solid var(--line); border-radius: 9px; }
+.btn:hover:not(:disabled), .seg button:hover:not([aria-pressed="true"]):not(:disabled) { background: var(--line); }
+.btn.primary { background: var(--accent); color: var(--on-accent); border-color: transparent; }
+.btn.primary:hover:not(:disabled) { background: var(--accent); filter: brightness(1.06); }
+button:disabled { opacity: .4; cursor: default; }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.swatch { width: 12px; height: 12px; border-radius: 50%; display: inline-block; vertical-align: -1px; margin-right: 6px; border: 1px solid var(--line); }
+.divider { width: 1px; align-self: stretch; background: var(--line); }
+
+.note {
+  position: fixed; z-index: 2; left: max(16px, env(safe-area-inset-left, 0px));
+  top: calc(env(safe-area-inset-top, 0px) + 74px);
+  font-size: 12px; color: var(--muted); max-width: 30ch; line-height: 1.45; pointer-events: none;
+}
+#status {
+  position: fixed; inset: 0; display: grid; place-items: center; z-index: 1;
+  font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted);
+  padding-inline: 16px; text-align: center;
+}
+
+/* Film mode: everything but the stage and captions fades away */
+.ui { transition: opacity .6s ease; }
+body.film .ui { opacity: 0; pointer-events: none; }
+.captions {
+  position: fixed; left: 0; right: 0; z-index: 3; pointer-events: none; text-align: center;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 12vh);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.cap { position: absolute; left: 0; right: 0; bottom: 0; opacity: 0; transform: translateY(8px); transition: opacity 1s ease, transform 1.2s ease; }
+.cap.on { opacity: 1; transform: none; }
+.cap-line { font-weight: 300; font-size: clamp(30px, 5.2vw, 64px); letter-spacing: -0.01em; text-wrap: balance; }
+.cap-mark { font-weight: 400; font-size: clamp(28px, 4.6vw, 56px); letter-spacing: 0.5em; margin-right: -0.5em; }
+.cap-sub { margin-top: 10px; font-size: clamp(11px, 1.3vw, 14px); letter-spacing: 0.3em; text-transform: uppercase; color: var(--muted); }
+.hint {
+  position: fixed; z-index: 3; left: 50%; transform: translateX(-50%); pointer-events: none;
+  top: calc(env(safe-area-inset-top, 0px) + 18px); font-size: 12px; color: var(--muted);
+  letter-spacing: .08em; opacity: 0; transition: opacity .6s;
+}
+.hint.on { opacity: 1; }
+
+@media (max-width: 640px) {
+  .divider { display: none; }
+  .dock { gap: 8px 10px; padding: 10px; }
+  .note { display: none; }
+  .wordmark { font-size: 18px; }
+  .hud-floor { font-size: 28px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ui, .cap, .hint, .hud-arrow { transition: none; }
+}
+</style>
+
+<div id="stage" aria-label="3D model of a SINNVO glass-shaft villa lift. Drag to orbit, scroll or pinch to zoom."></div>
+<div id="status">Loading 3D model…</div>
+
+<header class="top ui">
+  <div class="brand">
+    <div class="wordmark">SINNVO</div>
+    <div class="sub">Villa lift · concept model v1</div>
+  </div>
+  <div class="hud" aria-live="polite">
+    <div class="hud-floor"><span class="hud-arrow" id="hudArrow">▲</span><span id="hudFloor">1F</span></div>
+    <div class="hud-meta" id="hudMeta">0.00 m · doors closed</div>
+  </div>
+</header>
+<p class="note ui">Glass-shaft villa lift, two stops 3.1 m apart. Drag to orbit, scroll to zoom.</p>
+
+<nav class="dock ui" aria-label="Lift controls">
+  <div class="group">
+    <span class="label">Floor</span>
+    <div class="seg" role="group" aria-label="Floor">
+      <button id="f1" aria-pressed="true">1F</button>
+      <button id="f2" aria-pressed="false">2F</button>
+    </div>
+    <button class="btn" id="doors">Open doors</button>
+  </div>
+  <span class="divider"></span>
+  <div class="group">
+    <span class="label">Finish</span>
+    <div class="seg" role="group" aria-label="Frame finish" id="finishes"></div>
+  </div>
+  <span class="divider"></span>
+  <div class="group">
+    <span class="label">View</span>
+    <div class="seg" role="group" aria-label="Camera view">
+      <button id="vExt" aria-pressed="true">Exterior</button>
+      <button id="vCab" aria-pressed="false">Cabin</button>
+    </div>
+    <button class="btn" id="ctx" aria-pressed="false">Show upper floor</button>
+  </div>
+  <span class="divider"></span>
+  <div class="group">
+    <button class="btn" id="play" aria-pressed="false">Play ride</button>
+    <button class="btn primary" id="film">Film mode</button>
+    <button class="btn" id="caps" aria-pressed="true" title="Show captions in film mode">Captions on</button>
+  </div>
+</nav>
+
+<div class="captions" aria-hidden="true">
+  <div class="cap" data-from="0.8" data-to="4.2"><div class="cap-line">Your home.</div></div>
+  <div class="cap" data-from="6.0" data-to="9.8"><div class="cap-line">One more floor.</div></div>
+  <div class="cap" data-from="11.2" data-to="15.4"><div class="cap-mark">SINNVO</div><div class="cap-sub">Villa lifts</div></div>
+</div>
+<div class="hint" id="hint">Tap anywhere or press Esc to exit film mode</div>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+// SINNVO villa lift — parametric 3D model (three.js). Units: metres.
+// Shared by the browser viewer and the Node .glb exporter.
+
+const DIM = { W: 1.7, D: 1.6, FLOOR_H: 3.1, HEAD: 0.45, FLOORS: 2 };
+
+const FINISHES = {
+  champagne: { label: 'Champagne', frame: 0xc4b089, metal: 1.0, rough: 0.3 },
+  graphite: { label: 'Graphite', frame: 0x2d2e32, metal: 0.7, rough: 0.42 },
+  silver: { label: 'Silver', frame: 0xd0d3d7, metal: 1.0, rough: 0.22 },
+};
+
+function easeInOut(x) {
+  return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+}
+const clamp01 = (x) => Math.max(0, Math.min(1, x));
+const seg = (t, a, b) => easeInOut(clamp01((t - a) / (b - a)));
+
+// One 20-second ride cycle: open at L1, close, ride up, open at L2, close, ride down.
+const DEMO_LEN = 20;
+function demoState(t) {
+  t = ((t % DEMO_LEN) + DEMO_LEN) % DEMO_LEN;
+  const H = DIM.FLOOR_H;
+  const door1 = seg(t, 0.4, 1.8) - seg(t, 3.6, 5.0);
+  const door2 = seg(t, 9.6, 11.0) - seg(t, 13.0, 14.4);
+  return {
+    cabinY: H * (seg(t, 4.9, 9.4) - seg(t, 14.4, 18.9)),
+    door1,
+    door2,
+    cabinDoor: door1 + door2,
+  };
+}
+
+function buildElevator(THREE, opts = {}) {
+  const RBG = opts.RoundedBoxGeometry;
+  const { W, D, FLOOR_H, HEAD, FLOORS } = DIM;
+  const shaftTop = FLOOR_H * FLOORS; // underside of the head unit
+  const shaftH = shaftTop + HEAD;
+  const fin = FINISHES[opts.finish || 'champagne'];
+
+  const std = (name, p) => new THREE.MeshStandardMaterial({ name, ...p });
+  const M = {
+    frame: std('Frame_Metal', { color: fin.frame, metalness: fin.metal, roughness: fin.rough }),
+    glass: std('Shaft_Glass', {
+      color: 0xdbe9e7, metalness: 0, roughness: 0.04, transparent: true, opacity: 0.14,
+      depthWrite: false, side: THREE.DoubleSide, envMapIntensity: 1.8,
+    }),
+    doorGlass: std('Door_Glass', {
+      color: 0xd6e6e4, metalness: 0, roughness: 0.04, transparent: true, opacity: 0.2,
+      depthWrite: false, side: THREE.DoubleSide, envMapIntensity: 1.8,
+    }),
+    wood: std('Walnut_Panel', { color: 0x3f2c1f, roughness: 0.62, metalness: 0, envMapIntensity: 0.7 }),
+    stone: std('Stone_Floor', { color: 0xe7e3dc, roughness: 0.22, metalness: 0 }),
+    panel: std('Control_Panel', { color: 0x0f1012, roughness: 0.15, metalness: 0.4 }),
+    led: std('LED_Ceiling', { color: 0xfff7ea, emissive: 0xfff0d8, emissiveIntensity: 2.4 }),
+    button: std('LED_Button', { color: 0xfff2dc, emissive: 0xffdcae, emissiveIntensity: 1.6 }),
+    rail: std('Guide_Rail', { color: 0x8a8d93, metalness: 0.9, roughness: 0.35 }),
+    slab: std('Floor_Slab', { color: 0xefece6, roughness: 0.9, metalness: 0 }),
+    oak: std('Oak_Floor', { color: 0xc9b194, roughness: 0.6, metalness: 0 }),
+  };
+
+  const geo = (w, h, d, r) =>
+    RBG && r ? new RBG(w, h, d, 2, Math.min(r, w / 2, h / 2, d / 2)) : new THREE.BoxGeometry(w, h, d);
+
+  function box(parent, name, w, h, d, mat, x, y, z, r = 0) {
+    const m = new THREE.Mesh(geo(w, h, d, r), mat);
+    m.name = name;
+    m.position.set(x, y, z);
+    const isGlass = mat === M.glass || mat === M.doorGlass;
+    m.castShadow = !isGlass && mat !== M.led;
+    m.receiveShadow = !isGlass;
+    parent.add(m);
+    return m;
+  }
+
+  const root = new THREE.Group();
+  root.name = 'SINNVO_VillaLift';
+
+
+  // Telescopic centre-opening doors: two panels per side that stack when open.
+  function doorSet(parent, prefix, totalW, h, y, z, fr, matGlass) {
+    const pw = totalW / 4 + 0.006;
+    const panels = [];
+    [-1, 1].forEach((s) => {
+      [0, 1].forEach((k) => {
+        const g = new THREE.Group();
+        g.name = `${prefix}_${s < 0 ? 'L' : 'R'}${k + 1}`;
+        g.userData.closedX = s * pw * (k + 0.5);
+        g.userData.openX = s * (totalW / 2 + 0.012 + pw / 2);
+        g.position.set(g.userData.closedX, y, z + (k === 0 ? 0.03 : 0));
+        box(g, `${g.name}_Glass`, pw - fr * 2, h - fr * 2, 0.01, matGlass, 0, h / 2, 0);
+        box(g, `${g.name}_Frame_T`, pw, fr, 0.022, M.frame, 0, h - fr / 2, 0, 0.004);
+        box(g, `${g.name}_Frame_B`, pw, fr * 1.6, 0.022, M.frame, 0, fr * 0.8, 0, 0.004);
+        box(g, `${g.name}_Frame_A`, fr, h, 0.022, M.frame, (pw - fr) / 2, h / 2, 0, 0.004);
+        box(g, `${g.name}_Frame_B2`, fr, h, 0.022, M.frame, -(pw - fr) / 2, h / 2, 0, 0.004);
+        parent.add(g);
+        panels.push(g);
+      });
+    });
+    return panels;
+  }
+
+  // ── Shaft ────────────────────────────────────────────────
+  const shaft = new THREE.Group();
+  shaft.name = 'Shaft';
+  root.add(shaft);
+  const px = W / 2 - 0.04, pz = D / 2 - 0.04, post = 0.08;
+
+  box(shaft, 'Base_Plinth', W + 0.06, 0.05, D + 0.06, M.frame, 0, 0.025, 0, 0.01);
+  [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sz], i) =>
+    box(shaft, `Post_${i + 1}`, post, shaftTop, post, M.frame, sx * px, shaftTop / 2, sz * pz, 0.012)
+  );
+
+  // Horizontal frame band around the shaft at a given height
+  function band(y, h, tag) {
+    const t = 0.06;
+    box(shaft, `Band_${tag}_Front`, W - post, h, t, M.frame, 0, y, pz, 0.008);
+    box(shaft, `Band_${tag}_Back`, W - post, h, t, M.frame, 0, y, -pz, 0.008);
+    box(shaft, `Band_${tag}_Left`, t, h, D - post, M.frame, -px, y, 0, 0.008);
+    box(shaft, `Band_${tag}_Right`, t, h, D - post, M.frame, px, y, 0, 0.008);
+  }
+  band(0.09, 0.08, 'Base');
+  for (let f = 1; f < FLOORS; f++) band(f * FLOOR_H - 0.11, 0.22, `L${f + 1}`);
+  band(shaftTop - 0.04, 0.08, 'Top');
+
+  // Guide rails on the back wall
+  [-0.32, 0.32].forEach((x, i) =>
+    box(shaft, `Guide_Rail_${i + 1}`, 0.045, shaftTop - 0.1, 0.06, M.rail, x, shaftTop / 2, -D / 2 + 0.14)
+  );
+
+  // Glass and landing doors, floor by floor
+  const doorW = 0.86, doorH = 2.15;
+  const landing = [];
+  for (let f = 0; f < FLOORS; f++) {
+    const y0 = f * FLOOR_H + (f === 0 ? 0.13 : 0.0);
+    const y1 = f === FLOORS - 1 ? shaftTop - 0.08 : (f + 1) * FLOOR_H - 0.22;
+    const gh = y1 - y0, gy = (y0 + y1) / 2;
+    box(shaft, `Glass_L${f + 1}_Back`, W - post, gh, 0.012, M.glass, 0, gy, -pz);
+    box(shaft, `Glass_L${f + 1}_Left`, 0.012, gh, D - post, M.glass, -px, gy, 0);
+    box(shaft, `Glass_L${f + 1}_Right`, 0.012, gh, D - post, M.glass, px, gy, 0);
+
+    // Front face: side lights, jambs, header, transom
+    const base = f * FLOOR_H;
+    const sideW = px - post / 2 - (doorW / 2 + 0.02);
+    const sideX = doorW / 2 + 0.02 + sideW / 2;
+    [-1, 1].forEach((s) => {
+      box(shaft, `Glass_L${f + 1}_FrontSide_${s < 0 ? 'L' : 'R'}`, sideW, gh, 0.012, M.glass, s * sideX, gy, pz);
+      box(shaft, `Jamb_L${f + 1}_${s < 0 ? 'L' : 'R'}`, 0.04, doorH + 0.04 - (y0 - base), 0.07, M.frame,
+        s * (doorW / 2 + 0.02), base + (y0 - base) / 2 + (doorH + 0.04) / 2, pz, 0.006);
+    });
+    box(shaft, `Header_L${f + 1}`, doorW + 0.08, 0.06, 0.08, M.frame, 0, base + doorH + 0.05, pz, 0.008);
+    const tY0 = base + doorH + 0.08;
+    if (y1 - tY0 > 0.05)
+      box(shaft, `Glass_L${f + 1}_Transom`, doorW, y1 - tY0, 0.012, M.glass, 0, (tY0 + y1) / 2, pz);
+
+    // Landing doors
+    landing.push(doorSet(shaft, `LandingDoor_L${f + 1}`, doorW, doorH - 0.02, base + 0.02, pz + 0.05, 0.02, M.doorGlass));
+  }
+
+  // Head unit with downlight strip
+  box(shaft, 'Head_Unit', W + 0.04, HEAD, D + 0.04, M.frame, 0, shaftTop + HEAD / 2, 0, 0.02);
+  box(shaft, 'Head_LED_Strip', W - 0.3, 0.01, 0.05, M.led, 0, shaftTop - 0.005, pz - 0.06);
+
+  // ── Cabin ────────────────────────────────────────────────
+  const cabin = new THREE.Group();
+  cabin.name = 'Cabin';
+  root.add(cabin);
+  const cw = 1.04, cd = 1.15, ch = 2.2, cz = -0.06;
+  const cfront = cz + cd / 2;
+
+  box(cabin, 'Cabin_Floor', cw + 0.06, 0.07, cd + 0.06, M.stone, 0, -0.035, cz, 0.01);
+  box(cabin, 'Cabin_Apron', cw + 0.06, 0.08, cd + 0.06, M.frame, 0, -0.11, cz, 0.01);
+  box(cabin, 'Cabin_Ceiling', cw + 0.06, 0.08, cd + 0.06, M.frame, 0, ch + 0.04, cz, 0.01);
+  box(cabin, 'Cabin_LED_Panel', cw - 0.24, 0.012, cd - 0.24, M.led, 0, ch - 0.006, cz, 0.004);
+  [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sz], i) =>
+    box(cabin, `Cabin_Post_${i + 1}`, 0.04, ch, 0.04, M.frame, (sx * cw) / 2, ch / 2, cz + (sz * cd) / 2, 0.006)
+  );
+  box(cabin, 'Cabin_Back_Walnut', cw - 0.04, ch, 0.03, M.wood, 0, ch / 2, cz - cd / 2 + 0.01, 0.005);
+  box(cabin, 'Cabin_Glass_Left', 0.012, ch - 0.02, cd - 0.04, M.glass, -cw / 2, ch / 2, cz);
+  box(cabin, 'Cabin_Glass_Right', 0.012, ch - 0.02, cd - 0.04, M.glass, cw / 2, ch / 2, cz);
+  box(cabin, 'Cabin_Kick_Left', 0.03, 0.12, cd - 0.04, M.frame, -cw / 2, 0.06, cz, 0.004);
+  box(cabin, 'Cabin_Kick_Right', 0.03, 0.12, cd - 0.04, M.frame, cw / 2, 0.06, cz, 0.004);
+
+  // Handrail on the right wall
+  const railMesh = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.016, 0.78, 20), M.frame);
+  railMesh.name = 'Cabin_Handrail';
+  railMesh.rotation.x = Math.PI / 2;
+  railMesh.position.set(cw / 2 - 0.07, 0.95, cz - 0.05);
+  railMesh.castShadow = true;
+  cabin.add(railMesh);
+  [-0.3, 0.2].forEach((dz, i) =>
+    box(cabin, `Cabin_Handrail_Bracket_${i + 1}`, 0.07, 0.02, 0.02, M.frame, cw / 2 - 0.035, 0.95, cz - 0.05 + dz, 0.005)
+  );
+
+  // Control panel with two floor buttons and a display
+  const panelX = cw / 2 - 0.022, panelZ = cfront - 0.14;
+  box(cabin, 'Control_Panel', 0.012, 0.36, 0.085, M.panel, panelX, 1.12, panelZ, 0.004);
+  box(cabin, 'Control_Display', 0.004, 0.04, 0.05, M.button, panelX - 0.007, 1.24, panelZ);
+  [1.12, 1.04].forEach((y, i) => {
+    const b = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.014, 0.008, 24), M.button);
+    b.name = `Control_Button_L${2 - i}`;
+    b.rotation.z = Math.PI / 2;
+    b.position.set(panelX - 0.008, y, panelZ);
+    cabin.add(b);
+  });
+
+  // Cabin doors
+  const cabinDoors = doorSet(cabin, 'CabinDoor', cw - 0.04, ch - 0.02, 0.005, cfront + 0.03, 0.016, M.doorGlass);
+
+  // Car frame brackets that ride the guide rails
+  [-0.32, 0.32].forEach((x, i) => {
+    box(cabin, `Rail_Shoe_Top_${i + 1}`, 0.09, 0.1, 0.12, M.rail, x, ch - 0.1, cz - cd / 2 - 0.06, 0.01);
+    box(cabin, `Rail_Shoe_Bottom_${i + 1}`, 0.09, 0.1, 0.12, M.rail, x, 0.05, cz - cd / 2 - 0.06, 0.01);
+  });
+
+  // ── Villa context: upper-floor slab, oak flooring and glass balustrade ──
+  if (opts.context !== false) {
+    const ctx = new THREE.Group();
+    ctx.name = 'Villa_Context';
+    root.add(ctx);
+    const top = FLOOR_H, t = 0.22, gap = 0.03;
+    const xR0 = W / 2 + gap, xR1 = 4.4, zB0 = -2.8, zF1 = 2.4, xL0 = -1.4;
+    const zFront0 = D / 2 + gap;
+    const slab = (name, x0, x1, z0, z1) => {
+      box(ctx, name, x1 - x0, t, z1 - z0, M.slab, (x0 + x1) / 2, top - t / 2 - 0.012, (z0 + z1) / 2);
+      box(ctx, name + '_Oak', x1 - x0, 0.012, z1 - z0, M.oak, (x0 + x1) / 2, top - 0.006, (z0 + z1) / 2);
+    };
+    slab('Slab_Wing', xR0, xR1, zB0, zF1);
+    slab('Slab_Landing', xL0, xR0, zFront0, zF1);
+    // Balustrade along the open edges
+    const bh = 1.0;
+    const rail = (name, len, x, z, alongX) => {
+      const [w, d] = alongX ? [len, 0.012] : [0.012, len];
+      box(ctx, name + '_Glass', w, bh, d, M.glass, x, top + bh / 2, z);
+      box(ctx, name + '_Cap', alongX ? len : 0.04, 0.035, alongX ? 0.04 : len, M.frame, x, top + bh + 0.015, z, 0.008);
+      box(ctx, name + '_Shoe', alongX ? len : 0.05, 0.06, alongX ? 0.05 : len, M.frame, x, top + 0.03, z, 0.006);
+    };
+    rail('Balustrade_Front', xR1 - xL0, (xR1 + xL0) / 2, zF1 - 0.03, true);
+    rail('Balustrade_Side', zF1 - zFront0, xL0 + 0.03, (zF1 + zFront0) / 2, false);
+    // Slim columns carrying the open corners of the slab
+    [[xL0 + 0.15, zF1 - 0.15], [xR1 - 0.15, zF1 - 0.15], [xR1 - 0.15, zB0 + 0.15]].forEach(([x, z], i) =>
+      box(ctx, `Column_${i + 1}`, 0.16, top - t, 0.16, M.slab, x, (top - t) / 2, z, 0.02)
+    );
+  }
+
+  function setState(s) {
+    cabin.position.y = s.cabinY;
+    const lerp = (g, k) => (g.position.x = g.userData.closedX + (g.userData.openX - g.userData.closedX) * k);
+    landing.forEach((panels, i) => panels.forEach((g) => lerp(g, i === 0 ? s.door1 : s.door2)));
+    cabinDoors.forEach((g) => lerp(g, s.cabinDoor));
+  }
+
+  function setFinish(name) {
+    const f = FINISHES[name];
+    if (!f) return;
+    M.frame.color.setHex(f.frame);
+    M.frame.metalness = f.metal;
+    M.frame.roughness = f.rough;
+  }
+
+  setState({ cabinY: 0, door1: 0, door2: 0, cabinDoor: 0 });
+  return { root, cabin, shaft, landing, cabinDoors, materials: M, setState, setFinish, shaftH };
+}
+
+
+const $ = (id) => document.getElementById(id);
+const stage = $('stage');
+const H = DIM.FLOOR_H;
+
+// ── Renderer, scene, lights ─────────────────────────────
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+renderer.setClearColor(0x000000, 0);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+stage.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+const key = new THREE.DirectionalLight(0xfff6ea, 2.4);
+key.position.set(-4.5, 9, 6.5);
+key.castShadow = true;
+key.shadow.mapSize.set(2048, 2048);
+Object.assign(key.shadow.camera, { left: -6, right: 6, top: 8, bottom: -3, near: 1, far: 30 });
+key.shadow.bias = -0.0004;
+key.shadow.normalBias = 0.02;
+key.target.position.set(0.8, 1.5, 0);
+scene.add(key, key.target);
+scene.add(new THREE.HemisphereLight(0xffffff, 0xd8d2c8, 0.5));
+
+const ground = new THREE.Mesh(new THREE.CircleGeometry(30, 64), new THREE.ShadowMaterial({ opacity: 0.2 }));
+ground.rotation.x = -Math.PI / 2;
+ground.receiveShadow = true;
+scene.add(ground);
+
+const lift = buildElevator(THREE, { RoundedBoxGeometry, finish: 'champagne' });
+scene.add(lift.root);
+const ctxGroup = lift.root.getObjectByName('Villa_Context');
+if (ctxGroup) ctxGroup.visible = false;
+const cabinLight = new THREE.PointLight(0xfff1dc, 1.3, 3.0, 2);
+cabinLight.position.set(0, 1.95, -0.06);
+lift.cabin.add(cabinLight);
+
+// ── Camera & controls ───────────────────────────────────
+const camera = new THREE.PerspectiveCamera(32, 1, 0.05, 100);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.minDistance = 1.0;
+controls.maxDistance = 18;
+controls.maxPolarAngle = Math.PI * 0.495;
+
+const VIEWS = {
+  ext: () => ({ pos: new THREE.Vector3(-8.7, 3.4, 12.6), tgt: new THREE.Vector3(0.05, 2.65, 0) }),
+  cab: () => ({ pos: new THREE.Vector3(-0.35, state.cabinY + 1.45, 4.3), tgt: new THREE.Vector3(0, state.cabinY + 1.1, -0.2) }),
+};
+let view = 'ext';
+const v0 = VIEWS.ext();
+camera.position.copy(v0.pos);
+controls.target.copy(v0.tgt);
+
+function resize() {
+  const w = stage.clientWidth, h = stage.clientHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  // keep the whole lift in frame on tall phone screens
+  camera.fov = camera.aspect < 0.8 ? 46 : 32;
+  camera.updateProjectionMatrix();
+}
+new ResizeObserver(resize).observe(stage);
+resize();
+
+// ── State & tweens ──────────────────────────────────────
+const state = { cabinY: 0, door1: 0, door2: 0, cabinDoor: 0 };
+let floor = 0, doorsOpen = false, busy = false, mode = 'manual';
+const tweens = [];
+function tween(key, to, dur) {
+  return new Promise((resolve) => {
+    tweens.push({ key, from: state[key], to, start: performance.now(), dur: dur * 1000, resolve });
+  });
+}
+function stepTweens(now) {
+  for (let i = tweens.length - 1; i >= 0; i--) {
+    const tw = tweens[i];
+    const k = Math.min(1, (now - tw.start) / tw.dur);
+    state[tw.key] = tw.from + (tw.to - tw.from) * easeInOut(k);
+    if (k >= 1) { tweens.splice(i, 1); tw.resolve(); }
+  }
+}
+const doorKey = () => (floor === 0 ? 'door1' : 'door2');
+async function setDoors(open) {
+  doorsOpen = open;
+  await Promise.all([tween(doorKey(), open ? 1 : 0, 1.4), tween('cabinDoor', open ? 1 : 0, 1.4)]);
+}
+async function goTo(f) {
+  if (busy || f === floor) return;
+  busy = true; syncUI();
+  if (doorsOpen) await setDoors(false);
+  const dist = Math.abs(f - floor);
+  floor = f;
+  syncUI();
+  await tween('cabinY', f * H, 4.5 * dist);
+  await setDoors(true);
+  busy = false; syncUI();
+}
+
+// ── Controls wiring ─────────────────────────────────────
+$('f1').onclick = () => goTo(0);
+$('f2').onclick = () => goTo(1);
+$('doors').onclick = async () => {
+  if (busy) return;
+  busy = true; syncUI();
+  await setDoors(!doorsOpen);
+  busy = false; syncUI();
+};
+const finishBox = $('finishes');
+let finish = 'champagne';
+Object.entries(FINISHES).forEach(([id, f]) => {
+  const b = document.createElement('button');
+  b.id = 'fin-' + id;
+  b.setAttribute('aria-pressed', String(id === finish));
+  b.innerHTML = `<span class="swatch" style="background:#${f.frame.toString(16).padStart(6, '0')}"></span>${f.label}`;
+  b.onclick = () => {
+    finish = id; lift.setFinish(id);
+    finishBox.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+  };
+  finishBox.appendChild(b);
+});
+
+let camTween = null;
+function setView(v) {
+  view = v;
+  const to = VIEWS[v]();
+  camTween = { fromP: camera.position.clone(), fromT: controls.target.clone(), toP: to.pos, toT: to.tgt, start: performance.now(), dur: 1400 };
+  $('vExt').setAttribute('aria-pressed', String(v === 'ext'));
+  $('vCab').setAttribute('aria-pressed', String(v === 'cab'));
+}
+$('vExt').onclick = () => setView('ext');
+$('vCab').onclick = () => setView('cab');
+$('ctx').onclick = () => {
+  ctxGroup.visible = !ctxGroup.visible;
+  $('ctx').setAttribute('aria-pressed', String(ctxGroup.visible));
+  $('ctx').textContent = ctxGroup.visible ? 'Hide upper floor' : 'Show upper floor';
+};
+
+let demoT = 0, demoStart = 0;
+function startDemo(asFilm) {
+  tweens.length = 0;
+  mode = asFilm ? 'film' : 'demo';
+  demoStart = performance.now();
+  syncUI();
+}
+async function stopDemo() {
+  const wasFilm = mode === 'film';
+  mode = 'manual';
+  floor = state.cabinY > H / 2 ? 1 : 0;
+  busy = true; doorsOpen = false; syncUI();
+  await Promise.all([tween('cabinY', floor * H, 1), tween('door1', 0, 0.8), tween('door2', 0, 0.8), tween('cabinDoor', 0, 0.8)]);
+  busy = false; syncUI();
+  if (wasFilm) setView(view);
+}
+$('play').onclick = () => (mode === 'demo' ? stopDemo() : startDemo(false));
+
+let captions = true;
+$('caps').onclick = () => {
+  captions = !captions;
+  $('caps').setAttribute('aria-pressed', String(captions));
+  $('caps').textContent = captions ? 'Captions on' : 'Captions off';
+};
+let hintTimer;
+$('film').onclick = (e) => {
+  e.stopPropagation();
+  document.body.classList.add('film');
+  startDemo(true);
+  $('hint').classList.add('on');
+  clearTimeout(hintTimer);
+  hintTimer = setTimeout(() => $('hint').classList.remove('on'), 2600);
+};
+function exitFilm() {
+  if (mode !== 'film') return;
+  document.body.classList.remove('film');
+  $('hint').classList.remove('on');
+  document.querySelectorAll('.cap').forEach((c) => c.classList.remove('on'));
+  stopDemo();
+}
+window.addEventListener('keydown', (e) => e.key === 'Escape' && exitFilm());
+renderer.domElement.addEventListener('pointerdown', () => exitFilm());
+
+function syncUI() {
+  const moving = mode !== 'manual';
+  $('f1').setAttribute('aria-pressed', String(floor === 0));
+  $('f2').setAttribute('aria-pressed', String(floor === 1));
+  ['f1', 'f2', 'doors'].forEach((id) => ($(id).disabled = busy || moving));
+  $('doors').textContent = doorsOpen ? 'Close doors' : 'Open doors';
+  $('play').textContent = mode === 'demo' ? 'Stop ride' : 'Play ride';
+  $('play').setAttribute('aria-pressed', String(mode === 'demo'));
+  $('play').disabled = busy && mode === 'manual';
+  controls.enabled = mode !== 'film';
+}
+
+// ── HUD ─────────────────────────────────────────────────
+let lastY = 0;
+function updateHUD(dy) {
+  const f = state.cabinY > H / 2 ? 2 : 1;
+  $('hudFloor').textContent = f + 'F';
+  const arrow = $('hudArrow');
+  arrow.textContent = dy >= 0 ? '▲' : '▼';
+  arrow.classList.toggle('on', Math.abs(dy) > 1e-4);
+  const open = Math.max(state.door1, state.door2) > 0.98 ? 'doors open' : Math.max(state.door1, state.door2) > 0.02 ? 'doors moving' : 'doors closed';
+  $('hudMeta').textContent = `${state.cabinY.toFixed(2)} m · ${open}`;
+}
+
+// ── Film camera path (one 20 s ride) ────────────────────
+function filmCamera(t, s) {
+  const u = t / DEMO_LEN;
+  const theta = -0.62 + 0.42 * Math.sin(2 * Math.PI * u - Math.PI / 2);
+  const r = (camera.aspect < 0.8 ? 13.5 : 11.2) - 1.8 * Math.sin(Math.PI * u) ** 2;
+  const tgt = new THREE.Vector3(0.15, 1.0 + s.cabinY * 0.9, 0);
+  camera.position.set(tgt.x + r * Math.sin(theta), 1.9 + s.cabinY * 0.8, r * Math.cos(theta));
+  camera.lookAt(tgt);
+  controls.target.copy(tgt);
+}
+
+// ── Loop ────────────────────────────────────────────────
+let first = true;
+function frame(now) {
+  if (mode === 'manual') stepTweens(now);
+  else {
+    demoT = (now - demoStart) / 1000;
+    Object.assign(state, demoState(demoT));
+    floor = state.cabinY > H / 2 ? 1 : 0;
+  }
+  const dy = state.cabinY - lastY;
+  lift.setState(state);
+
+  if (mode === 'film') {
+    filmCamera(demoT % DEMO_LEN, state);
+    const tc = demoT % DEMO_LEN;
+    document.querySelectorAll('.cap').forEach((c) => {
+      c.classList.toggle('on', captions && tc >= +c.dataset.from && tc < +c.dataset.to);
+    });
+  } else if (camTween) {
+    const k = easeInOut(Math.min(1, (now - camTween.start) / camTween.dur));
+    camera.position.lerpVectors(camTween.fromP, camTween.toP, k);
+    controls.target.lerpVectors(camTween.fromT, camTween.toT, k);
+    if (k >= 1) camTween = null;
+  } else if (view === 'cab' && dy) {
+    camera.position.y += dy;
+    controls.target.y += dy;
+  }
+  if (mode !== 'film') controls.update();
+  updateHUD(dy);
+  lastY = state.cabinY;
+  renderer.render(scene, camera);
+  if (first) { first = false; $('status').hidden = true; }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+syncUI();
+window.__lift = { state, lift, camera, controls, setView, startDemo, seek: (t) => (demoStart = performance.now() - t * 1000) };
+</script>
+<script>
+  // Shown only if the 3D libraries could not start
+  setTimeout(() => {
+    const s = document.getElementById('status');
+    if (s && !s.hidden) s.textContent = '3D view could not start in this browser. Try a desktop browser with WebGL.';
+  }, 15000);
+</script>

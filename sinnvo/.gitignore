@@ -1,0 +1,11 @@
+# Downloaded CC0 textures/HDRIs: re-fetched by scripts/fetch_assets.py (sources in assets/CREDITS.md)
+assets/textures/
+assets/hdri/
+assets/sfx/
+# Raw frame sequences, previews and scratch renders: sent as zips, not committed
+renders/frames/
+renders/preview/
+renders/clay/
+renders/lookdev/
+*.blend1
+node_modules/
