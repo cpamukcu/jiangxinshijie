@@ -190,3 +190,21 @@ figure:hover .glass-tile { transform: translateY(-3px); box-shadow: var(--shadow
 .contact-form input:focus, .contact-form textarea:focus { outline: 2px solid var(--violet); }
 .contact-form__note { font-size: 13px; color: var(--ink); min-height: 1em; }
 
+
+/* ---------- real product photography ---------- */
+.split--photo { grid-template-columns: 1fr 1fr; }
+.split__media .media--portrait { aspect-ratio: 4 / 5; max-width: 480px; justify-self: center; width: 100%; }
+.split__media .media--square { aspect-ratio: 1; }
+.split--photo .split__media { display: flex; justify-content: center; }
+.photo-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.photo-strip .media { aspect-ratio: 4 / 5; border-radius: var(--radius); }
+.photo-strip figcaption { margin-top: 14px; font-size: 13.5px; color: var(--muted); letter-spacing: .01em; }
+@media (hover: hover) { .photo-strip figure:hover .media img { transform: scale(1.04); } }
+@media (max-width: 900px) {
+  .split--photo { grid-template-columns: 1fr; }
+  .split__media .media--portrait { max-width: 420px; }
+}
+@media (max-width: 640px) {
+  .photo-strip { grid-template-columns: 1fr; gap: 28px; }
+  .photo-strip .media { aspect-ratio: 4 / 5; }
+}
