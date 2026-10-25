@@ -11,7 +11,7 @@
   opacity: 1; transition: opacity .35s ease;
 }
 .site-header.is-solid {
-  background: rgba(255, 255, 255, 0.96); backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.98); /* no backdrop-filter: re-blurring the scrubbing hero canvas every frame is costly on phones */
   box-shadow: 0 1px 0 var(--hairline); padding: 14px 0;
 }
 .site-header.is-solid::before { opacity: 0; }
@@ -47,7 +47,7 @@
 .site-header.is-solid .header-cta { color: #fff; border-color: var(--violet); background: var(--violet); text-shadow: none; }
 .site-header.is-solid .header-cta:hover { background: var(--violet-deep); border-color: var(--violet-deep); }
 
-.nav-toggle { display: none; flex-direction: column; gap: 5px; padding: 8px; filter: drop-shadow(0 1px 4px rgba(0,0,0,.5)); transition: filter .3s var(--ease); }
+.nav-toggle { display: none; flex-direction: column; gap: 5px; padding: 8px; min-width: 44px; min-height: 44px; align-items: center; justify-content: center; filter: drop-shadow(0 1px 4px rgba(0,0,0,.5)); transition: filter .3s var(--ease); }
 .nav-toggle span { width: 22px; height: 1.5px; background: #fff; display: block; transition: background .3s, transform .35s var(--ease), opacity .2s; }
 .site-header.is-solid .nav-toggle { filter: none; }
 .site-header.is-solid .nav-toggle span { background: var(--ink); }

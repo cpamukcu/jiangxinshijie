@@ -57,7 +57,7 @@
   .lightbox__close { width: 44px; height: 44px; }
   .text-link { padding: 12px 0 6px; margin-top: 14px; }
   .site-footer__col > a, .site-footer__col .site-footer__link { display: block; padding: 11px 0; }
-  .crumbs a { display: inline-flex; align-items: center; min-height: 32px; }
+  .crumbs a { display: inline-flex; align-items: center; min-height: 44px; margin: -6px 0; }
   .main-nav a { min-height: 52px; }
 }
 @media (max-width: 640px) {

@@ -27,9 +27,16 @@ export function initParallax() {
     img.style.transform = `translateY(${shiftPercent}%)`;
   }
 
+  // Only measure while the banner is near the screen, so scrolling the rest of the page
+  // (the hero above all) never pays for this layout read.
+  let inView = false;
   const onScroll = () => {
-    if (!ticking) { requestAnimationFrame(render); ticking = true; }
+    if (inView && !ticking) { requestAnimationFrame(render); ticking = true; }
   };
+  new IntersectionObserver((entries) => {
+    inView = entries[0].isIntersecting;
+    onScroll();
+  }, { rootMargin: '100px 0px' }).observe(banner);
 
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
