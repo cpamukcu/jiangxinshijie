@@ -38,13 +38,13 @@
 
 /* ---------- touch devices ---------- */
 @media (hover: none) {
-  .btn--primary:hover { background: var(--navy); transform: none; box-shadow: none; }
-  .btn--gold:hover { background: var(--gold); transform: none; box-shadow: none; }
+  .btn--primary:hover { background: var(--ink); transform: none; box-shadow: none; }
+  .btn--gold:hover { background: var(--violet); transform: none; box-shadow: none; }
   .btn--ghost:hover { background: transparent; }
   .filter-chip:hover { border-color: var(--hairline); }
   .filter-bar--light .filter-chip:hover { border-color: var(--hairline-light); }
   .supplier-row__badges li:hover, .quickpick__item:hover { border-color: var(--hairline); box-shadow: none; }
-  .safety-item:hover { background: var(--titanium); }
+  .safety-item:hover { background: var(--ink); }
 }
 .btn:active, .filter-chip:active { transform: scale(.97); }
 .cabin-card__btn:active .media img, .case-tile:active .media img { transform: scale(1.03); }

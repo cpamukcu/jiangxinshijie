@@ -1,27 +1,30 @@
 :root {
-  /* brand palette */
-  --ivory: #F7F5F2;
-  --ivory-2: #F0ECE5;
-  --charcoal: #1C1C1C;
-  --navy: #1B3A6B;
-  --navy-2: #24487F;
-  --gold: #C9A05C;
-  --gold-light: #E3C899;
-  --titanium: #2B2B2E;
-  --titanium-2: #201F22;
-  --hairline: rgba(28, 28, 28, 0.12);
-  --hairline-light: rgba(247, 245, 242, 0.16);
+  /* brand palette (SINNVO logo proposal, 2026-10-12) */
+  --paper: #FFFFFF;
+  --stone: #F4F3F1;          /* warm-grey surface for quiet sections */
+  --stone-2: #E9E7E3;
+  --ink: #141223;            /* Deep Black: text and dark sections */
+  --ink-2: #1D1B2E;
+  --night: #100E1C;          /* deepest dark (footer, hovers on dark) */
+  --muted: #67646E;          /* secondary text on light */
+  --muted-light: #B9B6C2;    /* secondary text on dark */
+  --violet: #7D33FF;         /* the only accent: buttons, thin lines, Star Badge */
+  --violet-deep: #6A1FF0;    /* hover / pressed */
+  --violet-light: #B999FF;   /* accent on dark grounds */
+  --violet-mist: #F3EEFF;    /* small tinted fills only */
+  --hairline: rgba(20, 18, 35, 0.10);
+  --hairline-light: rgba(255, 255, 255, 0.14);
   --white: #FFFFFF;
 
   /* type */
-  --font-display: 'Playfair Display', Georgia, serif;
+  --font-display: 'Outfit', 'Helvetica Neue', Arial, sans-serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
   /* layout */
   --maxw: 1240px;
   --gutter: clamp(20px, 5vw, 64px);
-  --radius: 4px;
-  --shadow: 0 10px 40px rgba(28, 28, 28, 0.10);
-  --shadow-lg: 0 24px 64px rgba(28, 28, 28, 0.18);
+  --radius: 2px;
+  --shadow: 0 10px 40px rgba(20, 18, 35, 0.08);
+  --shadow-lg: 0 24px 64px rgba(20, 18, 35, 0.16);
   --ease: cubic-bezier(.22, .61, .36, 1);
 }

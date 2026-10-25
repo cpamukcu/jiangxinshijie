@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.sinnvo.example/sitemap.xml
+Sitemap: https://cpamukcu.github.io/jiangxinshijie/sitemap.xml
