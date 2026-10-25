@@ -119,6 +119,7 @@ figure:hover .glass-tile { transform: translateY(-3px); box-shadow: var(--shadow
   text-align: center; font-size: 13.5px; color: var(--muted-light); padding: 22px 24px 0; max-width: 640px; margin: 0 auto;
 }
 .cabin-grid__more a { color: var(--violet-light); font-weight: 600; }
+.section:not(.section--dark) .cabin-grid__more a { color: var(--violet); }
 .cabin-grid__more a:hover { text-decoration: underline; }
 .cabin-card { background: var(--ink); }
 .cabin-card__btn { display: block; width: 100%; text-align: left; padding: 0 0 26px; }

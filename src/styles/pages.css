@@ -47,14 +47,14 @@
 .site-footer__brand a { display: inline-block; padding: 6px 0; }
 .site-footer__brand img { height: 26px; width: auto; margin-bottom: 20px; }
 .site-footer__brand p { font-size: 14px; max-width: 34ch; }
-.site-footer__col h4 { font-family: var(--font-body); font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--violet-light); margin-bottom: 20px; }
+.site-footer__heading { font-family: var(--font-body); font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--violet-light); margin-bottom: 20px; }
 .site-footer__col > a { display: block; font-size: 14.5px; padding: 5px 0; transition: color .2s; }
 .site-footer__col > a:hover { color: #fff; }
 .site-footer__col address { font-style: normal; font-size: 14px; line-height: 1.8; margin-bottom: 18px; }
 .site-footer__col .site-footer__link { display: inline-block; padding: 0; color: var(--violet-light); font-weight: 600; }
 .site-footer__bottom { border-top: 1px solid var(--hairline-light); padding: 24px 0; }
 .site-footer__bottom-inner { display: flex; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; }
-.site-footer__bottom p { font-size: 12px; color: var(--muted); margin: 0; }
+.site-footer__bottom p { font-size: 12px; color: var(--muted-light); margin: 0; }
 
 /* ---------- filter chips ---------- */
 .filter-bar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 36px; }

@@ -1,6 +1,6 @@
 # SINNVO — Villa Elevator
 
-Marketing site for Huzhou Sinnvo Elevator Co., Ltd. Vanilla HTML/CSS/JS
+Marketing site for SINNVO (星沃), premium villa elevators. Vanilla HTML/CSS/JS
 (ES modules), built with Vite. No framework, no backend.
 
 ## Run it
@@ -42,9 +42,10 @@ wired by `src/js/assetFallback.js`) instead of a broken-image icon.
 |---|---|---|
 | `public/assets/video/frames/` | **In place** | Hero is a preloaded still-frame sequence (32 WebP frames per breakpoint, ~5s source clip), not a scrubbed `<video>` — scrubbing a real video by seek is latency-bound and visibly stutters on mobile Safari. Frames load coarse-to-fine and adapt to the connection (3G gets 9 frames, data-saver/2G none — the poster stays). Regenerate with `HERO_SRC_DIR=<folder with header.mp4 + header-mobile.mp4> FFMPEG_BIN=<path> node scripts/gen-hero-frames.mjs`; the source clips aren't committed, but the last ones can be recovered with `git show e51c8c5^:public/assets/video/header.mp4`. |
 | Responsive images | **In place** | After adding or replacing a JPEG in `public/assets/images/`, run `node scripts/gen-responsive-images.mjs && node scripts/html-to-picture.mjs && node scripts/upgrade-preload-links.mjs` to regenerate the WebP tiers (480/800/1200/1600w) and refresh every `<picture>` and hero preload. |
-| `public/assets/images/logo.svg` | **Placeholder** | A simple typographic mark I built (navy wordmark + geometric "X"). Swap for the real vector logo file — keep the filename `logo.svg` or update the two `<img>` references in `index.html`. |
+| `public/assets/images/logo.svg`, `logo-white.svg`, `public/favicon.svg` | **In place** | Official SINNVO wordmark and Star Badge from the brand kit (metadata stripped). The header uses `logo.svg` (turned white over the hero by CSS), the footer uses `logo-white.svg`. |
+| Real product photos (`real-*.jpg`) | **In place** | Made by `node scripts/prep-real-photos.mjs` from the brand kit (crop + gentle grade), then the responsive-image commands above. Retouched versions in `~/Desktop/SINNVO/edited/` win automatically. See `docs/image-inventory.md`. |
 | Real contact details | Placeholder | `src/js/contactForm.js` uses `info@sinnvo.example` as the mailto target — replace with the real inbox, and wire the form to a real backend (e.g. Formspree) per the `TODO` comment in that file. |
-| QR codes on the home Contact section | Placeholder | The "Follow Us" boxes are unlabeled dashed placeholders (Website / Xiaohongshu / Douyin / WeChat Channels) — drop in real QR images when available; do not fabricate scannable codes. |
+| QR codes | Removed | The placeholder "Follow Us" boxes were removed. Add a section back only with real QR images. |
 
 Every image slot referenced in the HTML pages now resolves to a real file —
 run `comm -23 <(grep -oE 'data-fallback-label="[^"]+"' index.html | sed 's/.*"\(.*\)"/\1/' | sort -u) <(ls public/assets/images | sort -u)`
