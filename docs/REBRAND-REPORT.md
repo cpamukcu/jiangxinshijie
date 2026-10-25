@@ -17,6 +17,17 @@ Branch: `rebrand/sinnvo-visual` (local, not pushed). `main` is untouched.
 ## Scores (Lighthouse 12.6, mobile, production build)
 All 12 pages: Accessibility 100, Best Practices 100, SEO 100, Performance 98–100 (one home run read 77 from a CPU spike; re-runs 99 and 100).
 
+## squirrelscan (v0.0.133, offline, local production build)
+Score **50 (F) → 79 (C)**; failed rules 15 → 1. Fixed: canonical URLs on every page (from `SITE_URL`), Organization JSON-LD `@id`/`url`/`logo`, width/height on all 104 images (`scripts/add-img-dimensions.mjs`), lighter real-photo JPEGs, lazy-loading on first-screen images, meta description lengths, home and privacy titles, the lightbox close button's accessible name, form autocomplete hints, and a new `public/llms.txt`.
+
+Left, and why:
+- `crawl/sitemap-domain` (the 1 error): the sitemap correctly points at the live domain, not localhost. Clears on the deployed site.
+- Duplicate title/description for `/` and `/index.html`: same page; the canonical tag covers it.
+- CSP, X-Frame-Options, HSTS, caching, compression, security.txt: response headers that GitHub Pages does not let you set; revisit with a custom host or Cloudflare in front.
+- Form CAPTCHA: will be covered by the honeypot when the Formspree handler goes in.
+- JPEG fallbacks over 200 KB (`villa-exterior`, `materials-flatlay`, `detail-*`, `villa-lifestyle-banner`): existing images, served only to browsers without WebP; left untouched per the brief.
+- Thin content (Contact, Projects), "agent token weight", contextual links: content decisions, not bugs.
+
 ## TODO(client): needs SINNVO's written confirmation
 | Item | Where | State now |
 |---|---|---|
@@ -38,7 +49,6 @@ Search the code for `TODO(client)` and `data-todo="client` to restore anything o
 None visible in pages, metadata, code or the placed images. Hidden (comments/templates only): the JX cabin codes, kept so they can be mapped to new codes.
 
 ## Not done
-- **squirrelscan audit:** the `squirrel` CLI is not installed on this Mac. Installing it needs your OK (`brew` is not available either; installer at squirrelscan.com/download).
 - **Contact form handler:** waits for the real inbox (Formspree is the plan: validation, honeypot, success state).
 - **OG/Twitter image (1200×630, SINNVO branded):** still the hero poster.
 - **Straightening verticals** on the placed photos: they are close to true; left for the retouch pass.
@@ -59,7 +69,7 @@ git push -u origin rebrand/sinnvo-visual
 
 ## When sinnvo.com goes live
 1. In `vite.config.js`, change the `SITE_URL` default to `https://www.sinnvo.com` (or build with `SITE_URL=https://www.sinnvo.com`).
-2. Replace `https://cpamukcu.github.io/jiangxinshijie` with the new domain in `public/robots.txt` and `public/sitemap.xml`.
+2. Replace `https://cpamukcu.github.io/jiangxinshijie` with the new domain in `public/robots.txt`, `public/sitemap.xml` and `public/llms.txt` (canonical tags and JSON-LD follow `SITE_URL` automatically).
 3. Add `public/CNAME` containing `www.sinnvo.com`, then set the custom domain in the repo's Settings → Pages and add the DNS records your registrar shows. `base: './'` already works on a root domain.
 
 ## Renaming the GitHub repo

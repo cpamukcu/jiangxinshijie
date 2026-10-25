@@ -1,0 +1,18 @@
+# SINNVO (星沃)
+
+> Premium villa elevators. SINNVO designs, manufactures and installs custom home and villa elevators in Huzhou, Zhejiang, China, for homes worldwide. Sales, R&D, manufacturing and installation are under one roof.
+
+- Fully custom (non-standard) cabins, made to order; designs draw on Eastern and Western heritage.
+- Four shaft and drive structures: Traction Gantry, Small Gantry, Backpack Frame, Strong-Drive.
+- No pit required, low headroom, right-angle and three-way door layouts.
+- Eight built-in safety systems, including power-failure self-leveling, an intelligent light curtain, a child-safety lock and cloud monitoring.
+- Every panel is hand-finished and checked before it ships.
+
+## Pages
+- [Home elevators](https://cpamukcu.github.io/jiangxinshijie/home-elevators.html): structures and cabin collections
+- [Collections](https://cpamukcu.github.io/jiangxinshijie/collections.html): cabin interiors and finishes
+- [Solutions](https://cpamukcu.github.io/jiangxinshijie/solutions.html): shaft and drive layouts
+- [Technology](https://cpamukcu.github.io/jiangxinshijie/technology.html): safety systems and controls
+- [Installation](https://cpamukcu.github.io/jiangxinshijie/installation.html): from empty shaft to finished cabin
+- [Components & OEM](https://cpamukcu.github.io/jiangxinshijie/components-oem.html): decoration parts made to drawings
+- [Contact](https://cpamukcu.github.io/jiangxinshijie/contact.html): request a quote with your shaft dimensions

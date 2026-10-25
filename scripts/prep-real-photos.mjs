@@ -54,7 +54,7 @@ for (const p of PHOTOS) {
     .linear(0.95, 10)                       // lift shadows a little
     .modulate({ brightness: 1.03, saturation: 0.98 })
     .sharpen({ sigma: 0.6 })                // gentle clarity
-    .jpeg({ quality: 82, mozjpeg: true })
+    .jpeg({ quality: 76, mozjpeg: true })
     .toFile(join(OUT, `${p.out}.jpg`));
   console.log(`${p.out}.jpg  ${info.width}x${info.height}  ${Math.round(info.size / 1024)} KB${src === edited ? '  (edited)' : ''}`);
 }

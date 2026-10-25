@@ -19,7 +19,7 @@ body {
 .section--dark :focus-visible, .site-footer :focus-visible { outline-color: var(--violet-light); }
 input, textarea, select { caret-color: var(--violet); accent-color: var(--violet); }
 
-img { max-width: 100%; display: block; }
+img { max-width: 100%; height: auto; display: block; }
 a { color: inherit; text-decoration: none; }
 ul, dl, dd, figure { list-style: none; margin: 0; padding: 0; }
 button { font: inherit; background: none; border: none; cursor: pointer; color: inherit; }
