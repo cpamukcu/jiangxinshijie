@@ -1,8 +1,8 @@
 {
-  "name": "jiangxinshijie-villa-elevator",
+  "name": "sinnvo-villa-elevator",
   "version": "1.0.0",
   "private": true,
-  "description": "Marketing site for Huzhou Jiangxinshijie Elevator Co., Ltd. — villa elevators",
+  "description": "Marketing site for Huzhou Sinnvo Elevator Co., Ltd. — villa elevators",
   "type": "module",
   "scripts": {
     "dev": "vite",

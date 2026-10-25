@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "audit-website": {
+      "source": "squirrelscan/skills",
+      "sourceType": "github",
+      "skillPath": "skills/audit-website/SKILL.md",
+      "computedHash": "cc6b03fe389eebaf5b6a5143591c13964462a855a54d08f3d65e0a23d8f90198"
+    },
+    "squirrelscan": {
+      "source": "squirrelscan/skills",
+      "sourceType": "github",
+      "skillPath": "skills/squirrelscan/SKILL.md",
+      "computedHash": "f29180262a11793dcf40451129e83f2505ceaec8432466983f26125c77e1afd6"
+    }
+  }
+}
