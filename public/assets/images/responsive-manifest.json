@@ -643,6 +643,110 @@
     ],
     "singleWebp": null
   },
+  "real-cabin-champagne": {
+    "origWidth": 1350,
+    "variants": [
+      {
+        "width": 480,
+        "webp": "real-cabin-champagne-480w.webp"
+      },
+      {
+        "width": 800,
+        "webp": "real-cabin-champagne-800w.webp"
+      },
+      {
+        "width": 1200,
+        "webp": "real-cabin-champagne-1200w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "real-cabin-starlight": {
+    "origWidth": 1350,
+    "variants": [
+      {
+        "width": 480,
+        "webp": "real-cabin-starlight-480w.webp"
+      },
+      {
+        "width": 800,
+        "webp": "real-cabin-starlight-800w.webp"
+      },
+      {
+        "width": 1200,
+        "webp": "real-cabin-starlight-1200w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "real-cabin-white-marble": {
+    "origWidth": 1350,
+    "variants": [
+      {
+        "width": 480,
+        "webp": "real-cabin-white-marble-480w.webp"
+      },
+      {
+        "width": 800,
+        "webp": "real-cabin-white-marble-800w.webp"
+      },
+      {
+        "width": 1200,
+        "webp": "real-cabin-white-marble-1200w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "real-decorative-panels": {
+    "origWidth": 1080,
+    "variants": [
+      {
+        "width": 480,
+        "webp": "real-decorative-panels-480w.webp"
+      },
+      {
+        "width": 800,
+        "webp": "real-decorative-panels-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "real-glass-shaft-showroom": {
+    "origWidth": 1350,
+    "variants": [
+      {
+        "width": 480,
+        "webp": "real-glass-shaft-showroom-480w.webp"
+      },
+      {
+        "width": 800,
+        "webp": "real-glass-shaft-showroom-800w.webp"
+      },
+      {
+        "width": 1200,
+        "webp": "real-glass-shaft-showroom-1200w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "real-showroom-cabin": {
+    "origWidth": 1350,
+    "variants": [
+      {
+        "width": 480,
+        "webp": "real-showroom-cabin-480w.webp"
+      },
+      {
+        "width": 800,
+        "webp": "real-showroom-cabin-800w.webp"
+      },
+      {
+        "width": 1200,
+        "webp": "real-showroom-cabin-1200w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
   "safety-lifestyle": {
     "origWidth": 1100,
     "variants": [

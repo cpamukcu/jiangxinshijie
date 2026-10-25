@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('.', import.meta.url));
 // Social crawlers need an absolute og:image URL; override with SITE_URL when a custom domain is live.
-const SITE_URL = (process.env.SITE_URL || 'https://www.sinnvo.example').replace(/\/$/, '');
+const SITE_URL = (process.env.SITE_URL || 'https://cpamukcu.github.io/jiangxinshijie').replace(/\/$/, '');
 const partialsDir = resolve(root, 'src/partials');
 const pages = readdirSync(root).filter((f) => f.endsWith('.html'));
 
@@ -19,6 +19,11 @@ function htmlPartials() {
       handler(html, ctx) {
         const page = basename(ctx.filename || 'index.html', '.html');
         html = html.replace(/(<meta property="og:image" content=")\/([^"]+)/, `$1${SITE_URL}/$2`);
+        // canonical URL and %SITE_URL% placeholders (JSON-LD) follow the same single domain switch
+        const path = page === 'index' ? '' : `${page}.html`;
+        html = html
+          .replaceAll('%SITE_URL%', SITE_URL)
+          .replace('</head>', `<link rel="canonical" href="${SITE_URL}/${path}">\n</head>`);
         return html.replace(/<!--@include (\w+)-->/g, (_, name) =>
           readFileSync(resolve(partialsDir, `${name}.html`), 'utf8').replaceAll(
             `data-nav="${page}"`,

@@ -55,6 +55,7 @@ function sizesFor(content, imgIndex, mediaClass) {
   const window = content.slice(Math.max(0, imgIndex - 500), imgIndex);
   if (/class="lifestyle-banner/.test(window)) return '100vw';
   if (window.includes('feature-row__media')) return '(max-width: 900px) 100vw, 45vw';
+  if (window.includes('photo-strip')) return '(max-width: 640px) 100vw, 33vw';
   if (window.includes('split__media')) return '(max-width: 900px) 100vw, 50vw';
   if (window.includes('well-compare__media')) return '(max-width: 900px) 100vw, 38vw';
   if (window.includes('safety-intro__media')) return '(max-width: 1080px) 100vw, 43vw';

@@ -51,40 +51,56 @@ export function initHeroVideo() {
 
   const ctx2d = canvas.getContext('2d', { alpha: false });
 
-  // Canvas box size in device pixels, refreshed only on resize instead of read from the
-  // layout on every drawn frame — getBoundingClientRect() forces a layout, and drawFrame()
-  // can run on every scroll event while scrubbing.
-  const canvasBox = { w: 0, h: 0 };
+  // Canvas aspect ratio, refreshed only on resize instead of read from the layout on every
+  // drawn frame — getBoundingClientRect() forces a layout, and paint() runs on every
+  // scrolled frame while scrubbing.
+  let boxAspect = 16 / 9;
   function syncCanvasBox() {
     const rect = canvas.getBoundingClientRect();
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvasBox.w = Math.max(1, Math.round(rect.width * dpr));
-    canvasBox.h = Math.max(1, Math.round(rect.height * dpr));
+    if (rect.width && rect.height) boxAspect = rect.width / rect.height;
   }
   syncCanvasBox();
 
-  // Paints one still frame into the canvas, cropped to match object-fit: cover.
-  function drawFrame(img) {
-    if (!ctx2d || !img || !img.naturalWidth) return;
-    const w = canvasBox.w, h = canvasBox.h;
-    if (!w || !h) return;
-    if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+  // The object-fit: cover crop of a frame for the current box, in frame pixels. The canvas
+  // backing store is exactly that crop, so every draw is 1:1 (no resampling, and a far
+  // smaller bitmap than a full-screen retina canvas); CSS stretches it to the box.
+  let crop = null;
+  function cropFor(img) {
     const iw = img.naturalWidth, ih = img.naturalHeight;
-    const boxAspect = w / h, imgAspect = iw / ih;
     let sx, sy, sw, sh;
-    if (imgAspect > boxAspect) { sh = ih; sw = ih * boxAspect; sx = (iw - sw) / 2; sy = 0; }
+    if (iw / ih > boxAspect) { sh = ih; sw = ih * boxAspect; sx = (iw - sw) / 2; sy = 0; }
     else { sw = iw; sh = iw / boxAspect; sx = 0; sy = (ih - sh) / 2; }
-    try { ctx2d.drawImage(img, sx, sy, sw, sh, 0, 0, w, h); } catch (e) { return; }
+    return { sx, sy, sw, sh, w: Math.max(1, Math.round(sw)), h: Math.max(1, Math.round(sh)) };
+  }
+
+  // Draws frame a, then frame b on top at opacity t. Blending neighbouring stills by the
+  // scroll position between them turns the 32-frame sequence into near-continuous motion
+  // instead of a visible step every ~40px of scroll. BLEND_STEPS sub-steps per frame pair
+  // (~250 visible positions) keep the redraw count low on slow phones.
+  const BLEND_STEPS = 8;
+  function drawBlend(a, b, t) {
+    if (!ctx2d || !a || !a.naturalWidth) return;
+    if (!crop) crop = cropFor(a);
+    if (canvas.width !== crop.w || canvas.height !== crop.h) { canvas.width = crop.w; canvas.height = crop.h; }
+    const { sx, sy, sw, sh, w, h } = crop;
+    try {
+      ctx2d.globalAlpha = 1;
+      ctx2d.drawImage(a, sx, sy, sw, sh, 0, 0, w, h);
+      if (b && b !== a && t > 0) {
+        ctx2d.globalAlpha = t;
+        ctx2d.drawImage(b, sx, sy, sw, sh, 0, 0, w, h);
+        ctx2d.globalAlpha = 1;
+      }
+    } catch (e) { return; }
     if (!canvas.classList.contains('is-active')) canvas.classList.add('is-active');
   }
 
   const frames = new Array(frameCount); // a slot is filled only once that frame is decoded
   let framesReady = false;              // true once frame 0 is in — scrubbing works from then on
-  let shownFrame = null;
+  let shownKey = -1;
 
-  // Nearest decoded frame to the target, so scrubbing never waits on a frame still in flight.
-  function frameForProgress(p) {
-    const idx = Math.max(0, Math.min(frameCount - 1, Math.round(p * (frameCount - 1))));
+  // Nearest decoded frame to an index, so scrubbing never waits on a frame still in flight.
+  function nearestFrame(idx) {
     for (let d = 0; d < frameCount; d++) {
       if (frames[idx - d]) return frames[idx - d];
       if (frames[idx + d]) return frames[idx + d];
@@ -93,8 +109,14 @@ export function initHeroVideo() {
   }
 
   function paint() {
-    const img = frameForProgress(currentProgress);
-    if (img && img !== shownFrame) { shownFrame = img; drawFrame(img); }
+    const f = currentProgress * (frameCount - 1);
+    const i0 = Math.floor(f);
+    const i1 = Math.min(frameCount - 1, i0 + 1);
+    const t = Math.round((f - i0) * BLEND_STEPS) / BLEND_STEPS;
+    const key = i0 * (BLEND_STEPS + 1) + t * BLEND_STEPS;
+    if (key === shownKey) return; // same blend as on screen: no redraw
+    if (frames[i0] && frames[i1]) { drawBlend(frames[i0], frames[i1], t); shownKey = key; }
+    else { drawBlend(nearestFrame(Math.round(f)), null, 0); shownKey = -1; } // neighbours still loading
   }
 
   // Coarse-to-fine order (0, 16, 31, 8, 24, 4, 12, …): each pass doubles the timeline's
@@ -137,27 +159,41 @@ export function initHeroVideo() {
   const seg = (p, a, b) => clamp((p - a) / (b - a), 0, 1);
   const easeOut = (t) => 1 - Math.pow(1 - t, 3);
 
+  // Writes a style only when its rounded value changed, so a scrolled frame past the
+  // reveal ranges touches no styles at all.
+  const lastT = new Map();
   function reveal(el, from, to) {
     if (!el) return;
-    const t = easeOut(seg(currentProgress, from, to));
+    const t = Math.round(easeOut(seg(currentProgress, from, to)) * 1000) / 1000;
+    if (lastT.get(el) === t) return;
+    lastT.set(el, t);
     el.style.opacity = String(t);
-    el.style.transform = `translateX(${(1 - t) * -22}px)`;
+    el.style.transform = t === 1 ? 'none' : `translate3d(${((1 - t) * -22).toFixed(2)}px,0,0)`;
   }
 
   let currentProgress = 0;
   let ticking = false;
 
+  // Track geometry is measured on load/resize only; per frame, progress comes from scrollY
+  // (no layout read on the scroll path).
+  const sticky = hero.querySelector('.hero__sticky');
+  let heroTop = 0, trackHeight = 0;
+  function measure() {
+    heroTop = hero.getBoundingClientRect().top + window.scrollY;
+    trackHeight = hero.offsetHeight - (sticky ? sticky.offsetHeight : window.innerHeight);
+  }
+  measure();
+
+  let hintShown = -1;
   function render() {
     ticking = false;
-    const rect = hero.getBoundingClientRect();
-    const sticky = hero.querySelector('.hero__sticky');
-    const trackHeight = hero.offsetHeight - (sticky ? sticky.offsetHeight : window.innerHeight);
     if (trackHeight <= 0) return;
-    currentProgress = clamp(-rect.top / trackHeight, 0, 1);
+    currentProgress = clamp((window.scrollY - heroTop) / trackHeight, 0, 1);
 
     if (framesReady) paint();
 
-    if (hint) hint.style.opacity = String(1 - seg(currentProgress, 0, 0.07));
+    const h = Math.round((1 - seg(currentProgress, 0, 0.07)) * 100) / 100;
+    if (hint && h !== hintShown) { hintShown = h; hint.style.opacity = String(h); }
     reveal(kicker, 0.04, 0.18);
     reveal(title, 0.1, 0.28);
     reveal(desc, 0.18, 0.36);
@@ -167,7 +203,8 @@ export function initHeroVideo() {
   const onScroll = () => {
     if (!ticking) { requestAnimationFrame(render); ticking = true; }
   };
-  const onResize = () => { syncCanvasBox(); shownFrame = null; onScroll(); };
+  const onResize = () => { syncCanvasBox(); measure(); crop = null; shownKey = -1; onScroll(); };
+  window.addEventListener('load', () => { measure(); onScroll(); }, { once: true });
 
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onResize);
