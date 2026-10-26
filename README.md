@@ -95,3 +95,19 @@ link is highlighted), and add it to `public/sitemap.xml`.
 GitHub Pages address). When a custom domain is live, build with
 `SITE_URL=https://yourdomain.com npm run build` and update `public/robots.txt`
 and `public/sitemap.xml`.
+
+## Journal (blog)
+
+Posts are Markdown files in `journal/`. Each starts with front matter:
+
+```
+---
+title: Your Article Title
+date: 2026-11-02
+summary: One or two sentences shown on the cards and as the meta description.
+cover: real-landing-door
+coverAlt: What the cover photo shows
+---
+```
+
+`cover` is an image base name from `public/assets/images` (it must already have its WebP tiers). Write the body in Markdown below the front matter. `npm run dev` and `npm run build` turn every post into `journal-<slug>.html`, rebuild `journal.html`, the "From the Journal" row on the home page and the Journal entries in `public/sitemap.xml`. The generated pages are git-ignored; commit only the `.md` file. Use only facts SINNVO has confirmed.
