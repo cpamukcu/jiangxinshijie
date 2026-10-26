@@ -3,10 +3,11 @@
   .solutions-grid { grid-template-columns: repeat(2, 1fr); }
   .case-grid { grid-template-columns: repeat(3, 1fr); }
   .cabin-grid { grid-template-columns: repeat(2, 1fr); }
-  /* 10 items divide evenly into a 2-column grid — no orphan, so undo the
-     3-column full-width/centering treatment from sections.css. */
-  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) { grid-column: auto; display: block; }
-  .cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__btn { max-width: none; }
+  /* 9 cards in two columns leave one alone: span it across both, photo beside text */
+  .cabin-grid > .cabin-card:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .cabin-grid > .cabin-card:last-child:nth-child(odd) .cabin-card__btn { display: grid; grid-template-columns: calc(50% - 6px) 1fr; align-content: center; padding-bottom: 0; }
+  .cabin-grid > .cabin-card:last-child:nth-child(odd) .media { grid-row: 1 / span 3; margin: 0 18px 0 0; }
+  .cabin-grid > .cabin-card:last-child:nth-child(odd) .cabin-card__btn > :not(.media) { grid-column: 2; padding-left: 0; }
   .details-grid--3 { grid-template-columns: 1fr 1fr; }
   .safety-intro { grid-template-columns: 1fr; }
 }

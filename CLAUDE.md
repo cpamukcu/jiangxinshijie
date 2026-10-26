@@ -11,7 +11,7 @@ Marketing site for SINNVO (星沃), a villa/home elevator manufacturer in Huzhou
 - Deploys to GitHub Pages from `main` via `.github/workflows/deploy.yml`. Never push to `main` without the owner's approval.
 
 ## Commands
-- `npm run dev` – local dev server
+- `npm run dev` – local dev server (builds the Journal from `journal/*.md` first)
 - `npm run build` – production build to `dist/`
 - `npm run preview` – serve the build
 - `SITE_URL=https://example.com npm run build` – absolute og:image URLs (SITE_URL is the single domain switch in `vite.config.js`)

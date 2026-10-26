@@ -6,6 +6,7 @@ import './styles/hero.css';
 import './styles/sections.css';
 import './styles/lightbox.css';
 import './styles/pages.css';
+import './styles/journal.css';
 import './styles/responsive.css';
 
 import { initAssetFallbacks } from './js/assetFallback.js';
