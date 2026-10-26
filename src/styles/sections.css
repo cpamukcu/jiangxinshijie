@@ -108,25 +108,23 @@ figure:hover .glass-tile { transform: translateY(-3px); box-shadow: var(--shadow
 .glass-tile--eurotea { background-color: #8f6a44; }
 
 /* ---------- cabin gallery ---------- */
-.cabin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--hairline-light); border: 1px solid var(--hairline-light); }
-/* A grid of 10 leaves one orphan card alone in the last row; spanning it full-width
-   stops the container's own background showing through the two empty cells beside
-   it, but it must still render as a normal-width card (not stretched), or it looks
-   like an oversized, half-empty row. */
-.cabin-grid > .cabin-card:last-child:nth-child(3n+1) { grid-column: 1 / -1; display: flex; justify-content: center; }
-.cabin-grid > .cabin-card:last-child:nth-child(3n+1) .cabin-card__btn { width: 100%; max-width: calc((100% - 4px) / 3); }
+.cabin-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  max-width: 1040px; /* left-aligned with the section heading above it */
+}
 .cabin-grid__more {
-  text-align: center; font-size: 13.5px; color: var(--muted-light); padding: 22px 24px 0; max-width: 640px; margin: 0 auto;
+  text-align: center; font-size: 13.5px; color: var(--muted-light); padding: 22px 24px 0; max-width: 1040px; margin: 0; /* centred under the left-aligned grid */
 }
 .cabin-grid__more a { color: var(--violet-light); font-weight: 600; }
 .section:not(.section--dark) .cabin-grid__more a { color: var(--violet); }
 .cabin-grid__more a:hover { text-decoration: underline; }
-.cabin-card { background: var(--ink); }
-.cabin-card__btn { display: block; width: 100%; text-align: left; padding: 0 0 26px; }
-.cabin-card__btn .media { aspect-ratio: 3 / 4; margin-bottom: 20px; }
-.cabin-card__code { display: block; padding: 0 26px; font-family: var(--font-body); font-size: 12px; letter-spacing: .1em; color: var(--violet-light); margin-bottom: 6px; }
-.cabin-card__name { padding: 0 26px; font-family: var(--font-display); font-size: 21px; margin-bottom: 10px; }
-.cabin-card__mood { padding: 0 26px; font-size: 13px; color: var(--muted-light); }
+.cabin-card { background: var(--ink); border: 1px solid var(--hairline-light); transition: border-color .3s var(--ease), transform .3s var(--ease); }
+.cabin-card:hover { border-color: var(--violet-light); transform: translateY(-3px); }
+.cabin-card__btn { display: block; width: 100%; text-align: left; padding: 0 0 22px; }
+.cabin-card__btn .media { aspect-ratio: 4 / 5; margin-bottom: 18px; }
+.cabin-card__code { display: none; /* codes live in the spec popup; only some cabins have one */ padding: 0 22px; font-family: var(--font-body); font-size: 12px; letter-spacing: .1em; color: var(--violet-light); margin-bottom: 6px; }
+.cabin-card__name { padding: 0 22px; font-family: var(--font-display); font-size: 19px; margin-bottom: 6px; }
+.cabin-card__mood { padding: 0 22px; font-size: 13px; color: var(--muted-light); }
 
 
 /* ---------- details ---------- */
