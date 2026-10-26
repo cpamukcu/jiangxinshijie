@@ -47,3 +47,24 @@ Not straightened in code: verticals are close to true in all six; a manual persp
 
 ## Needs AI retouch (entries in PHOTO-PROMPTS.md where they exist)
 03, 05, 07, 11, 12, 13, 14, 15, 16, 17, 20, 21, 22, 25, 26. Drop results into `~/Desktop/SINNVO/edited/` with the kit filename; `prep-real-photos.mjs` picks them up first.
+
+## Yuanbao restage (2026-10-26)
+
+All 14 photos above were restaged in Yuanbao (Hy Image 3.5) from the full-resolution iPhone originals: the real elevator kept as built, the setting replaced with a villa, a clean workshop or a light design studio. Results are in `~/Desktop/SINNVO/edited/` (1248×2240 PNG; 26 is 2240×1248). Each carries Yuanbao's "元宝 AI生成" mark in the bottom-right corner; the slot crops in `scripts/prep-real-photos.mjs` fall inside it.
+
+| Photo | Web file | Where |
+|---|---|---|
+| 01 | real-glass-shaft-showroom | About, "One Team, Four Disciplines" |
+| 02, 04, 06 | real-cabin-starlight / -white-marble / -champagne | Collections, "Photographed as Built" |
+| 09 | real-showroom-cabin | Home, "Made to Order" (tight crop keeps an invented wall sign out) |
+| 11 | real-villa-glass-shaft | Projects, new "Built Into the Architecture" |
+| 13 | real-control-panels | Home details, Technology (replaces AI control-panel) |
+| 14 | real-workshop-cabin | Factory header, Home craftsmanship, Solutions derricks (replaces AI craftsmanship-detail) |
+| 17 | real-wood-panel | Home details, About/Technology/Factory sections (replaces AI manufacturing-detail) |
+| 19 | real-decorative-panels | Factory, "Every Cabin Tells a Story" |
+| 20 | real-villa-landing | Home safety, Technology header (replaces AI safety-lifestyle) |
+| 21 | real-landing-door | Installation, new "What Stays Visible"; Collections "Mix, Match" |
+| 22 | real-trim-profiles | Collections header, Home details, Factory materials (replaces AI materials-flatlay) |
+| 26 | real-showroom-corridor | About header |
+
+AI images no longer used anywhere (delete only after approval): control-panel, materials-flatlay, manufacturing-detail, craftsmanship-detail, safety-lifestyle, cabin-yinshe (plus their -NNNw.webp tiers).

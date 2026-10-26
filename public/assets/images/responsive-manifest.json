@@ -644,7 +644,7 @@
     "singleWebp": null
   },
   "real-cabin-champagne": {
-    "origWidth": 1350,
+    "origWidth": 1248,
     "variants": [
       {
         "width": 480,
@@ -662,7 +662,7 @@
     "singleWebp": null
   },
   "real-cabin-starlight": {
-    "origWidth": 1350,
+    "origWidth": 1248,
     "variants": [
       {
         "width": 480,
@@ -680,7 +680,7 @@
     "singleWebp": null
   },
   "real-cabin-white-marble": {
-    "origWidth": 1350,
+    "origWidth": 1248,
     "variants": [
       {
         "width": 480,
@@ -697,8 +697,26 @@
     ],
     "singleWebp": null
   },
+  "real-control-panels": {
+    "origWidth": 1248,
+    "variants": [
+      {
+        "width": 480,
+        "webp": "real-control-panels-480w.webp"
+      },
+      {
+        "width": 800,
+        "webp": "real-control-panels-800w.webp"
+      },
+      {
+        "width": 1200,
+        "webp": "real-control-panels-1200w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
   "real-decorative-panels": {
-    "origWidth": 1080,
+    "origWidth": 1248,
     "variants": [
       {
         "width": 480,
@@ -707,12 +725,16 @@
       {
         "width": 800,
         "webp": "real-decorative-panels-800w.webp"
+      },
+      {
+        "width": 1200,
+        "webp": "real-decorative-panels-1200w.webp"
       }
     ],
     "singleWebp": null
   },
   "real-glass-shaft-showroom": {
-    "origWidth": 1350,
+    "origWidth": 1248,
     "variants": [
       {
         "width": 480,
@@ -729,8 +751,26 @@
     ],
     "singleWebp": null
   },
+  "real-landing-door": {
+    "origWidth": 1248,
+    "variants": [
+      {
+        "width": 480,
+        "webp": "real-landing-door-480w.webp"
+      },
+      {
+        "width": 800,
+        "webp": "real-landing-door-800w.webp"
+      },
+      {
+        "width": 1200,
+        "webp": "real-landing-door-1200w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
   "real-showroom-cabin": {
-    "origWidth": 1350,
+    "origWidth": 973,
     "variants": [
       {
         "width": 480,
@@ -739,10 +779,118 @@
       {
         "width": 800,
         "webp": "real-showroom-cabin-800w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "real-showroom-corridor": {
+    "origWidth": 1600,
+    "variants": [
+      {
+        "width": 480,
+        "webp": "real-showroom-corridor-480w.webp"
+      },
+      {
+        "width": 800,
+        "webp": "real-showroom-corridor-800w.webp"
       },
       {
         "width": 1200,
-        "webp": "real-showroom-cabin-1200w.webp"
+        "webp": "real-showroom-corridor-1200w.webp"
+      },
+      {
+        "width": 1600,
+        "webp": "real-showroom-corridor-1600w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "real-trim-profiles": {
+    "origWidth": 1248,
+    "variants": [
+      {
+        "width": 480,
+        "webp": "real-trim-profiles-480w.webp"
+      },
+      {
+        "width": 800,
+        "webp": "real-trim-profiles-800w.webp"
+      },
+      {
+        "width": 1200,
+        "webp": "real-trim-profiles-1200w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "real-villa-glass-shaft": {
+    "origWidth": 1248,
+    "variants": [
+      {
+        "width": 480,
+        "webp": "real-villa-glass-shaft-480w.webp"
+      },
+      {
+        "width": 800,
+        "webp": "real-villa-glass-shaft-800w.webp"
+      },
+      {
+        "width": 1200,
+        "webp": "real-villa-glass-shaft-1200w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "real-villa-landing": {
+    "origWidth": 1248,
+    "variants": [
+      {
+        "width": 480,
+        "webp": "real-villa-landing-480w.webp"
+      },
+      {
+        "width": 800,
+        "webp": "real-villa-landing-800w.webp"
+      },
+      {
+        "width": 1200,
+        "webp": "real-villa-landing-1200w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "real-wood-panel": {
+    "origWidth": 1248,
+    "variants": [
+      {
+        "width": 480,
+        "webp": "real-wood-panel-480w.webp"
+      },
+      {
+        "width": 800,
+        "webp": "real-wood-panel-800w.webp"
+      },
+      {
+        "width": 1200,
+        "webp": "real-wood-panel-1200w.webp"
+      }
+    ],
+    "singleWebp": null
+  },
+  "real-workshop-cabin": {
+    "origWidth": 1248,
+    "variants": [
+      {
+        "width": 480,
+        "webp": "real-workshop-cabin-480w.webp"
+      },
+      {
+        "width": 800,
+        "webp": "real-workshop-cabin-800w.webp"
+      },
+      {
+        "width": 1200,
+        "webp": "real-workshop-cabin-1200w.webp"
       }
     ],
     "singleWebp": null
