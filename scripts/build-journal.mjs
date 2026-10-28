@@ -19,7 +19,7 @@ import sharp from 'sharp';
 
 const ROOT = join(import.meta.dirname, '..');
 const SRC = join(ROOT, 'journal');
-const SITE_URL = (process.env.SITE_URL || 'https://cpamukcu.github.io/jiangxinshijie').replace(/\/$/, '');
+const SITE_URL = (process.env.SITE_URL || 'https://sinnvoelevator.com').replace(/\/$/, '');
 const manifest = JSON.parse(readFileSync(join(ROOT, 'public/assets/images/responsive-manifest.json'), 'utf8'));
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');

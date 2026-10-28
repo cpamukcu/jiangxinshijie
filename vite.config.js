@@ -4,8 +4,8 @@ import { basename, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('.', import.meta.url));
-// Social crawlers need an absolute og:image URL; override with SITE_URL when a custom domain is live.
-const SITE_URL = (process.env.SITE_URL || 'https://cpamukcu.github.io/jiangxinshijie').replace(/\/$/, '');
+// Social crawlers need an absolute og:image URL; override with SITE_URL to build for another domain.
+const SITE_URL = (process.env.SITE_URL || 'https://sinnvoelevator.com').replace(/\/$/, '');
 const partialsDir = resolve(root, 'src/partials');
 const pages = readdirSync(root).filter((f) => f.endsWith('.html'));
 

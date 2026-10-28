@@ -9,11 +9,11 @@
 - Every panel is hand-finished and checked before it ships.
 
 ## Pages
-- [Home elevators](https://cpamukcu.github.io/jiangxinshijie/home-elevators.html): structures and cabin collections
-- [Collections](https://cpamukcu.github.io/jiangxinshijie/collections.html): cabin interiors and finishes
-- [Solutions](https://cpamukcu.github.io/jiangxinshijie/solutions.html): shaft and drive layouts
-- [Technology](https://cpamukcu.github.io/jiangxinshijie/technology.html): safety systems and controls
-- [Installation](https://cpamukcu.github.io/jiangxinshijie/installation.html): from empty shaft to finished cabin
-- [Components & OEM](https://cpamukcu.github.io/jiangxinshijie/components-oem.html): decoration parts made to drawings
-- [Journal](https://cpamukcu.github.io/jiangxinshijie/journal.html): guides on structures, measurements and finishes
-- [Contact](https://cpamukcu.github.io/jiangxinshijie/contact.html): request a quote with your shaft dimensions
+- [Home elevators](https://sinnvoelevator.com/home-elevators.html): structures and cabin collections
+- [Collections](https://sinnvoelevator.com/collections.html): cabin interiors and finishes
+- [Solutions](https://sinnvoelevator.com/solutions.html): shaft and drive layouts
+- [Technology](https://sinnvoelevator.com/technology.html): safety systems and controls
+- [Installation](https://sinnvoelevator.com/installation.html): from empty shaft to finished cabin
+- [Components & OEM](https://sinnvoelevator.com/components-oem.html): decoration parts made to drawings
+- [Journal](https://sinnvoelevator.com/journal.html): guides on structures, measurements and finishes
+- [Contact](https://sinnvoelevator.com/contact.html): request a quote with your shaft dimensions
