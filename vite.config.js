@@ -11,7 +11,7 @@ const partialsDir = resolve(root, 'src/partials');
 const pages = readdirSync(root).filter((f) => f.endsWith('.html'));
 
 // Site-wide entities, emitted on every page so BlogPosting author/publisher @id references resolve wherever they are read.
-// TODO(client): add "email"/"telephone" and "sameAs" (official social profiles) once confirmed in writing.
+// TODO(client): add "sameAs" (official social profiles) once confirmed in writing.
 const ORGANIZATION = {
   '@type': 'Organization',
   '@id': `${SITE_URL}/#organization`,
@@ -20,6 +20,10 @@ const ORGANIZATION = {
   image: `${SITE_URL}/assets/images/hero-poster.jpg`,
   name: 'SINNVO',
   alternateName: '星沃',
+  legalName: 'Huzhou Jiangxin Shijie Elevator & Decoration Co., Ltd.',
+  email: 'wukai@xsdecorate.cn',
+  telephone: '+86 186 6821 7306',
+  contactPoint: { '@type': 'ContactPoint', contactType: 'sales', email: 'wukai@xsdecorate.cn', telephone: '+86 186 6821 7306' },
   slogan: 'Premium Villa Elevators',
   address: {
     '@type': 'PostalAddress',
