@@ -18,10 +18,16 @@ export function initNav() {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
 
+  // On home the header stays a ghost over the whole scroll-scrubbed hero and only turns
+  // solid once the hero has scrolled away: a white bar cutting across the footage
+  // mid-scroll is what made the hero look pasted onto the page.
+  const hero = isHome ? document.querySelector('.hero') : null;
+  const solidAt = () => (hero ? hero.offsetTop + hero.offsetHeight - header.offsetHeight : 40);
+
   let ticking = false;
   const update = () => {
     ticking = false;
-    header.classList.toggle('is-solid', window.scrollY > (isHome ? window.innerHeight * 0.6 : 40));
+    header.classList.toggle('is-solid', window.scrollY > solidAt());
     if (isHome && !reduceMotion) {
       const t = clamp(window.scrollY / 90, 0, 1);
       header.style.opacity = String(t);
