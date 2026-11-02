@@ -11,7 +11,7 @@ export function initContactForm() {
   const note = document.getElementById('contactFormNote');
   if (!form) return;
 
-  const CONTACT_EMAIL = 'info@sinnvo.example'; // TODO(client): real inbox not yet provided
+  const CONTACT_EMAIL = 'wukai@xsdecorate.cn';
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();

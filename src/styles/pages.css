@@ -226,3 +226,9 @@
   .cabin-grid { gap: 12px; }
   .aside-card { padding: 28px 24px; }
 }
+
+/* contact lines in the footer + floating WhatsApp button (ink, with the violet accent on hover/focus only) */
+.site-footer__contact { margin: 18px 0; color: var(--muted-light); font-size: 14px; line-height: 1.7; }
+.site-footer__contact a { color: var(--white); }
+.wa-float { position: fixed; right: 20px; bottom: 20px; z-index: 60; display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; background: var(--ink); color: var(--white); border: 1px solid var(--hairline-light); box-shadow: var(--shadow-lg); transition: background .25s var(--ease), transform .25s var(--ease); }
+.wa-float:hover, .wa-float:focus-visible { background: var(--violet); transform: translateY(-2px); }
