@@ -51,6 +51,12 @@ function picture(base, alt, sizes, extra = '') {
   return `<picture><source type="image/webp" srcset="${srcset}" sizes="${sizes}"><img src="/assets/images/${base}.jpg"${wh} alt="${esc(alt)}"${extra}></picture>`;
 }
 
+// the hero <picture> is the LCP element, so let the browser start on it before CSS and fonts
+function preloadHero(base) {
+  const srcset = manifest[base].variants.map((v) => `/assets/images/${v.webp} ${v.width}w`).join(', ');
+  return `<link rel="preload" as="image" href="/assets/images/${base}.jpg" imagesrcset="${srcset}" imagesizes="100vw" type="image/webp" fetchpriority="high">`;
+}
+
 function head({ title, description, image, type, jsonLd }) {
   return `<!doctype html>
 <html lang="en">
@@ -65,7 +71,8 @@ function head({ title, description, image, type, jsonLd }) {
 <meta property="og:image" content="/assets/images/${image}.jpg">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/inter.woff2" crossorigin>
-<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/outfit.woff2" crossorigin>${jsonLd ? `\n<script type="application/ld+json">\n${JSON.stringify(jsonLd, null, 2)}\n</script>` : ''}
+<link rel="preload" as="font" type="font/woff2" href="/assets/fonts/outfit.woff2" crossorigin>
+${preloadHero(image)}${jsonLd ? `\n<script type="application/ld+json">\n${JSON.stringify(jsonLd, null, 2)}\n</script>` : ''}
 </head>`;
 }
 
@@ -132,7 +139,7 @@ for (const p of posts) {
   const minutes = Math.max(1, Math.round(p.words / 220));
   const main = `${hero({
     image: p.cover, alt: p.coverAlt,
-    crumbs: `<a href="index.html">Home</a><span aria-hidden="true">/</span><a href="journal.html">Journal</a><span aria-hidden="true">/</span><span>${esc(p.title)}</span>`,
+    crumbs: `<a href="./">Home</a><span aria-hidden="true">/</span><a href="journal.html">Journal</a><span aria-hidden="true">/</span><span>${esc(p.title)}</span>`,
     title: esc(p.title),
     lede: `<p class="page-hero__lede"><time datetime="${p.date}">${fmtDate(p.date)}</time> · ${minutes} min read</p>`
   })}
@@ -151,7 +158,7 @@ ${p.html}
 
 const indexMain = `${hero({
   image: 'real-villa-glass-shaft', alt: 'A SINNVO glass-shaft elevator rising through a double-height villa hall',
-  crumbs: '<a href="index.html">Home</a><span aria-hidden="true">/</span><span>Journal</span>',
+  crumbs: '<a href="./">Home</a><span aria-hidden="true">/</span><span>Journal</span>',
   title: 'Journal',
   lede: '<p class="page-hero__lede">Guides for villa owners, architects and distributors planning a home elevator: structures, measurements and finishes.</p>'
 })}

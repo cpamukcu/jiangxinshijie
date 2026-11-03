@@ -30,6 +30,9 @@
 .text-link:hover { color: var(--violet); }
 .text-link--light { color: var(--violet-light); }
 .text-link--light:hover { color: #fff; border-color: #fff; }
+/* contextual link inside running copy: keeps the paragraph colour, thin violet underline */
+.inline-link { color: inherit; text-decoration: underline; text-decoration-color: var(--violet); text-decoration-thickness: 1px; text-underline-offset: 3px; transition: color .25s; }
+.inline-link:hover { color: var(--violet); }
 .btn--gold { background: var(--violet); color: #fff; }
 .btn--gold:hover { background: var(--violet-deep); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
 .main-nav a { position: relative; }
@@ -229,6 +232,7 @@
 
 /* contact lines in the footer + floating WhatsApp button (ink, with the violet accent on hover/focus only) */
 .site-footer__contact { margin: 18px 0; color: var(--muted-light); font-size: 14px; line-height: 1.7; }
-.site-footer__contact a { color: var(--white); }
+.site-footer__contact a { color: var(--white); text-decoration: underline; text-decoration-color: var(--hairline-light); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.site-footer__contact a:hover, .site-footer__contact a:focus-visible { text-decoration-color: currentColor; }
 .wa-float { position: fixed; right: 20px; bottom: 20px; z-index: 60; display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; background: var(--ink); color: var(--white); border: 1px solid var(--hairline-light); box-shadow: var(--shadow-lg); transition: background .25s var(--ease), transform .25s var(--ease); }
 .wa-float:hover, .wa-float:focus-visible { background: var(--violet); transform: translateY(-2px); }

@@ -7,6 +7,8 @@ import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('.', import.meta.url));
 // Social crawlers need an absolute og:image URL; override with SITE_URL to build for another domain.
 const SITE_URL = (process.env.SITE_URL || 'https://sinnvoelevator.com').replace(/\/$/, '');
+// Google Search Console "HTML tag" token (the content="..." value only); emitted on the home page. Not needed if the property is verified by DNS.
+const GOOGLE_SITE_VERIFICATION = '';
 const partialsDir = resolve(root, 'src/partials');
 const pages = readdirSync(root).filter((f) => f.endsWith('.html'));
 
@@ -56,6 +58,7 @@ function seoHead(html, url, page) {
     '<meta name="twitter:card" content="summary_large_image">'
   ];
   for (const p of ['title', 'description', 'image']) if (og(p)) tags.push(`<meta name="twitter:${p}" content="${og(p)}">`);
+  if (page === 'index' && GOOGLE_SITE_VERIFICATION) tags.push(`<meta name="google-site-verification" content="${GOOGLE_SITE_VERIFICATION}">`);
 
   const graph = [ORGANIZATION, WEBSITE];
   const crumbs = (html.match(/<nav class="crumbs"[^>]*>([\s\S]*?)<\/nav>/) || [])[1];
@@ -64,7 +67,7 @@ function seoHead(html, url, page) {
       '@type': 'ListItem',
       position: i + 1,
       name: decode(m[2] || m[3]),
-      item: m[1] ? `${SITE_URL}/${m[1] === 'index.html' ? '' : m[1]}` : url
+      item: m[1] ? `${SITE_URL}/${m[1] === './' ? '' : m[1]}` : url
     }));
     graph.push({ '@type': 'BreadcrumbList', itemListElement: items });
   }
