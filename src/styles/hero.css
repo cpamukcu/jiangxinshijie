@@ -10,10 +10,11 @@
   display: flex; flex-direction: column; justify-content: flex-end;
   color: #fff;
 }
-/* The source footage is warm bronze; grading it down towards the warm-grey stone of the
-   rest of the site (and tinting the shadows with --ink below) stops it reading as a
-   separate stock clip. Filter on the wrapper, not the canvas, so the fallback matches. */
-.hero__media { position: absolute; inset: 0; filter: saturate(.5) contrast(.94) brightness(1.04); }
+/* The footage (a real SINNVO cabin in white and warm grey) already sits in the site's
+   palette; this only lifts it slightly so the ink overlay below doesn't sink it, while
+   keeping the red frame — a real product finish — true. Filter on the wrapper, not the
+   canvas, so the fallback matches. */
+.hero__media { position: absolute; inset: 0; filter: brightness(1.12) contrast(.96); }
 .hero__video-canvas, .hero__fallback, .hero__fallback img {
   position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
 }
