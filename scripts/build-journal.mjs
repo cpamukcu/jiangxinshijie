@@ -172,7 +172,7 @@ const indexMain = `${hero({
     </div>
   </section>`;
 writeFileSync(join(ROOT, 'journal.html'), shell(head({
-  title: 'Journal | SINNVO Villa Elevators',
+  title: 'Villa Elevator Planning Guides | SINNVO Journal',
   description: 'Guides for planning a villa or home elevator: choosing a shaft and drive structure, what to measure before a quote, and how cabin finishes come together.',
   image: 'real-villa-glass-shaft', type: 'website'
 }), 'page-sub page-journal', indexMain));

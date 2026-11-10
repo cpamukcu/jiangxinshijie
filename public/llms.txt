@@ -1,31 +1,49 @@
 # SINNVO (星沃)
 
-> Premium villa elevators. SINNVO designs, manufactures and installs custom home and villa elevators in Huzhou, Zhejiang, China, for homes worldwide. Sales, R&D, manufacturing and installation are under one roof.
+> Custom villa and home elevators, designed, manufactured and installed by SINNVO in Huzhou, Zhejiang, China, for homes worldwide. Sales, R&D, manufacturing and installation are under one roof. SINNVO also makes elevator decoration components (cabin wall panels, ceilings, door panels, handrails) for other elevator manufacturers.
 
-- Fully custom (non-standard) cabins, made to order; designs draw on Eastern and Western heritage.
-- Four shaft and drive structures: Traction Gantry, Small Gantry, Backpack Frame, Strong-Drive.
-- No pit required, low headroom, right-angle and three-way door layouts.
-- Eight built-in safety systems, including power-failure self-leveling, an intelligent light curtain, a child-safety lock and cloud monitoring.
-- Every panel is hand-finished and checked before it ships.
+Legal name: Huzhou Jiangxin Shijie Elevator & Decoration Co., Ltd.
+Website: https://sinnvoelevator.com/
 
-## Pages
-- [Home elevators](https://sinnvoelevator.com/home-elevators.html): structures and cabin collections
+## What SINNVO makes
+- Villa and home elevators with fully custom (non-standard) cabins, made to order for one home.
+- Four shaft and drive structures, chosen by the building's main constraint:
+  - Traction Gantry: self-supporting gantry frame with traction drive. For heavy daily use; high load capacity, long service life, easy maintenance.
+  - Small Gantry: the gantry principle in a compact envelope, for extra-small shafts with minimal change to the building.
+  - Backpack Frame: frame sits behind the cabin. Allows right-angle and three-way door layouts; low construction threshold and low headroom.
+  - Strong-Drive: no pit required, low headroom, lightweight structure. Suited to adding an elevator to an existing home.
+- Shaft frames in steel (cost-effective, clad later by the owner's contractor) or aluminium alloy with laminated safety glass.
+- Frame colours: silver white, radiant silver, champagne gold, rose gold, sky blue, cinnabar red. Glass tints: clear, ultra-clear, Euro grey, star blue-grey, gold tea, Euro tea.
+- Thirteen cabin interior collections (finishes include champagne gold, walnut, sintered stone, black titanium and mirror steel).
+- Eight built-in safety and comfort systems, including power-failure automatic self-leveling, an intelligent light curtain, a child-safety lock, contactless calling, a landline interface and cloud monitoring.
+- Elevator decoration components and OEM parts made to customer drawings.
+
+## Requesting a quote
+Send these through https://sinnvoelevator.com/contact.html:
+1. Shaft width × depth (finished internal dimensions, mm)
+2. Pit depth and overhead height, or say that a pit is not possible
+3. Number of floors and travel height
+4. Door positions (same side, opposite, or adjacent)
+5. Preferred style, or a photo of the interior
+SINNVO usually replies within two business days.
+
+## Contact
+Email: wukai@xsdecorate.cn
+Phone / WhatsApp: +86 186 6821 7306
+Factory and office: No. 1888, Renrui West Road, Nanxun Economic Development Zone, Huzhou City, Zhejiang Province, China
+
+## Key pages
+- [Home elevators](https://sinnvoelevator.com/home-elevators.html): the product line and the shaft-first process
+- [Solutions](https://sinnvoelevator.com/solutions.html): the four shaft and drive structures compared
 - [Collections](https://sinnvoelevator.com/collections.html): cabin interiors and finishes
-- [Solutions](https://sinnvoelevator.com/solutions.html): shaft and drive layouts
 - [Technology](https://sinnvoelevator.com/technology.html): safety systems and controls
 - [Installation](https://sinnvoelevator.com/installation.html): from empty shaft to finished cabin
 - [Components & OEM](https://sinnvoelevator.com/components-oem.html): decoration parts made to drawings
-- [Factory & Quality](https://sinnvoelevator.com/factory-quality.html): the Huzhou workshop and how panels are checked
-- [Projects](https://sinnvoelevator.com/projects.html): villa elevator project styles
-- [About](https://sinnvoelevator.com/about.html): who SINNVO is
-- [Journal](https://sinnvoelevator.com/journal.html): guides on structures, measurements and finishes
-- [Contact](https://sinnvoelevator.com/contact.html): request a quote with your shaft dimensions
+- [Factory & Quality](https://sinnvoelevator.com/factory-quality.html): the Huzhou workshop
+- [About](https://sinnvoelevator.com/about.html): company background
+- [Contact](https://sinnvoelevator.com/contact.html): request a quote
 
-## Location
-Huzhou Jiangxin Shijie Elevator & Decoration Co., Ltd. (brand: SINNVO 星沃)
-Email: wukai@xsdecorate.cn
-Phone / WhatsApp: +86 186 6821 7306
-Factory and office: No. 1888, Renrui West Road, Nanxun Economic Development Zone, Huzhou City, Zhejiang Province, China.
-
-## Requesting a quote
-Send shaft width × depth (finished internal, mm), pit depth and overhead height (or say a pit is not possible), number of floors and travel height, and the cabin look you want through the [contact page](https://sinnvoelevator.com/contact.html). SINNVO usually replies within two business days.
+## Guides
+- [Choosing a shaft and drive structure](https://sinnvoelevator.com/journal-choosing-a-shaft-and-drive-structure.html)
+- [What to measure before you ask for a quote](https://sinnvoelevator.com/journal-what-to-measure-before-you-ask-for-a-quote.html)
+- [How a cabin interior comes together](https://sinnvoelevator.com/journal-how-a-cabin-interior-comes-together.html)

@@ -25,7 +25,8 @@ const ORGANIZATION = {
   legalName: 'Huzhou Jiangxin Shijie Elevator & Decoration Co., Ltd.',
   email: 'wukai@xsdecorate.cn',
   telephone: '+86 186 6821 7306',
-  contactPoint: { '@type': 'ContactPoint', contactType: 'sales', email: 'wukai@xsdecorate.cn', telephone: '+86 186 6821 7306' },
+  contactPoint: { '@type': 'ContactPoint', contactType: 'sales', email: 'wukai@xsdecorate.cn', telephone: '+86 186 6821 7306', availableLanguage: ['en', 'zh'] },
+  knowsAbout: ['Villa elevators', 'Home elevators', 'Elevator cabin decoration', 'Elevator decoration components'],
   slogan: 'Premium Villa Elevators',
   address: {
     '@type': 'PostalAddress',
@@ -34,7 +35,7 @@ const ORGANIZATION = {
     addressRegion: 'Zhejiang',
     addressCountry: 'CN'
   },
-  description: 'Manufacturer of custom villa and home elevators: sales, R&D, manufacturing and installation under one roof.'
+  description: 'Manufacturer of custom villa and home elevators and elevator decoration components: sales, R&D, manufacturing and installation under one roof.'
 };
 const WEBSITE = {
   '@type': 'WebSite',
