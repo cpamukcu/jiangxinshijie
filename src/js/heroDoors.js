@@ -55,9 +55,6 @@ export function initHeroDoors() {
   const sticky = hero.querySelector('.hero__sticky');
   const L = hero.querySelector('.hero__half--l');
   const R = hero.querySelector('.hero__half--r');
-  const sign = hero.querySelector('.hero__sign');
-  const signText = hero.querySelector('.hero__sign span');
-  const tags = hero.querySelectorAll('.hero__tag');
   const cue = hero.querySelector('.hero__scrollcue');
   const scrim = hero.querySelector('.hero__scrim');
   const shade = hero.querySelector('.hero__vignette');
@@ -155,12 +152,8 @@ export function initHeroDoors() {
     setOn(L, 'Lo', 'opacity', headline); setOn(R, 'Ro', 'opacity', headline);
 
     setOn(cue, 'cue', 'opacity', (1 - seg(p, 0, 0.03)).toFixed(3));
-    tags.forEach((t, i) => setOn(t, 'tag' + i, 'opacity', (1 - seg(p, 0.04, 0.1)).toFixed(3)));
     setOn(scrim, 'scrim', 'opacity', (1 - seg(p, 0.34, 0.54)).toFixed(3));
-    setOn(sign, 'sign', 'opacity', (1 - seg(p, 0.7, 0.76)).toFixed(3));
     setOn(shade, 'shade', 'opacity', seg(p, 0.76, 0.86).toFixed(3));
-    const label = f < F_CLOSED + 2 ? 'G · Doors closed' : f < F_OPEN ? 'G · Doors opening' : 'G · Welcome home';
-    if (signText && signText.textContent !== label) signText.textContent = label;
 
     for (const [el, a, b] of reveals) {
       if (!el) continue;
