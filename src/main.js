@@ -11,7 +11,7 @@ import './styles/responsive.css';
 
 import { initAssetFallbacks } from './js/assetFallback.js';
 import { initNav } from './js/nav.js';
-import { initHeroVideo } from './js/heroVideo.js';
+import { initHeroDoors } from './js/heroDoors.js';
 import { initReveal } from './js/reveal.js';
 import { initLightbox } from './js/lightbox.js';
 import { initContactForm } from './js/contactForm.js';
@@ -26,7 +26,7 @@ function initYear() {
 document.addEventListener('DOMContentLoaded', () => {
   initAssetFallbacks();
   initNav();
-  initHeroVideo();
+  initHeroDoors();
   initReveal();
   initLightbox();
   initContactForm();
