@@ -73,7 +73,7 @@
     content: ""; position: fixed; inset: 0; z-index: 90; background: rgba(15, 14, 12, .55);
     animation: navFade .3s ease;
   }
-  .main-nav a { color: var(--ink); font-size: 20px; padding: 12px 0; border-bottom: 1px solid var(--hairline); }
+  .main-nav a { color: var(--ink); font-size: 20px; padding: 12px 0; border-bottom: 1px solid var(--hairline); text-shadow: none; }
   .header-cta { display: none; }
   .nav-toggle { display: flex; z-index: 110; }
   .nav-toggle span { background: #fff; }
