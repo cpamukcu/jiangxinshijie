@@ -20,17 +20,23 @@
 <main id="main">
 
   <!-- ============ 1. HERO ============ -->
-  <section class="hero" id="top" aria-label="Hero">
+  <section class="hero hero--doors" id="top" aria-label="Hero">
     <div class="hero__sticky">
       <div class="hero__media">
-        <canvas class="hero__video-canvas" id="heroVideoCanvas" aria-hidden="true"
-          data-frames-desktop="assets/video/frames/header-desktop" data-frame-count-desktop="32"
-          data-frames-mobile="assets/video/frames/header-mobile" data-frame-count-mobile="32"></canvas>
-        <div class="media hero__fallback" data-fallback-label="hero-poster.jpg">
-          <picture><source type="image/webp" srcset="/assets/images/hero-poster-480w.webp 480w, /assets/images/hero-poster-800w.webp 800w, /assets/images/hero-poster-1200w.webp 1200w" sizes="100vw"><img src="/assets/images/hero-poster.jpg" width="1280" height="720" alt="SINNVO glass home elevator with a red frame, centred in a softly lit living space" fetchpriority="high"></picture>
+        <canvas class="hero__video-canvas" aria-hidden="true" data-frames="/assets/video/doors/doors"></canvas>
+        <div class="media hero__fallback" data-fallback-label="hero-doors-poster.jpg">
+          <picture><source type="image/webp" srcset="/assets/images/hero-doors-poster.webp"><img src="/assets/images/hero-doors-poster.jpg" width="1280" height="720" alt="A softly lit villa living room at dusk, seen from inside a SINNVO glass elevator with its doors open" fetchpriority="high"></picture>
         </div>
+        <div class="hero__scrim" aria-hidden="true"></div>
         <div class="hero__vignette" aria-hidden="true"></div>
       </div>
+      <p class="hero__split" aria-hidden="true">
+        <span class="hero__half hero__half--l">Every floor,</span>
+        <span class="hero__half hero__half--r"><em>your&nbsp;style.</em></span>
+      </p>
+      <span class="hero__tag hero__tag--l" aria-hidden="true">Premium Villa Elevators</span>
+      <span class="hero__tag hero__tag--r" aria-hidden="true">Made to order</span>
+      <div class="hero__sign" aria-hidden="true"><i></i><span>G · Doors closed</span></div>
       <div class="wrap hero__content">
         <p class="hero__kicker">Premium Villa Elevators</p>
         <h1 class="hero__headline">
@@ -42,7 +48,7 @@
           <a href="projects.html" class="btn btn--ghost">View Projects</a>
         </div>
       </div>
-      <div class="hero__scrollcue" aria-hidden="true"><i></i><span>SCROLL</span></div>
+      <div class="hero__scrollcue" aria-hidden="true"><i></i><span>SCROLL TO OPEN</span></div>
     </div>
   </section>
 

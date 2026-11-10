@@ -102,3 +102,71 @@
   .hero__desc { margin-top: 8px; }
   .hero__actions { gap: 10px; }
 }
+
+/* ================= Home hero: "Doors at Dusk" (src/js/heroDoors.js) =================
+   Static by default (no JS, reduced motion, data saver): the open room at dusk with the copy
+   shown. heroDoors.js adds .hero--live, which turns the section into a tall scroll track:
+   tight on the closed doors -> the real doors open with the split headline riding them ->
+   the camera pulls back into the room and the copy comes in. */
+.hero--doors { height: 100vh; height: 100svh; }
+.hero--doors.hero--live { height: 560vh; height: 560svh; }
+.hero--doors .hero__sticky { background: #0a0806; }
+.hero--doors .hero__media { filter: none; overflow: hidden; }
+.hero--doors .hero__video-canvas { transform-origin: 0 0; will-change: transform; transition: none; object-fit: fill; }
+.hero--live .hero__fallback { opacity: 0; }
+.hero__scrim {
+  position: absolute; inset: 0; display: none;
+  background: radial-gradient(ellipse at 50% 50%, rgba(10,8,6,.15), rgba(10,8,6,.62) 75%);
+}
+.hero--live .hero__scrim { display: block; }
+.hero--live .hero__vignette { opacity: 0; }
+
+.hero__split, .hero__tag, .hero__sign { display: none; }
+.hero--live .hero__split, .hero--live .hero__tag, .hero--live .hero__sign { display: block; }
+.hero__split {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none; margin: 0;
+  font-family: var(--font-display); font-weight: 300; font-size: clamp(30px, 5.8vw, 92px);
+  line-height: 1.02; letter-spacing: -0.03em; color: #fff;
+}
+.hero__half {
+  position: absolute; top: 50%; white-space: nowrap; will-change: transform, opacity;
+  transform: translate3d(0, -50%, 0); text-shadow: 0 2px 40px rgba(0,0,0,.55);
+}
+.hero__half em { font-style: normal; color: var(--violet-light); }
+.hero__half--l { right: 50%; padding-right: 1.1vw; }
+.hero__half--r { left: 50%; padding-left: 1.1vw; }
+.hero__tag {
+  position: absolute; z-index: 2; bottom: clamp(90px, 14vh, 140px);
+  font-family: var(--font-body); font-size: 11px; font-weight: 500; letter-spacing: .2em;
+  text-transform: uppercase; color: rgba(255,255,255,.75);
+}
+.hero__tag--l { right: calc(50% + 1.1vw); }
+.hero__tag--r { left: calc(50% + 1.1vw); }
+.hero--live .hero__sign {
+  position: absolute; z-index: 2; top: 104px; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 999px;
+  background: rgba(20,18,35,.62); border: 1px solid var(--hairline-light); color: #fff;
+  font-family: var(--font-body); font-size: 11px; font-weight: 500; letter-spacing: .16em; white-space: nowrap;
+}
+.hero__sign i { width: 7px; height: 7px; border-radius: 50%; background: #ffd98f; box-shadow: 0 0 10px #ffd98f; }
+.hero--doors .hero__content { z-index: 3; }
+.hero--live .hero__kicker, .hero--live .hero__title, .hero--live .hero__desc, .hero--live .hero__actions { visibility: hidden; }
+
+/* first paint (before JS): a dark frame, not the end-state poster flashing up and away.
+   If the JS never runs, the poster fades in with the copy (heroNoJsReveal, above). */
+@media (prefers-reduced-motion: no-preference) {
+  .hero--doors .hero__fallback { opacity: 0; animation: heroNoJsReveal .6s ease 4s forwards; }
+  .js-ready .hero--doors .hero__fallback { animation: none; }
+  .js-ready .hero--doors:not(.hero--live) .hero__fallback,
+  .js-ready .hero--doors:not(.hero--live) .hero__kicker,
+  .js-ready .hero--doors:not(.hero--live) .hero__title,
+  .js-ready .hero--doors:not(.hero--live) .hero__desc,
+  .js-ready .hero--doors:not(.hero--live) .hero__actions { opacity: 1; }
+  .js-ready .hero--live .hero__fallback { opacity: 0; }
+}
+@media (max-width: 640px) {
+  .hero--doors.hero--live { height: 460vh; height: 460svh; }
+  .hero__split { font-size: 7.4vw; }
+  .hero__tag { display: none !important; }
+  .hero--live .hero__sign { top: 88px; }
+}
