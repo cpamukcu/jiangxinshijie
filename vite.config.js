@@ -53,6 +53,8 @@ const decode = (s) => s.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/
 function seoHead(html, url, page) {
   const og = (p) => (html.match(new RegExp(`<meta property="og:${p}" content="([^"]*)"`)) || [])[1];
   const tags = [
+    // lets CSS hide reveal-on-scroll content only when JS is running to reveal it again
+    '<script>document.documentElement.classList.add(\'js\')</script>',
     `<meta property="og:url" content="${url}">`,
     '<meta property="og:site_name" content="SINNVO">',
     '<meta property="og:locale" content="en_US">',
@@ -129,6 +131,28 @@ function inlineCss() {
   };
 }
 
+// Google image sitemap extension: lists each page's content photos (the full-size
+// JPEG behind every <picture>, plus its og:image) so they can be found in Image search.
+function addImages(xml) {
+  return xml
+    .replace('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+      '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">')
+    .replace(/<url><loc>([^<]+)<\/loc>([\s\S]*?)<\/url>/g, (tag, loc, rest) => {
+      const page = loc.slice(SITE_URL.length + 1) || 'index.html';
+      let html = '';
+      try { html = readFileSync(resolve(root, 'dist', page), 'utf8'); } catch { return tag; }
+      const srcs = new Set();
+      const og = (html.match(/<meta property="og:image" content="([^"]+)"/) || [])[1];
+      if (og) srcs.add(og);
+      for (const m of html.matchAll(/<img\b[^>]*\bsrc="([^"]+\.(?:jpe?g|png|webp))"/g)) {
+        srcs.add(new URL(m[1].replace(/^\.\//, '/'), `${SITE_URL}/`).href);
+      }
+      if (!srcs.size) return tag;
+      const images = [...srcs].map((u) => `<image:image><image:loc>${u}</image:loc></image:image>`).join('');
+      return `<url><loc>${loc}</loc>${rest}${images}</url>`;
+    });
+}
+
 // Stamps each sitemap URL with its page's last commit date (needs full git history in CI: fetch-depth 0).
 function sitemapLastmod() {
   return {
@@ -144,7 +168,7 @@ function sitemapLastmod() {
         } catch {}
         return date ? `<url><loc>${loc}</loc><lastmod>${date}</lastmod></url>` : tag;
       });
-      writeFileSync(file, xml);
+      writeFileSync(file, addImages(xml));
     }
   };
 }

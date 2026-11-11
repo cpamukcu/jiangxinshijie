@@ -77,14 +77,30 @@ export function initHeroDoors() {
       img.decode().then(() => { frames.set(i, img); dirty = true; kick(); }, () => {}).then(done);
     });
   }
-  // the opening frame right away (it is the first thing on screen), the rest once the page
-  // has loaded, coarse to fine so scrubbing works early on a slow connection
+  // the opening frame right away (it is the first thing on screen), then coarse to fine so
+  // scrubbing works early on a slow connection. Only the coarse pass (~1 in 8 frames) loads
+  // with the page; the fine passes wait for the visitor's first scroll/touch/key, so a visit
+  // that never scrolls doesn't download and decode ~100 frames (~2.8 MB).
   function loadRest() {
     const rest = AVAILABLE.filter((i) => i !== F_CLOSED);
     const order = [];
     for (const step of [16, 8, 4, 2, 1]) rest.forEach((f, k) => { if (k % step === 0 && !order.includes(f)) order.push(f); });
-    const next = () => { const i = order.shift(); if (i !== undefined) load(i).then(next); };
+    let gate = rest.filter((f, k) => k % 8 === 0).length; // frames allowed before the first interaction
+    let running = 0;
+    const next = () => {
+      if (!order.length || gate <= 0) return;
+      gate--; running++;
+      load(order.shift()).then(() => { running--; next(); });
+    };
+    const INTERACTIONS = ['scroll', 'wheel', 'touchstart', 'pointerdown', 'keydown'];
+    const release = () => {
+      INTERACTIONS.forEach((t) => window.removeEventListener(t, release));
+      gate = Infinity;
+      for (let k = running; k < 4; k++) next();
+    };
+    INTERACTIONS.forEach((t) => window.addEventListener(t, release, { passive: true }));
     for (let k = 0; k < 4; k++) next();
+    if (window.scrollY > 0) release(); // restored scroll position: the visitor is already mid-hero
   }
   load(F_CLOSED);
   if (document.readyState === 'complete') loadRest();

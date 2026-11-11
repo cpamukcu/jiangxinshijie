@@ -47,4 +47,24 @@ export function initReveal() {
   }, { threshold: 0, rootMargin: '0px 0px -8% 0px' });
 
   targets.forEach((el) => io.observe(el));
+
+  // An observer only reports threshold crossings, so a target jumped over in one
+  // frame (anchor link, fast fling, scroll restore) never fires. Sweep for any
+  // still-hidden target that is above the viewport bottom after each scroll.
+  let pending = [...targets];
+  let ticking = false;
+  const sweep = () => {
+    ticking = false;
+    const limit = window.innerHeight;
+    pending = pending.filter((el) => {
+      if (el.classList.contains('is-visible') || el.classList.contains('is-in')) return false;
+      if (el.getBoundingClientRect().top < limit) { show(el); io.unobserve(el); return false; }
+      return true;
+    });
+    if (!pending.length) window.removeEventListener('scroll', onScroll);
+  };
+  const onScroll = () => { if (!ticking) { ticking = true; requestAnimationFrame(sweep); } };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('load', onScroll, { once: true });
+  onScroll();
 }
