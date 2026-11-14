@@ -11,7 +11,7 @@
  *   3. The camera pulls back into the softly lit room and the hero copy + buttons come in.
  *
  * Frames are drawn to a <canvas> (no <video>: seeking is too slow on mobile Safari, see
- * heroVideo.js's history). The camera move is a CSS transform on the canvas.
+ * heroVideo.js's history). The camera move is applied when each frame is drawn.
  *
  * No JS, prefers-reduced-motion, data saver / 2G: the section stays in its static end
  * state (poster of the open room, copy shown) — `.hero--live` is never added.
@@ -120,14 +120,22 @@ export function initHeroDoors() {
     canvas.width = Math.max(1, Math.round(vw * dpr)); canvas.height = Math.max(1, Math.round(vh * dpr));
     shown = null; dirty = true;
   }
+  // The camera move is drawn straight from the source frame at device resolution. (Scaling the
+  // finished canvas with a CSS transform resampled the picture twice and blurred the close-up.)
   let shown = null;
-  function draw(img) {
-    if (!img || img === shown) return;
-    const cw = canvas.width, ch = canvas.height;
-    const s = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+  function draw(img, tx, ty, S) {
+    if (!img) return;
+    const key = `${frames.size}|${img.src}|${tx.toFixed(1)}|${ty.toFixed(1)}|${S.toFixed(4)}`;
+    if (key === shown) return;
+    const cw = canvas.width, ch = canvas.height, r = cw / Math.max(1, vw);
+    const s = Math.max(vw / img.naturalWidth, vh / img.naturalHeight); // object-fit: cover, CSS px
     const w = img.naturalWidth * s, h = img.naturalHeight * s;
-    ctx.drawImage(img, (cw - w) / 2, (ch - h) / 2, w, h);
-    shown = img;
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
+    ctx.fillStyle = '#0a0806';
+    ctx.fillRect(0, 0, cw, ch);
+    ctx.drawImage(img, (tx + S * (vw - w) / 2) * r, (ty + S * (vh - h) / 2) * r, w * S * r, h * S * r);
+    shown = key;
     if (!canvas.classList.contains('is-active')) canvas.classList.add('is-active');
   }
 
@@ -150,14 +158,13 @@ export function initHeroDoors() {
       ? F_CLOSED + (F_OPEN - F_CLOSED) * seg(p, 0.06, 0.5)
       : F_OPEN + (F_END - F_OPEN) * seg(p, 0.5, 0.94);
     const z = 1 - easeInOut(seg(p, 0.5, 0.84)); // 1 = tight on the doors, 0 = whole room
-    draw(nearest(f));
 
     // camera: where the door seam lands with object-fit: cover, scaled up and centred
     const s = Math.max(vw / SRC_W, vh / SRC_H);
     const sx = (vw - SRC_W * s) / 2 + SEAM_X * s, sy = (vh - SRC_H * s) / 2 + DOOR_CY * s;
     const S = 1 + (ZOOM - 1) * z;
     const tx = sx + (vw / 2 - sx) * z - sx * S, ty = sy + (vh / 2 - sy) * z - sy * S;
-    setOn(canvas, 'cam', 'transform', `translate3d(${tx.toFixed(1)}px,${ty.toFixed(1)}px,0) scale(${S.toFixed(4)})`);
+    draw(nearest(f), tx, ty, S);
 
     // each half of the headline rides its own real door edge, then clears
     const k = s * S;
