@@ -112,7 +112,7 @@
 .hero--doors.hero--live { height: 560vh; height: 560svh; }
 .hero--doors .hero__sticky { background: #0a0806; }
 .hero--doors .hero__media { filter: none; overflow: hidden; }
-.hero--doors .hero__video-canvas { transform-origin: 0 0; will-change: transform; transition: none; object-fit: fill; }
+.hero--doors .hero__video-canvas { transition: none; object-fit: fill; }
 .hero--live .hero__fallback { opacity: 0; }
 .hero__scrim {
   position: absolute; inset: 0; display: none;
